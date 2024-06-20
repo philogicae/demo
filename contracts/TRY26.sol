@@ -115,18 +115,27 @@ contract TRY26 is
   /* ------------ Constructor ------------ */
 
   constructor() EIP712(__name, __version) Ownable(_msgSender()) {
-    address to = _msgSender();
+    address admin = _msgSender();
     bytes32 ticketId = bytes32('abcde');
+    bytes32 ticketId2 = bytes32('fghij');
     uint256 batchId = ++totalBatches;
-    _batches[batchId] = Batch(1, uint128(block.timestamp), to);
+    _batches[batchId] = Batch(1, uint128(block.timestamp), admin);
     _tickets[batchId].add(ticketId);
-    totalTickets++;
-    emit BatchPreMinted(batchId, 1, to, 1);
+    _tickets[batchId].add(ticketId2);
+    totalTickets += 2;
+    emit BatchPreMinted(batchId, 1, admin, 2);
+    // 1
     uint256 tokenId = ++_totalTokens;
     _tokenIds[ticketId] = tokenId;
-    _tokens[tokenId] = Token(to, batchId, ticketId);
-    _claimedTokenIds[to].add(tokenId);
-    emit Transfer(ZERO_ADDRESS, to, tokenId);
+    _tokens[tokenId] = Token(admin, batchId, ticketId);
+    _claimedTokenIds[admin].add(tokenId);
+    emit Transfer(ZERO_ADDRESS, admin, tokenId);
+    // 2
+    uint256 tokenId2 = ++_totalTokens;
+    _tokenIds[ticketId2] = tokenId2;
+    _tokens[tokenId2] = Token(admin, batchId, ticketId2);
+    _claimedTokenIds[admin].add(tokenId2);
+    emit Transfer(ZERO_ADDRESS, admin, tokenId2);
   }
 
   /* ------------ IERC165 Methods ------------ */

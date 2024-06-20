@@ -37,8 +37,8 @@ createWeb3Modal({
   defaultChain: sepolia,
   themeMode: 'dark',
   themeVariables: {
-    '--w3m-accent': '#0064ff',
-    '--w3m-border-radius-master': '2px',
+    '--w3m-accent': '#0040ff',
+    //'--w3m-border-radius-master': '2px',
   },
 })
 
