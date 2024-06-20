@@ -27,8 +27,7 @@ contract TRY26 is
   /* ------------ Structs ------------ */
 
   struct Batch {
-    uint64 imageId;
-    uint64 metadataId;
+    uint128 metadataId;
     uint128 createdAt;
     address admin;
   }
@@ -70,40 +69,28 @@ contract TRY26 is
   string private constant __name = 'TwentySix Soulbound';
   string private constant __symbol = 'TRY26';
   string private constant __version = '1';
-
-  string private constant JSON_PREFIX = 'data:application/json;utf8,';
-  string private constant _contractURI =
-    '{"name":"TwentySix Soulbound","description":"Exclusive Free Trials on TwentySix","image":"https://demo.binaryeyelabs.xyz/512x512.png","external_link":"https://demo.binaryeyelabs.xyz"}';
-  string private constant _json_desc =
-    '{"name":"TRY26","description":"Exclusive Free Trial on TwentySix","image":"https://demo.binaryeyelabs.xyz/img/';
-  string private constant _json_ext =
-    '.png","external_url":"https://demo.binaryeyelabs.xyz/#/sbt/';
+  string private constant _baseURI = 'https://demo.binaryeyelabs.xyz';
 
   /* ------------ Storage ------------ */
 
-  uint64 public totalMetadatas;
   uint256 public totalBatches;
   uint256 public totalTickets;
-  uint256 private _totalTokens;
-
-  mapping(uint64 => string) private _metadatas;
-
   mapping(uint256 batchId => Batch) private _batches;
   mapping(uint256 batchId => PaginatedEnumerableSet.Bytes32Set)
     private _tickets;
 
   mapping(bytes32 reservation => uint256 timestamp) private _reservations;
 
+  uint256 private _totalTokens;
   mapping(bytes32 ticketId => uint256) private _tokenIds;
   mapping(uint256 tokenId => Token) private _tokens;
   mapping(address => PaginatedEnumerableSet.UintSet) private _claimedTokenIds;
 
   /* ------------ Events ------------ */
 
-  event MetadataAdded(uint64 indexed metadataId, string metadata);
   event BatchPreMinted(
     uint256 indexed batchId,
-    uint64 indexed metadataId,
+    uint128 indexed metadataId,
     address indexed admin,
     uint256 nbTickets
   );
@@ -128,16 +115,13 @@ contract TRY26 is
   /* ------------ Constructor ------------ */
 
   constructor() EIP712(__name, __version) Ownable(_msgSender()) {
-    uint64 metadataId = addMetadata(
-      '[{"trait_type":"Type","value":"Instance"},{"trait_type":"CPU","value":"1"},{"trait_type":"RAM","value":"2GB"},{"trait_type":"HDD","value":"20GB"},{"trait_type":"start","value":"2024-06-20"},{"trait_type":"end","value":"2024-07-20"}]'
-    );
     address to = _msgSender();
     bytes32 ticketId = bytes32('abcde');
     uint256 batchId = ++totalBatches;
-    _batches[batchId] = Batch(1, metadataId, uint128(block.timestamp), to);
+    _batches[batchId] = Batch(1, uint128(block.timestamp), to);
     _tickets[batchId].add(ticketId);
     totalTickets++;
-    emit BatchPreMinted(batchId, metadataId, to, 1);
+    emit BatchPreMinted(batchId, 1, to, 1);
     uint256 tokenId = ++_totalTokens;
     _tokenIds[ticketId] = tokenId;
     _tokens[tokenId] = Token(to, batchId, ticketId);
@@ -168,24 +152,19 @@ contract TRY26 is
   }
 
   function tokenURI(uint256 tokenId) public view returns (string memory) {
-    Batch memory batch = _batches[_tokens[tokenId].batchId];
     return
       string.concat(
-        JSON_PREFIX,
-        _json_desc,
-        Strings.toString(batch.imageId),
-        _json_ext,
-        Strings.toString(tokenId),
-        '","attributes":',
-        _metadatas[batch.metadataId],
-        '}'
+        _baseURI,
+        '/sbt/metadata/',
+        Strings.toString(_batches[_tokens[tokenId].batchId].metadataId),
+        '.json'
       );
   }
 
   /* ------------ ERC7572 Methods ------------ */
 
   function contractURI() public pure returns (string memory) {
-    return string.concat(JSON_PREFIX, _contractURI);
+    return string.concat(_baseURI, '/sbt/contractURI.json');
   }
 
   /* ------------ IERC721Enumerable Methods ------------ */
@@ -224,28 +203,15 @@ contract TRY26 is
 
   /* ------------ View Methods ------------ */
 
-  function getMetadata(
-    uint64 metadataId
-  ) public view returns (string memory metadata) {
-    if (metadataId > totalMetadatas) revert IndexOutOfBounds();
-    metadata = _metadatas[metadataId];
-  }
-
   function getBatch(
     uint256 batchId
   )
     public
     view
-    returns (
-      uint64 imageId,
-      uint64 metadataId,
-      uint128 createdAt,
-      uint256 nbTickets
-    )
+    returns (uint128 metadataId, uint128 createdAt, uint256 nbTickets)
   {
     if (batchId > totalBatches) revert IndexOutOfBounds();
     Batch memory batch = _batches[batchId];
-    imageId = batch.imageId;
     metadataId = batch.metadataId;
     createdAt = batch.createdAt;
     nbTickets = _tickets[batchId].length();
@@ -294,30 +260,14 @@ contract TRY26 is
 
   /* ------------ Core Methods ------------ */
 
-  function addMetadata(
-    string memory metadata
-  ) public onlyOwner returns (uint64 newMetadataId) {
-    newMetadataId = ++totalMetadatas;
-    _metadatas[newMetadataId] = metadata;
-    emit MetadataAdded(newMetadataId, metadata);
-  }
-
   function preMint(
-    uint64 imageId,
-    uint64 metadataId,
+    uint128 metadataId,
     bytes32[] calldata tickets
   ) external onlyOwner returns (uint256 batchId) {
     address _owner = owner();
     batchId = ++totalBatches;
-    if (metadataId > totalMetadatas || tickets.length == 0) {
-      revert InvalidBatch();
-    }
-    _batches[batchId] = Batch(
-      imageId,
-      metadataId,
-      uint128(block.timestamp),
-      _owner
-    );
+    if (tickets.length == 0) revert InvalidBatch();
+    _batches[batchId] = Batch(metadataId, uint128(block.timestamp), _owner);
     PaginatedEnumerableSet.Bytes32Set storage ticketIds = _tickets[batchId];
     for (uint256 i = 0; i < tickets.length; i++) {
       ticketIds.add(tickets[i]);

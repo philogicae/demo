@@ -1,0 +1,14 @@
+{
+  "name": "TRY26",
+  "description": "Exclusive Free Trial on TwentySix",
+  "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
+  "image": "https://demo.binaryeyelabs.xyz/sbt/cover/1.png",
+  "attributes": [
+    { "trait_type": "Type", "value": "Instance" },
+    { "trait_type": "CPU", "value": "1" },
+    { "trait_type": "RAM", "value": "2GB" },
+    { "trait_type": "HDD", "value": "20GB" },
+    { "display_type": "date", "trait_type": "start", "value": 1718878416 },
+    { "display_type": "date", "trait_type": "end", "value": 1721459616 }
+  ]
+}
