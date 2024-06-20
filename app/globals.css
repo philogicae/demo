@@ -10,16 +10,16 @@ body {
   @apply w-full h-full overflow-hidden text-white;
   background: linear-gradient(
       180deg,
-      #cccccc 0%,
-      #6db68a 10%,
-      #599c88 20%,
-      #4f8f87 30%,
-      #458286 40%,
-      #3b7585 50%,
-      #316884 60%,
-      #275b83 70%,
-      #1d4e82 80%,
-      #134181 90%,
+      #ffffff 0%,
+      #6db68a 19%,
+      #599c88 28%,
+      #4f8f87 37%,
+      #458286 46%,
+      #3b7585 55%,
+      #316884 64%,
+      #275b83 73%,
+      #1d4e82 82%,
+      #134181 92%,
       #093480 100%
     )
     no-repeat;

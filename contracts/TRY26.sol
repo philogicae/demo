@@ -29,13 +29,19 @@ contract TRY26 is
   struct Batch {
     uint128 metadataId;
     uint128 createdAt;
-    address admin;
+    address creator;
+    uint96 totalTickets;
   }
 
   struct Token {
     address owner;
     uint256 batchId;
     bytes32 ticketId;
+  }
+
+  struct FullToken {
+    Token token;
+    Batch batch;
   }
 
   struct Signature {
@@ -51,11 +57,6 @@ contract TRY26 is
     Signature signature;
   }
 
-  struct FullToken {
-    Token token;
-    Batch batch;
-  }
-
   /* ------------ Constants ------------ */
 
   address private constant ZERO_ADDRESS =
@@ -63,7 +64,7 @@ contract TRY26 is
   uint256 private constant SAFETY_DELAY = 1 minutes;
   bytes32 private constant PREMINT_PERMIT_TYPEHASH =
     keccak256(
-      'PreMintPermit(address admin,uint256 batchId,bytes32 batchSecret)'
+      'PreMintPermit(address creator,uint256 batchId,bytes32 batchSecret)'
     );
 
   string private constant __name = 'TwentySix Soulbound';
@@ -91,7 +92,7 @@ contract TRY26 is
   event BatchPreMinted(
     uint256 indexed batchId,
     uint128 indexed metadataId,
-    address indexed admin,
+    address indexed creator,
     uint256 nbTickets
   );
   event TicketReserved(
@@ -110,32 +111,33 @@ contract TRY26 is
   error ReservationNotFound(bytes32 reservation);
   error TicketNotFound(uint256 batchId, bytes32 ticketId);
   error TicketAlreadyClaimed(uint256 batchId, bytes32 ticketId);
-  error InvalidSigner(address admin, address signer);
+  error InvalidSigner(address creator, address signer);
 
   /* ------------ Constructor ------------ */
 
   constructor() EIP712(__name, __version) Ownable(_msgSender()) {
-    address admin = _msgSender();
+    /* TODO: REMOVE BLOCK */
+    address creator = _msgSender();
     bytes32 ticketId = bytes32('abcde');
     bytes32 ticketId2 = bytes32('fghij');
     uint256 batchId = ++totalBatches;
-    _batches[batchId] = Batch(1, uint128(block.timestamp), admin);
+    _batches[batchId] = Batch(1, uint128(block.timestamp), creator, 2);
     _tickets[batchId].add(ticketId);
     _tickets[batchId].add(ticketId2);
     totalTickets += 2;
-    emit BatchPreMinted(batchId, 1, admin, 2);
+    emit BatchPreMinted(batchId, 1, creator, 2);
     // 1
     uint256 tokenId = ++_totalTokens;
     _tokenIds[ticketId] = tokenId;
-    _tokens[tokenId] = Token(admin, batchId, ticketId);
-    _claimedTokenIds[admin].add(tokenId);
-    emit Transfer(ZERO_ADDRESS, admin, tokenId);
+    _tokens[tokenId] = Token(creator, batchId, ticketId);
+    _claimedTokenIds[creator].add(tokenId);
+    emit Transfer(ZERO_ADDRESS, creator, tokenId);
     // 2
     uint256 tokenId2 = ++_totalTokens;
     _tokenIds[ticketId2] = tokenId2;
-    _tokens[tokenId2] = Token(admin, batchId, ticketId2);
-    _claimedTokenIds[admin].add(tokenId2);
-    emit Transfer(ZERO_ADDRESS, admin, tokenId2);
+    _tokens[tokenId2] = Token(creator, batchId, ticketId2);
+    _claimedTokenIds[creator].add(tokenId2);
+    emit Transfer(ZERO_ADDRESS, creator, tokenId2);
   }
 
   /* ------------ IERC165 Methods ------------ */
@@ -212,18 +214,9 @@ contract TRY26 is
 
   /* ------------ View Methods ------------ */
 
-  function getBatch(
-    uint256 batchId
-  )
-    public
-    view
-    returns (uint128 metadataId, uint128 createdAt, uint256 nbTickets)
-  {
+  function getBatch(uint256 batchId) public view returns (Batch memory batch) {
     if (batchId > totalBatches) revert IndexOutOfBounds();
-    Batch memory batch = _batches[batchId];
-    metadataId = batch.metadataId;
-    createdAt = batch.createdAt;
-    nbTickets = _tickets[batchId].length();
+    batch = _batches[batchId];
   }
 
   function ticketsByBatch(
@@ -272,17 +265,23 @@ contract TRY26 is
   function preMint(
     uint128 metadataId,
     bytes32[] calldata tickets
-  ) external onlyOwner returns (uint256 batchId) {
-    address _owner = owner();
-    batchId = ++totalBatches;
+  ) external returns (uint256 batchId) {
+    /* TODO: ADD AFTER TESTS: modifier onlyOwner */
     if (tickets.length == 0) revert InvalidBatch();
-    _batches[batchId] = Batch(metadataId, uint128(block.timestamp), _owner);
+    batchId = ++totalBatches;
+    address creator = _msgSender();
+    _batches[batchId] = Batch(
+      metadataId,
+      uint128(block.timestamp),
+      creator,
+      uint96(tickets.length)
+    );
     PaginatedEnumerableSet.Bytes32Set storage ticketIds = _tickets[batchId];
     for (uint256 i = 0; i < tickets.length; i++) {
       ticketIds.add(tickets[i]);
     }
     totalTickets += tickets.length;
-    emit BatchPreMinted(batchId, metadataId, _owner, tickets.length);
+    emit BatchPreMinted(batchId, metadataId, creator, tickets.length);
   }
 
   function reserve(bytes32 reservation) external {
@@ -326,13 +325,13 @@ contract TRY26 is
     if (_tokenIds[ticketId] > 0) {
       revert TicketAlreadyClaimed(ticket.batchId, ticketId);
     }
-    address admin = _batches[ticket.batchId].admin;
+    address creator = _batches[ticket.batchId].creator;
     address signer = ecrecover(
       _hashTypedDataV4(
         keccak256(
           abi.encode(
             PREMINT_PERMIT_TYPEHASH,
-            admin,
+            creator,
             ticket.batchId,
             ticket.batchSecret
           )
@@ -342,7 +341,7 @@ contract TRY26 is
       ticket.signature.r,
       ticket.signature.s
     );
-    if (signer != admin) revert InvalidSigner(admin, signer);
+    if (signer != creator) revert InvalidSigner(creator, signer);
   }
 
   /* ------------ IERC721 Banned Methods ------------ */

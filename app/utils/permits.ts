@@ -3,18 +3,18 @@ import { Address, Hex } from 'viem'
 const generatePreMintPermit = ({
   chainId,
   contactAddr,
-  admin,
+  creator,
   batchId,
   batchSecret,
 }: {
   chainId: number
   contactAddr: Address
-  admin: Address
+  creator: Address
   batchId: bigint
   batchSecret: Hex
 }): any => {
   return {
-    account: admin,
+    account: creator,
     domain: {
       name: 'TwentySix Soulbound',
       version: '1',
@@ -24,13 +24,13 @@ const generatePreMintPermit = ({
     primaryType: 'PreMintPermit',
     types: {
       TicketPermit: [
-        { name: 'admin', type: 'address' },
+        { name: 'creator', type: 'address' },
         { name: 'batchId', type: 'uint256' },
         { name: 'batchSecret', type: 'bytes32' },
       ],
     } as const,
     message: {
-      admin: admin,
+      creator: creator,
       batchId: batchId,
       batchSecret: batchSecret,
     } as const,
