@@ -1,0 +1,16 @@
+{
+  "short_name": "TRY26",
+  "name": "TwentySix Soulbound",
+  "description": "Exclusive Free Allocations on TwentySix",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#093480",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

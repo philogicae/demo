@@ -1,4 +1,4 @@
-/* import { Hex, hexToSignature, Signature } from 'viem'
+/* import { Address, Hex, hexToSignature, Signature } from 'viem'
 import { compress, decompress } from '@zalari/string-compression-utils'
 
 const generateTicketHash = async (
@@ -59,10 +59,10 @@ const extractFromTicketHash = async (
     const output = await decompress(decoded, 'deflate-raw')
     const chainId = Number(output.split(':')[0])
     const data = output.split(':')[1]
-    const orderId = ('0x' + data.slice(0, 64)) as `0x${string}`
-    const orderSecret = ('0x' + data.slice(64, 128)) as `0x${string}`
-    const ticketSecret = ('0x' + data.slice(128, 192)) as `0x${string}`
-    const signature = hexToSignature(('0x' + data.slice(192)) as `0x${string}`)
+    const orderId = ('0x' + data.slice(0, 64)) as Address
+    const orderSecret = ('0x' + data.slice(64, 128)) as Address
+    const ticketSecret = ('0x' + data.slice(128, 192)) as Address
+    const signature = hexToSignature(('0x' + data.slice(192)) as Address)
     return {
       chainId,
       content: {

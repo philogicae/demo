@@ -19,14 +19,12 @@ module.exports = {
     enabled: false,
   },
   networks: {
-    avalanche: {
-      url:
-        'https://avalanche-mainnet.infura.io/v3/' +
-        process.env.NEXT_PUBLIC_INFURA_ID,
-      accounts: [process.env.TEST_PRIVATE_KEY],
-    },
     sepolia: {
       url: 'https://eth-sepolia.public.blastapi.io',
+      accounts: [process.env.TEST_PRIVATE_KEY],
+    },
+    avalanche: {
+      url: 'https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc',
       accounts: [process.env.TEST_PRIVATE_KEY],
     },
   },

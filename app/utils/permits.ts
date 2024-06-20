@@ -16,7 +16,7 @@ const generatePreMintPermit = ({
   return {
     account: admin,
     domain: {
-      name: 'TwentySix SBT',
+      name: 'TwentySix Soulbound',
       version: '1',
       chainId: chainId,
       verifyingContract: contactAddr,
@@ -30,9 +30,9 @@ const generatePreMintPermit = ({
       ],
     } as const,
     message: {
-      creator: admin,
-      orderId: batchId,
-      orderSecret: batchSecret,
+      admin: admin,
+      batchId: batchId,
+      batchSecret: batchSecret,
     } as const,
   }
 }

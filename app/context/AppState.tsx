@@ -31,7 +31,7 @@ export default function AppState({ children }: { children: React.ReactNode }) {
   const [mobile, setMobile] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
-    const updatedWidth = () => setMobile(layout.current!.offsetWidth < 1000)
+    const updatedWidth = () => setMobile(layout.current!.offsetWidth < 560)
     updatedWidth()
     return () => window.removeEventListener('resize', updatedWidth)
   }, [])

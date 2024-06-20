@@ -1,4 +1,4 @@
-import { Abi } from 'viem'
+import { Address, Abi } from 'viem'
 import registry from './registry.json'
 import TRY26 from './abis/TRY26.json'
 
@@ -15,7 +15,7 @@ const abis: {
 }
 
 export type ContractData = {
-  address: `0x${string}`
+  address: Address
   abi: Abi
 }
 
@@ -26,7 +26,7 @@ const load = (
   const chain = chainId.toString()
   if (reg?.[contract][chain] && abis[contract])
     return {
-      address: reg[contract][chain] as `0x${string}`,
+      address: reg[contract][chain] as Address,
       abi: abis[contract],
     }
 }

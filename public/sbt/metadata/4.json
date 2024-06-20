@@ -1,0 +1,16 @@
+{
+  "name": "TRY26 - Function",
+  "description": "Exclusive Free Allocation on TwentySix",
+  "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
+  "image": "https://demo.binaryeyelabs.xyz/sbt/cover/3.png",
+  "attributes": [
+    { "trait_type": "Type", "value": "Function" },
+    { "trait_type": "Max Unit", "value": 2 },
+    { "trait_type": "Max CPU Cores", "value": 2 },
+    { "trait_type": "Max RAM (GB)", "value": 4 },
+    { "trait_type": "Max Volume (GB)", "value": 2 },
+    { "trait_type": "Persistent", "value": "Disallowed" },
+    { "display_type": "date", "trait_type": "start", "value": 1718878416 },
+    { "display_type": "date", "trait_type": "end", "value": 1721459616 }
+  ]
+}

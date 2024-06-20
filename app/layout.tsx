@@ -8,8 +8,8 @@ import Navbar from '@components/layout/Navbar'
 const inter = Inter({ subsets: ['latin'], preload: true })
 
 export const metadata: Metadata = {
-  title: 'Demo',
-  description: 'Demo',
+  title: 'Twentysix Soulbound',
+  description: 'Exclusive Free Allocations on TwentySix',
 }
 
 export const viewport: Viewport = {
@@ -31,7 +31,13 @@ export default function RootLayout({
       window.location.reload()
     }
   }
-  const csp = `default-src 'self' api.web3modal.com *.walletconnect.com *.walletconnect.org wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org/rpc rpc.sepolia.org cloudflare-eth.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' * blob: data:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src data:`
+  const csp = `default-src 'self';
+script-src 'self' 'unsafe-eval' 'unsafe-inline';
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+img-src 'self' data: blob: https://walletconnect.org https://walletconnect.com https://secure.walletconnect.com https://secure.walletconnect.org https://tokens-data.1inch.io https://tokens.1inch.io https://ipfs.io;
+font-src 'self' https://fonts.gstatic.com;
+connect-src 'self' https://rpc.walletconnect.com https://rpc.walletconnect.org https://explorer-api.walletconnect.com https://explorer-api.walletconnect.org https://relay.walletconnect.com https://relay.walletconnect.org wss://relay.walletconnect.com wss://relay.walletconnect.org https://pulse.walletconnect.com https://pulse.walletconnect.org https://api.web3modal.com https://api.web3modal.org https://keys.walletconnect.com https://keys.walletconnect.org https://notify.walletconnect.com https://notify.walletconnect.org https://echo.walletconnect.com https://echo.walletconnect.org https://push.walletconnect.com https://push.walletconnect.org wss://www.walletlink.org rpc.sepolia.org cloudflare-eth.com https://eth-sepolia.public.blastapi.io wss://ethereum-sepolia-rpc.publicnode.com wss://avalanche-c-chain-rpc.publicnode.com https://ava-mainnet.public.blastapi.io;
+frame-src 'self' https://verify.walletconnect.com https://verify.walletconnect.org https://secure.walletconnect.com https://secure.walletconnect.org;`
   return (
     <html lang="en">
       <head>

@@ -1,14 +1,14 @@
 {
-  "name": "TRY26 - Basic Instance",
+  "name": "TRY26 - Classic Instance",
   "description": "Exclusive Free Allocation on TwentySix",
   "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-  "image": "https://demo.binaryeyelabs.xyz/sbt/cover/1.png",
+  "image": "https://demo.binaryeyelabs.xyz/sbt/cover/5.png",
   "attributes": [
     { "trait_type": "Type", "value": "Instance" },
-    { "trait_type": "Max Unit", "value": 1 },
-    { "trait_type": "Max CPU Cores", "value": 1 },
-    { "trait_type": "Max RAM (GB)", "value": 2 },
-    { "trait_type": "Max Volume (GB)", "value": 20 },
+    { "trait_type": "Max Unit", "value": 2 },
+    { "trait_type": "Max CPU Cores", "value": 4 },
+    { "trait_type": "Max RAM (GB)", "value": 8 },
+    { "trait_type": "Max Volume (GB)", "value": 100 },
     { "trait_type": "Confidential", "value": "Disallowed" },
     { "display_type": "date", "trait_type": "start", "value": 1718878416 },
     { "display_type": "date", "trait_type": "end", "value": 1721459616 }

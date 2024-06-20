@@ -13,20 +13,24 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
       <div
         id="topbar"
         className={cn(
-          'flex flex-row w-full items-center justify-between px-3',
-          mobile ? 'h-16' : 'h-20'
+          'flex flex-row w-full items-center justify-between',
+          mobile ? 'h-20 pl-4 pr-2' : 'h-24 pl-6 pr-4'
         )}
       >
         <a
           className="flex flex-row items-center gap-2"
           href={'https://demo.binaryeyelabs.xyz'}
         >
-          <Image src="/512x512.png" alt="Demo" width={50} height={50} />
-          <div className="text-2xl">Demo</div>
+          <Image
+            src={mobile ? '/26-icon.png' : '/26-horizontal.png'}
+            alt="TwentySix Soulbound"
+            width={mobile ? 40 : 200}
+            height={mobile ? 40 : 50}
+          />
         </a>
         <w3m-button
           size="sm"
-          balance="hide"
+          balance={mobile ? 'hide' : 'show'}
           label={isConnected ? ensName || address : undefined}
         />
       </div>

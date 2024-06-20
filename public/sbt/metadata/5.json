@@ -1,0 +1,13 @@
+{
+  "name": "TRY26 - Website",
+  "description": "Exclusive Free Allocation on TwentySix",
+  "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
+  "image": "https://demo.binaryeyelabs.xyz/sbt/cover/2.png",
+  "attributes": [
+    { "trait_type": "Type", "value": "Website" },
+    { "trait_type": "Max Unit", "value": 3 },
+    { "trait_type": "Max Volume (GB)", "value": 1 },
+    { "display_type": "date", "trait_type": "start", "value": 1718878416 },
+    { "display_type": "date", "trait_type": "end", "value": 1721459616 }
+  ]
+}
