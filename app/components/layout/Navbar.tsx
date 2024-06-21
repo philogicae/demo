@@ -14,7 +14,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
         id="topbar"
         className={cn(
           'flex flex-row w-full items-center justify-between',
-          mobile ? 'h-20 pl-4 pr-2' : 'h-24 pl-6 pr-4'
+          mobile ? 'h-16 pl-3 pr-1' : 'h-20 px-6'
         )}
       >
         <a
@@ -22,23 +22,30 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
           href={'https://demo.binaryeyelabs.xyz'}
         >
           <Image
-            src={mobile ? '/26-icon.png' : '/26-horizontal.png'}
+            src="/26-horizontal.png"
             alt="TwentySix Soulbound"
-            width={mobile ? 40 : 200}
-            height={mobile ? 40 : 50}
+            width={mobile ? 150 : 200}
+            height={50}
             radius="none"
           />
-          {!mobile && (
-            <span className="text-xl font-extrabold italic absolute text-black z-5 top-[54px] left-[110px]">
-              Soulbound
-            </span>
-          )}
+          <span
+            className={cn(
+              'text-xl font-extrabold italic absolute text-black z-5',
+              mobile
+                ? 'text-md top-[35px] left-[77px]'
+                : 'text-xl top-[44px] left-[110px]'
+            )}
+          >
+            Soulbound
+          </span>
         </a>
-        <w3m-button
-          size="sm"
-          balance={mobile ? 'hide' : 'show'}
-          label={isConnected ? ensName || address : undefined}
-        />
+        <div className={cn(mobile ? 'pt-2' : 'pt-2')}>
+          <w3m-button
+            size="sm"
+            balance={mobile ? 'hide' : 'show'}
+            label={isConnected ? ensName || address : undefined}
+          />
+        </div>
       </div>
       <div className="flex flex-col w-full h-full overflow-y-auto">
         {children}

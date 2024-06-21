@@ -15,17 +15,21 @@ export function Metadata({
   const external_url = '/#' + data.external_url.split('#')[1]
   return (
     <Card className="w-full max-w-xs !h-full text-white bg-opacity-10">
-      <CardHeader className="flex">
-        <Image
-          src={'/sbt' + data.image.split('sbt')[1]}
-          alt="Cover"
-          radius="sm"
-          width={150}
-          height={150}
-        />
-        <div className="flex flex-col p-2 w-full bg-opacity-15 bg-white ml-3 mr-1 rounded-xl">
-          <span className="text-lg font-extrabold text-center">{title[0]}</span>
-          <span className="text-lg font-bold text-center">{title[1]}</span>
+      <CardHeader className="flex items-center justify-between">
+        <div className="w-[90px] h-[90px] items-center justify-center overflow-visible">
+          <Image
+            src={'/sbt' + data.image.split('sbt')[1]}
+            alt="Cover"
+            radius="sm"
+            width={90}
+            height={90}
+          />
+        </div>
+        <div className="flex flex-col items-end justify-center h-[90px] pl-3 pr-1">
+          <span className="text-lg font-extrabold text-right">{title[0]}</span>
+          <span className="text-lg font-bold text-right max-w-36">
+            {title[1]}
+          </span>
         </div>
       </CardHeader>
       <Divider className="bg-opacity-30 bg-white" />
@@ -33,11 +37,11 @@ export function Metadata({
         <p className="italic font-semibold">{data.description}</p>
         <Divider className="bg-opacity-30 bg-white my-2" />
         <div className="flex flex-row justify-between items-center">
-          <span className="font-bold">Image</span>
-          <span>{data.image.split('cover/')[1]}</span>
+          <span className="font-bold">Image ID</span>
+          <span>{data.image.split('cover/')[1].split('.')[0]}</span>
         </div>
         <div className="flex flex-row justify-between items-center">
-          <span className="font-bold">External Url</span>
+          <span className="font-bold">External URL</span>
           <span>{!id ? external_url : external_url.replace('{id}', id)}</span>
         </div>
         {data.attributes.length > 0 ? (

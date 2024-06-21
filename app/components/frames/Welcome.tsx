@@ -66,17 +66,17 @@ export default function Welcome() {
           <div className="flex flex-col items-center justify-center p-1 rounded-lg bg-white bg-opacity-10">
             <span className="text-center px-2 font-semibold">Batches</span>
             <Divider className="bg-opacity-30 bg-white mt-1" />
-            <span>{data.batches}</span>
+            <span className="font-semibold">{data.batches}</span>
           </div>
           <div className="flex flex-col items-center justify-center p-1 rounded-lg bg-white bg-opacity-10">
             <span className="text-center px-2 font-semibold">Tickets</span>
             <Divider className="bg-opacity-30 bg-white mt-1" />
-            <span>{data.tickets}</span>
+            <span className="font-semibold">{data.tickets}</span>
           </div>
           <div className="flex flex-col items-center justify-center p-1 rounded-lg bg-white bg-opacity-10">
             <span className="text-center px-2 font-semibold">Claimed</span>
             <Divider className="bg-opacity-30 bg-white mt-1" />
-            <span>{data.claimed}</span>
+            <span className="font-semibold">{data.claimed}</span>
           </div>
         </div>
       </div>

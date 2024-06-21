@@ -11,8 +11,8 @@ export default function Create() {
     Number(n) > max ? max : Number(n) < min ? min : n
   return (
     <div className="flex flex-col items-center justify-start w-full py-10 px-5 gap-3">
-      <span className="text-xl rounded-lg bg-green-800 bg-opacity-20 px-2 pb-1 font-bold">
-        Create a new batch of TRY26
+      <span className="text-center text-xl rounded-lg bg-green-800 bg-opacity-20 px-2 pb-1 font-bold">
+        Create a new batch of TRY26&rsquo;s
       </span>
       <Input
         isRequired
@@ -56,7 +56,7 @@ export default function Create() {
           trigger:
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
           label: 'text-white font-bold text-md',
-          value: 'text-right font-bold !text-white text-md',
+          value: 'text-right font-bold !text-white text-sm',
           popoverContent: 'text-white bg-gray-800',
         }}
         className="max-w-xs"
