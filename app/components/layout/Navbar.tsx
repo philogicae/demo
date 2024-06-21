@@ -19,7 +19,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
       >
         <a
           className="flex flex-col items-center"
-          href={'https://demo.binaryeyelabs.xyz'}
+          href={'https://26-soulbound.istest.eth.limo'}
         >
           <Image
             src="/26-horizontal.png"

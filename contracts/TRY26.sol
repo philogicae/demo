@@ -70,7 +70,7 @@ contract TRY26 is
   string private constant __name = 'TwentySix Soulbound';
   string private constant __symbol = 'TRY26';
   string private constant __version = '1';
-  string private constant _baseURI = 'https://demo.binaryeyelabs.xyz';
+  string private constant _baseURI = 'https://26-soulbound.istest.eth.limo';
 
   /* ------------ Storage ------------ */
 

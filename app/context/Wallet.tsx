@@ -16,8 +16,8 @@ export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID
 const metadata = {
   name: 'TwentySix Soulbound',
   description: 'Exclusive Free Allocations on TwentySix',
-  url: 'https://demo.binaryeyelabs.xyz',
-  icons: ['https://demo.binaryeyelabs.xyz/26-icon.png'],
+  url: 'https://26-soulbound.istest.eth.limo',
+  icons: ['https://26-soulbound.istest.eth.limo/26-icon.png'],
 }
 
 export const txType: Record<number, 'eip1559' | 'legacy'> = {

@@ -2,8 +2,8 @@
   "1": {
     "name": "TRY26 - Basic Instance",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-    "image": "https://demo.binaryeyelabs.xyz/sbt/cover/1.png",
+    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
+    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/1.png",
     "attributes": [
       {
         "trait_type": "Type",
@@ -44,8 +44,8 @@
   "2": {
     "name": "TRY26 - Classic Instance",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-    "image": "https://demo.binaryeyelabs.xyz/sbt/cover/5.png",
+    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
+    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/5.png",
     "attributes": [
       {
         "trait_type": "Type",
@@ -86,8 +86,8 @@
   "3": {
     "name": "TRY26 - Confidential Instance",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-    "image": "https://demo.binaryeyelabs.xyz/sbt/cover/4.png",
+    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
+    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/4.png",
     "attributes": [
       {
         "trait_type": "Type",
@@ -128,8 +128,8 @@
   "4": {
     "name": "TRY26 - Function",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-    "image": "https://demo.binaryeyelabs.xyz/sbt/cover/3.png",
+    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
+    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/3.png",
     "attributes": [
       {
         "trait_type": "Type",
@@ -170,8 +170,8 @@
   "5": {
     "name": "TRY26 - Website",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-    "image": "https://demo.binaryeyelabs.xyz/sbt/cover/2.png",
+    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
+    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/2.png",
     "attributes": [
       {
         "trait_type": "Type",

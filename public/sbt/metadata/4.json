@@ -1,8 +1,8 @@
 {
   "name": "TRY26 - Function",
   "description": "Exclusive Free Allocation on TwentySix",
-  "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
-  "image": "https://demo.binaryeyelabs.xyz/sbt/cover/3.png",
+  "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
+  "image": "https://26-soulbound.istest.eth.limo/sbt/cover/3.png",
   "attributes": [
     { "trait_type": "Type", "value": "Function" },
     { "trait_type": "Max Unit", "value": 2 },
