@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+import { Image } from '@nextui-org/react'
 import { useAppState } from '@context/AppState'
 import { useAccount, useEnsName } from 'wagmi'
 import { cn } from '@utils/tw'
@@ -26,6 +26,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
             alt="TwentySix Soulbound"
             width={mobile ? 40 : 200}
             height={mobile ? 40 : 50}
+            radius="none"
           />
         </a>
         <w3m-button
@@ -34,7 +35,9 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
           label={isConnected ? ensName || address : undefined}
         />
       </div>
-      {children}
+      <div className="flex flex-col w-full h-full overflow-y-auto">
+        {children}
+      </div>
     </div>
   )
 }

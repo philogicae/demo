@@ -47,8 +47,8 @@ const config = defaultWagmiConfig({
 createWeb3Modal({
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true,
-  enableOnramp: true,
+  enableAnalytics: false,
+  enableOnramp: false,
   allowUnsupportedChain: false,
   defaultChain: sepolia,
   themeMode: 'light',

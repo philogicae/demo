@@ -16,7 +16,7 @@ fs.readdir(directoryPath, (err, files) => {
       const filePath = path.join(directoryPath, file)
       return fs.promises.readFile(filePath, 'utf8').then((data) => {
         const content = JSON.parse(data)
-        const id = `${path.basename(file, '.json')}. ${content.name}`
+        const id = path.basename(file, '.json')
         return { [id]: content }
       })
     }

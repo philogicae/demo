@@ -13,36 +13,29 @@ import {
 type AppStateType = {
   mobile: boolean
   setMobile: Dispatch<SetStateAction<boolean>>
-  loading: boolean
-  setLoading: Dispatch<SetStateAction<boolean>>
 }
 
 const defaultAppState: AppStateType = {
   mobile: false,
   setMobile: (value: SetStateAction<boolean>) => {},
-  loading: false,
-  setLoading: (value: SetStateAction<boolean>) => {},
 }
 
 const AppContext = createContext(defaultAppState)
 
 export default function AppState({ children }: { children: React.ReactNode }) {
   const layout = useRef<HTMLDivElement>(null)
-  const [mobile, setMobile] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [mobile, setMobile] = useState(false)
   useEffect(() => {
     const updatedWidth = () => setMobile(layout.current!.offsetWidth < 560)
     updatedWidth()
     return () => window.removeEventListener('resize', updatedWidth)
   }, [])
   return (
-    <div ref={layout} className="w-full h-full">
+    <div ref={layout} className="flex w-full h-full">
       <AppContext.Provider
         value={{
           mobile,
           setMobile,
-          loading,
-          setLoading,
         }}
       >
         {children}

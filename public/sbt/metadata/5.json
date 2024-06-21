@@ -7,7 +7,7 @@
     { "trait_type": "Type", "value": "Website" },
     { "trait_type": "Max Unit", "value": 3 },
     { "trait_type": "Max Volume (GB)", "value": 1 },
-    { "display_type": "date", "trait_type": "start", "value": 1718878416 },
-    { "display_type": "date", "trait_type": "end", "value": 1721459616 }
+    { "display_type": "date", "trait_type": "Start", "value": 1718878416 },
+    { "display_type": "date", "trait_type": "End", "value": 1721459616 }
   ]
 }

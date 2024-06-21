@@ -34,10 +34,19 @@ body {
   margin: auto;
 }
 
-.halo-text {
-  text-shadow: 0 0 10px #00ffff;
+.text-halo {
+  text-shadow: 0 0 8px #ffffff;
 }
 
-.halo-button {
+.button-halo {
   animation: button-pulse 2s infinite;
+}
+
+.no-arrow::-webkit-outer-spin-button,
+.no-arrow::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-arrow {
+  -moz-appearance: textfield;
 }

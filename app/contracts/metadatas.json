@@ -1,5 +1,5 @@
 {
-  "1. TRY26 - Basic Instance": {
+  "1": {
     "name": "TRY26 - Basic Instance",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -31,17 +31,17 @@
       },
       {
         "display_type": "date",
-        "trait_type": "start",
+        "trait_type": "Start",
         "value": 1718878416
       },
       {
         "display_type": "date",
-        "trait_type": "end",
+        "trait_type": "End",
         "value": 1721459616
       }
     ]
   },
-  "2. TRY26 - Classic Instance": {
+  "2": {
     "name": "TRY26 - Classic Instance",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -73,17 +73,17 @@
       },
       {
         "display_type": "date",
-        "trait_type": "start",
+        "trait_type": "Start",
         "value": 1718878416
       },
       {
         "display_type": "date",
-        "trait_type": "end",
+        "trait_type": "End",
         "value": 1721459616
       }
     ]
   },
-  "3. TRY26 - Confidential Instance": {
+  "3": {
     "name": "TRY26 - Confidential Instance",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -115,17 +115,17 @@
       },
       {
         "display_type": "date",
-        "trait_type": "start",
+        "trait_type": "Start",
         "value": 1718878416
       },
       {
         "display_type": "date",
-        "trait_type": "end",
+        "trait_type": "End",
         "value": 1721459616
       }
     ]
   },
-  "4. TRY26 - Function": {
+  "4": {
     "name": "TRY26 - Function",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -157,17 +157,17 @@
       },
       {
         "display_type": "date",
-        "trait_type": "start",
+        "trait_type": "Start",
         "value": 1718878416
       },
       {
         "display_type": "date",
-        "trait_type": "end",
+        "trait_type": "End",
         "value": 1721459616
       }
     ]
   },
-  "5. TRY26 - Website": {
+  "5": {
     "name": "TRY26 - Website",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -187,12 +187,12 @@
       },
       {
         "display_type": "date",
-        "trait_type": "start",
+        "trait_type": "Start",
         "value": 1718878416
       },
       {
         "display_type": "date",
-        "trait_type": "end",
+        "trait_type": "End",
         "value": 1721459616
       }
     ]

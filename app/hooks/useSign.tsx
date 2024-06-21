@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { useSignTypedData } from 'wagmi'
 import { Hex, verifyTypedData, parseSignature } from 'viem'
 
-export function useSigner() {
+export function useSign() {
   const isValidSignature = useRef<boolean>(true)
   const {
     signTypedDataAsync,

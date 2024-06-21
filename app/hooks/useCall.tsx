@@ -15,7 +15,7 @@ type CallsProps = {
   active?: boolean
 }
 
-export function useCaller({ calls, initData, active = false }: CallsProps) {
+export function useCall({ calls, initData, active = false }: CallsProps) {
   const methods: { [method: string]: number } = {}
   calls
     .map((x) => x.functionName)
