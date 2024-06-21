@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useChainId } from 'wagmi'
 import load from '@contracts/loader'
@@ -39,8 +39,8 @@ export default function Token() {
     data: { name: '' },
     extra: {},
   })
-  const done = useRef(false)
-  const { fetch, result, isSuccess, isError } = useCall({
+
+  const { fetch } = useCall({
     calls: [
       {
         chainId: chainId,
@@ -65,29 +65,29 @@ export default function Token() {
       },
     ],
   })
+
   useEffect(() => {
-    console.log(done.current, isSuccess, isError)
-    if (isSuccess && !done.current) {
-      const r = prepare(result.getFullToken)
-      if (r.token.batchId === 0) navigate('/404')
-      else {
-        setMetadata({
-          data: (metadatas as Record<string, any>)[r.batch.metadataId],
-          id,
-          extra: { ...r.token, ...r.batch },
-        })
-        done.current = true
-      }
-    }
-    if (isError) navigate('/404')
-  }, [isSuccess, isError])
-  useEffect(() => {
-    done.current = false
     fetch()
+      .then((result) => {
+        if (!result.data?.getFullToken.token.batchId) navigate('/404')
+        const { token, batch } = prepare(result.data?.getFullToken)
+        setMetadata({
+          data: (metadatas as Record<string, any>)[batch.metadataId],
+          id,
+          extra: { ...token, ...batch },
+        })
+      })
+      .catch((err) => {
+        console.error('Error during call:', err)
+        navigate('/404')
+      })
   }, [id])
-  return done.current ? (
+
+  return metadata.data?.name ? (
     <div className="flex flex-col items-center justify-center w-full gap-5">
-      <span className="text-3xl">#{metadata.id}</span>
+      <span className="text-3xl rounded-xl bg-green-800 bg-opacity-20 px-2 pb-1 font-bold">
+        #{metadata.id}
+      </span>
       <Metadata data={metadata.data} id={metadata.id} extra={metadata.extra} />
     </div>
   ) : (

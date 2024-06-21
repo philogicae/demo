@@ -14,7 +14,7 @@ export function Metadata({
   const title = data.name.split(' - ')
   const external_url = '/#' + data.external_url.split('#')[1]
   return (
-    <Card className="w-full max-w-xs !h-full">
+    <Card className="w-full max-w-xs !h-full text-white bg-opacity-10">
       <CardHeader className="flex">
         <Image
           src={'/sbt' + data.image.split('sbt')[1]}
@@ -23,15 +23,15 @@ export function Metadata({
           width={150}
           height={150}
         />
-        <div className="flex flex-col p-2 w-full">
-          <span className="text-lg font-bold text-center">{title[0]}</span>
-          <span className="text-lg font-extrabold text-center">{title[1]}</span>
+        <div className="flex flex-col p-2 w-full bg-opacity-15 bg-white ml-3 mr-1 rounded-xl">
+          <span className="text-lg font-extrabold text-center">{title[0]}</span>
+          <span className="text-lg font-bold text-center">{title[1]}</span>
         </div>
       </CardHeader>
-      <Divider />
+      <Divider className="bg-opacity-30 bg-white" />
       <CardBody className="flex text-sm overflow-hidden">
-        <p className="italic">{data.description}</p>
-        <Divider className="my-2" />
+        <p className="italic font-semibold">{data.description}</p>
+        <Divider className="bg-opacity-30 bg-white my-2" />
         <div className="flex flex-row justify-between items-center">
           <span className="font-bold">Image</span>
           <span>{data.image.split('cover/')[1]}</span>
@@ -42,7 +42,7 @@ export function Metadata({
         </div>
         {data.attributes.length > 0 ? (
           <div>
-            <Divider className="my-2" />
+            <Divider className="bg-opacity-30 bg-white my-2" />
             <div className="gap-2">
               {data.attributes.map((attribute: any, index: number) => (
                 <div
@@ -62,7 +62,7 @@ export function Metadata({
         ) : null}
         {extra && Object.keys(extra).length > 0 ? (
           <div>
-            <Divider className="my-2" />
+            <Divider className="bg-opacity-30 bg-white my-2" />
             <div className="gap-2">
               {Object.entries(extra).map((item: any, index: number) => (
                 <div

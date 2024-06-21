@@ -18,7 +18,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
         )}
       >
         <a
-          className="flex flex-row items-center gap-2"
+          className="flex flex-col items-center"
           href={'https://demo.binaryeyelabs.xyz'}
         >
           <Image
@@ -28,6 +28,11 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
             height={mobile ? 40 : 50}
             radius="none"
           />
+          {!mobile && (
+            <span className="text-xl font-extrabold italic absolute text-black z-5 top-[54px] left-[110px]">
+              Soulbound
+            </span>
+          )}
         </a>
         <w3m-button
           size="sm"
