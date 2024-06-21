@@ -1,5 +1,5 @@
 {
-  "1": {
+  "1. TRY26 - Basic Instance": {
     "name": "TRY26 - Basic Instance",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -41,7 +41,7 @@
       }
     ]
   },
-  "2": {
+  "2. TRY26 - Classic Instance": {
     "name": "TRY26 - Classic Instance",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -83,7 +83,7 @@
       }
     ]
   },
-  "3": {
+  "3. TRY26 - Confidential Instance": {
     "name": "TRY26 - Confidential Instance",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -125,7 +125,7 @@
       }
     ]
   },
-  "4": {
+  "4. TRY26 - Function": {
     "name": "TRY26 - Function",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",
@@ -167,7 +167,7 @@
       }
     ]
   },
-  "5": {
+  "5. TRY26 - Website": {
     "name": "TRY26 - Website",
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://demo.binaryeyelabs.xyz/#/token/{id}",

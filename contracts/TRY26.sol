@@ -262,13 +262,10 @@ contract TRY26 is
 
   /* ------------ Core Methods ------------ */
 
-  function preMint(
-    uint128 metadataId,
-    bytes32[] calldata tickets
-  ) external returns (uint256 batchId) {
+  function preMint(uint128 metadataId, bytes32[] calldata tickets) external {
     /* TODO: ADD AFTER TESTS: modifier onlyOwner */
     if (tickets.length == 0) revert InvalidBatch();
-    batchId = ++totalBatches;
+    uint256 batchId = ++totalBatches;
     address creator = _msgSender();
     _batches[batchId] = Batch(
       metadataId,
