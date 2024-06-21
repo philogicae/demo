@@ -14,7 +14,7 @@ export function Metadata({
   const title = data.name.split(' - ')
   const external_url = '/#' + data.external_url.split('#')[1]
   return (
-    <Card className="w-full max-w-xs !h-full text-white bg-opacity-10">
+    <Card className="w-full max-w-xs text-white bg-opacity-10">
       <CardHeader className="flex items-center justify-between">
         <div className="w-[90px] h-[90px] items-center justify-center overflow-visible">
           <Image

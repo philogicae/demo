@@ -84,9 +84,9 @@ export default function Token() {
   }, [id])
 
   return metadata.data?.name ? (
-    <div className="flex flex-col items-center justify-center w-full gap-5">
-      <span className="text-3xl rounded-xl bg-green-800 bg-opacity-20 px-2 pb-1 font-bold">
-        #{metadata.id}
+    <div className="flex flex-col items-center justify-center w-full h-full gap-3">
+      <span className="text-3xl rounded-xl bg-green-800 bg-opacity-20 px-2 pb-1 font-semibold font-mono">
+        TRY26#{metadata.id}
       </span>
       <Metadata data={metadata.data} id={metadata.id} extra={metadata.extra} />
     </div>
