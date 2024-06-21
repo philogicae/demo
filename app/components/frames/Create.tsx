@@ -20,13 +20,23 @@ export default function Create() {
         placeholder="Select a template"
         selectedKeys={[metadataId]}
         onChange={handleMetadataId}
+        classNames={{
+          popoverContent: 'bg-white text-black',
+        }}
         className="max-w-xs"
       >
-        {Object.keys(metadatas).map((metadata, index) => (
-          <SelectItem key={metadata}>{metadata}</SelectItem>
+        {Object.keys(metadatas).map((metadata) => (
+          <SelectItem
+            key={metadata}
+            classNames={{
+              base: 'data-[hover=true]:bg-amber-300',
+            }}
+          >
+            {metadata}
+          </SelectItem>
         ))}
       </Select>
-      <span className="pt-3 w-80 h-80">
+      <span className="pt-5 w-80 h-80">
         {JSON.stringify(
           (metadatas as Record<string, any>)[metadataId],
           null,
