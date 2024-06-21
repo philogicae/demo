@@ -28,20 +28,6 @@ body {
   @apply font-sans antialiased;
 }
 
-.manual-y-center::before,
-.manual-y-center::after {
-  content: '';
-  margin: auto;
-}
-
-.text-halo {
-  text-shadow: 0 0 8px #ffffff;
-}
-
-.button-halo {
-  animation: button-pulse 2s infinite;
-}
-
 .no-arrow::-webkit-outer-spin-button,
 .no-arrow::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -49,4 +35,8 @@ body {
 }
 .no-arrow {
   -moz-appearance: textfield;
+}
+
+.button-halo {
+  animation: button-pulse 2s infinite;
 }
