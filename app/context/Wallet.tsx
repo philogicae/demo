@@ -17,7 +17,7 @@ const metadata = {
   name: 'TwentySix Soulbound',
   description: 'Exclusive Free Allocations on TwentySix',
   url: 'https://26-soulbound.istest.eth.limo',
-  icons: ['https://26-soulbound.istest.eth.limo/26-icon.png'],
+  icons: ['https://26-soulbound.istest.eth.limo/favicon-32x32.png'],
 }
 
 export const txType: Record<number, 'eip1559' | 'legacy'> = {
