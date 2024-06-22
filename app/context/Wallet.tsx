@@ -26,6 +26,7 @@ export const txType: Record<number, 'eip1559' | 'legacy'> = {
 }
 
 const chains = [sepolia] as const
+export const defaultChain = chains[0]
 const config = defaultWagmiConfig({
   chains,
   projectId,
@@ -50,7 +51,7 @@ createWeb3Modal({
   enableAnalytics: false,
   enableOnramp: false,
   allowUnsupportedChain: false,
-  defaultChain: sepolia,
+  defaultChain,
   themeMode: 'light',
   themeVariables: {
     '--w3m-accent': '#050011',

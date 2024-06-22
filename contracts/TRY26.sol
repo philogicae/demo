@@ -313,10 +313,7 @@ contract TRY26 is
     ticketId = keccak256(
       abi.encodePacked(ticket.batchSecret, ticket.ticketSecret)
     );
-    PaginatedEnumerableSet.Bytes32Set storage tickets = _tickets[
-      ticket.batchId
-    ];
-    if (!tickets.contains(ticketId)) {
+    if (!_tickets[ticket.batchId].contains(ticketId)) {
       revert TicketNotFound(ticket.batchId, ticketId);
     }
     if (_tokenIds[ticketId] > 0) {

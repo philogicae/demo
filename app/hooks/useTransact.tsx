@@ -67,7 +67,7 @@ export function useTransact({
     chainId,
     hash: txHash,
     confirmations: 1,
-    query: { enabled: Boolean(txHash) },
+    query: { enabled: !!txHash },
   })
 
   useEffect(() => {

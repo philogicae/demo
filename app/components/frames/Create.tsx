@@ -7,7 +7,7 @@ import { Select, SelectItem, Input } from '@nextui-org/react'
 import { ActionButton } from '@components/elements/Buttons'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { Loader } from '@components/elements/Loader'
-import { sepolia } from 'wagmi/chains'
+import { defaultChain } from '@context/Wallet'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import load from '@contracts/loader'
 import {
@@ -15,9 +15,10 @@ import {
   generateBatchHex,
   generateTicketIds,
 } from '@utils/packing'
+import { Hex } from 'viem'
 //import { useTransact } from '@hooks/useTransact'
 
-const defaultChain = sepolia
+const maxTickets = 100
 
 export default function Create() {
   const { isConnected } = useAccount()
@@ -27,15 +28,19 @@ export default function Create() {
   if (isConnected && !contract) switchChain({ chainId: defaultChain.id })
   const [metadataId, setMetadataId] = useState('')
   const [units, setUnits] = useState('')
-
   const [loading, setLoading] = useState(false)
+  const [hashes, setHashes] = useState({
+    batchSecret: '',
+    ticketSecrets: [] as Hex[],
+    ticketIds: [] as Hex[],
+  })
 
   const handleCreateBatch = async () => {
+    setLoading(true)
     const batchSecret = generateHex()
     const ticketSecrets = generateBatchHex(Number(units))
     const ticketIds = generateTicketIds(batchSecret, ticketSecrets)
-    console.log({ ticketIds })
-    setLoading(true)
+    setHashes({ batchSecret, ticketSecrets, ticketIds })
   }
 
   const handleSignTickets = async () => {}
@@ -56,6 +61,7 @@ export default function Create() {
       </span>
       <Select
         isRequired
+        isDisabled={!!hashes.batchSecret}
         size="sm"
         color="primary"
         variant="faded"
@@ -63,9 +69,9 @@ export default function Create() {
         placeholder="Select a template"
         selectorIcon={<></>}
         selectedKeys={[metadataId]}
-        onChange={(e: any) => {
-          setMetadataId(e.target.value)
-        }}
+        onChange={(e: any) =>
+          !hashes.batchSecret && setMetadataId(e.target.value)
+        }
         classNames={{
           innerWrapper: 'w-full',
           trigger:
@@ -82,6 +88,7 @@ export default function Create() {
       </Select>
       <Input
         isRequired
+        isDisabled={!!hashes.batchSecret}
         size="sm"
         color="primary"
         variant="faded"
@@ -89,13 +96,18 @@ export default function Create() {
         placeholder="0"
         type="number"
         value={units}
-        onChange={(e: any) => {
+        onChange={(e: any) =>
+          !hashes.batchSecret &&
           setUnits(
-            restrictRange(Math.round(Number(e.target.value)), 1, 50).toString()
+            restrictRange(
+              Math.round(Number(e.target.value)),
+              1,
+              maxTickets
+            ).toString()
           )
-        }}
+        }
         min={1}
-        max={50}
+        max={maxTickets}
         classNames={{
           inputWrapper:
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
