@@ -1,29 +1,50 @@
-/* import { Address, Hex, hexToSignature, Signature } from 'viem'
-import { compress, decompress } from '@zalari/string-compression-utils'
+// @ts-expect-error expected
+import { encode, decode } from 'base64-compressor'
+import { nanoid } from 'nanoid'
+import {
+  Address,
+  encodePacked,
+  Hex,
+  keccak256,
+  parseSignature,
+  Signature,
+  toHex,
+} from 'viem'
 
-const generateTicketHash = async (
+export const generateHex = (): Hex => keccak256(toHex(nanoid(32)))
+
+export const generateBatchHex = (units: number): Hex[] =>
+  Array.from({ length: units }, generateHex)
+
+export const generateTicketIds = (
+  batchSecret: Hex,
+  ticketSecrets: Hex[]
+): Hex[] =>
+  ticketSecrets.map((ticketSecret) =>
+    keccak256(encodePacked(['bytes32', 'bytes32'], [batchSecret, ticketSecret]))
+  )
+
+export const generateTicketHash = async (
   chainId: number,
-  orderId: Hex,
-  orderSecret: Hex,
+  batchId: Hex,
+  batchSecret: Hex,
   ticketSecret: Hex,
   signature: Hex
 ): Promise<string> => {
-  const raw =
+  const object =
     chainId.toString() +
     ':' +
-    orderId.slice(2) +
-    orderSecret.slice(2) +
+    batchId.slice(2) +
+    batchSecret.slice(2) +
     ticketSecret.slice(2) +
     signature.slice(2)
-  const compressed = await compress(raw, 'deflate-raw')
-  const ticketCode = encodeURIComponent(compressed)
-  return ticketCode
+  return await encode(object)
 }
 
-const generateBatchTicketHash = async (
+export const generateBatchTicketHash = async (
   chainId: number,
-  orderId: Hex,
-  orderSecret: Hex,
+  batchId: Hex,
+  batchSecret: Hex,
   ticketSecrets: Hex[],
   signature: Hex
 ): Promise<string[]> =>
@@ -32,22 +53,22 @@ const generateBatchTicketHash = async (
       async (ticketSecret) =>
         await generateTicketHash(
           chainId,
-          orderId,
-          orderSecret,
+          batchId,
+          batchSecret,
           ticketSecret,
           signature
         )
     )
   )
 
-const extractFromTicketHash = async (
+export const extractFromTicketHash = async (
   ticketCode: string
 ): Promise<
   | {
       chainId: number
       content: {
-        orderId: Hex
-        orderSecret: Hex
+        batchId: Hex
+        batchSecret: Hex
         ticketSecret: Hex
         signature: Signature
       }
@@ -55,19 +76,18 @@ const extractFromTicketHash = async (
   | undefined
 > => {
   try {
-    const decoded = decodeURIComponent(ticketCode)
-    const output = await decompress(decoded, 'deflate-raw')
-    const chainId = Number(output.split(':')[0])
-    const data = output.split(':')[1]
-    const orderId = ('0x' + data.slice(0, 64)) as Address
-    const orderSecret = ('0x' + data.slice(64, 128)) as Address
+    const decoded = await decode(ticketCode)
+    const chainId = Number(decoded.split(':')[0])
+    const data = decoded.split(':')[1]
+    const batchId = ('0x' + data.slice(0, 64)) as Address
+    const batchSecret = ('0x' + data.slice(64, 128)) as Address
     const ticketSecret = ('0x' + data.slice(128, 192)) as Address
-    const signature = hexToSignature(('0x' + data.slice(192)) as Address)
+    const signature = parseSignature(('0x' + data.slice(192)) as Address)
     return {
       chainId,
       content: {
-        orderId,
-        orderSecret,
+        batchId,
+        batchSecret,
         ticketSecret,
         signature,
       },
@@ -76,6 +96,3 @@ const extractFromTicketHash = async (
     return
   }
 }
-
-export { generateBatchTicketHash, extractFromTicketHash }
- */

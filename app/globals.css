@@ -40,3 +40,40 @@ body {
 .button-halo {
   animation: button-pulse 2s infinite;
 }
+
+@keyframes button-pulse {
+  0% {
+    border: 2px solid #000000;
+    box-shadow: 0 0 10px #000000;
+  }
+  50% {
+    border: 1px solid #000000;
+    box-shadow: 0 0 0px #000000;
+  }
+  100% {
+    border: 2px solid #000000;
+    box-shadow: 0 0 10px #000000;
+  }
+}
+
+.loading-button::before {
+  position: absolute;
+  content: '';
+  top: 5px;
+  left: -20px;
+  width: 150%;
+  height: 70%;
+  background: #ffffff;
+  z-index: -1;
+  transform: rotate(45deg);
+  animation: loading 3s linear infinite;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

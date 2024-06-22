@@ -1,3 +1,4 @@
+'use client'
 import { Image, Divider, Card, CardHeader, CardBody } from '@nextui-org/react'
 import { cn } from '@utils/tw'
 import { formatDate } from '@utils/convert'
@@ -34,7 +35,7 @@ export function Metadata({
       </CardHeader>
       <Divider className="bg-opacity-30 bg-white" />
       <CardBody className="flex text-sm overflow-hidden">
-        <p className="italic font-semibold">{data.description}</p>
+        <p className="italic font-semibold text-center">{data.description}</p>
         <Divider className="bg-opacity-30 bg-white my-2" />
         <div className="flex flex-row justify-between items-center">
           <span className="font-bold">Image ID</span>

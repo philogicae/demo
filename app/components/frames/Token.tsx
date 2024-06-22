@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useChainId } from 'wagmi'
 import load from '@contracts/loader'
-import Loader from '@components/elements/Loader'
+import LoaderPage from '@components/elements/Loader'
 import { useCall } from '@hooks/useCall'
 import { formatDate } from '@utils/convert'
 import metadatas from '@contracts/metadatas.json'
@@ -84,13 +84,13 @@ export default function Token() {
   }, [id])
 
   return metadata.data?.name ? (
-    <div className="flex flex-col items-center justify-center w-full h-full gap-3">
-      <span className="text-3xl rounded-xl bg-green-800 bg-opacity-20 px-2 pb-1 font-semibold font-mono">
+    <div className="flex flex-col items-center justify-center w-full mt-10 mb-4 gap-2">
+      <span className="text-3xl rounded-xl text-gray-950 bg-white bg-opacity-30 px-2 font-semibold font-mono">
         TRY26#{metadata.id}
       </span>
       <Metadata data={metadata.data} id={metadata.id} extra={metadata.extra} />
     </div>
   ) : (
-    <Loader />
+    <LoaderPage />
   )
 }

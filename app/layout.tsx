@@ -9,13 +9,13 @@ import Navbar from '@components/layout/Navbar'
 const inter = Inter({ subsets: ['latin'], preload: true })
 
 export const metadata: Metadata = {
-  title: 'Twentysix Soulbound',
+  title: '26 Soulbound',
   description: 'Exclusive Free Allocations on TwentySix',
 }
 
 export const viewport: Viewport = {
   themeColor: 'black',
-  colorScheme: 'dark',
+  colorScheme: 'only light',
   width: 'device-width',
   initialScale: 1,
 }

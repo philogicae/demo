@@ -6,3 +6,6 @@ export const formatDate = (unixTimestamp: number) => {
     day: 'numeric',
   })
 }
+
+export const restrictRange = (n: any, min: number, max: number) =>
+  Number(n) > max ? max : Number(n) < min ? min : n
