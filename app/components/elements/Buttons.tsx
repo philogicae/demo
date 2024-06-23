@@ -1,7 +1,7 @@
 'use client'
-import { useNavigate } from 'react-router-dom'
-import { ClassName, cn } from '@utils/tw'
 import { Button } from '@nextui-org/react'
+import { type ClassName, cn } from '@utils/tw'
+import { useNavigate } from 'react-router-dom'
 
 export function LoadingWrapper({
   children,
@@ -70,7 +70,7 @@ export function ActionButton({
           'flex flex-row w-28 font-bold bg-white border-1.5 border-black text-black',
           isActive && !isLoading
             ? 'hover:text-white hover:!bg-gray-950 button-halo'
-            : 'pointer-events-none cursor-not-allowed',
+            : 'pointer-events-none cursor-not-allowed disabled:!bg-gray-400',
           className
         )}
         onClick={onClick}

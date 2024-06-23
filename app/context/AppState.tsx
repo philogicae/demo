@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 import {
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -17,7 +17,7 @@ type AppStateType = {
 
 const defaultAppState: AppStateType = {
   mobile: false,
-  setMobile: (value: SetStateAction<boolean>) => {},
+  setMobile: (_value: SetStateAction<boolean>) => {},
 }
 
 const AppContext = createContext(defaultAppState)

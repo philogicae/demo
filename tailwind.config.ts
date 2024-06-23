@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss'
 import { nextui } from '@nextui-org/theme'
+import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [

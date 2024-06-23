@@ -1,5 +1,5 @@
 'use client'
-import { ContractData } from '@contracts/loader'
+import type { ContractData } from '@contracts/loader'
 import { useReadContracts } from 'wagmi'
 
 type Call = {

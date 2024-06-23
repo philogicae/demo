@@ -1,13 +1,13 @@
 'use client'
+import { txType } from '@context/Wallet'
+import type { ContractData } from '@contracts/loader'
 import { useEffect, useRef } from 'react'
-import { ContractData } from '@contracts/loader'
 import {
   useChains,
   useSimulateContract,
-  useWriteContract,
   useWaitForTransactionReceipt,
+  useWriteContract,
 } from 'wagmi'
-import { txType } from '@context/Wallet'
 
 export type TransactProps = {
   chainId: number

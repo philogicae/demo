@@ -1,13 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useChainId } from 'wagmi'
-import load from '@contracts/loader'
 import LoaderPage from '@components/elements/Loader'
+import { Metadata } from '@components/elements/Metadata'
+import load from '@contracts/loader'
+import metadatas from '@contracts/metadatas.json'
 import { useCall } from '@hooks/useCall'
 import { formatDate } from '@utils/convert'
-import metadatas from '@contracts/metadatas.json'
-import { Metadata } from '@components/elements/Metadata'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useChainId } from 'wagmi'
 
 const prepare = (obj: any): any => {
   if (typeof obj !== 'object' || obj === null) {

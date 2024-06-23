@@ -1,13 +1,13 @@
 'use client'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { createHashRouter, RouterProvider, redirect } from 'react-router-dom'
-import Loading from '@components/frames/Loading'
-import Error from '@components/frames/Error'
-import Welcome from '@components/frames/Welcome'
-import Create from '@components/frames/Create'
 import Claim from '@components/frames/Claim'
+import Create from '@components/frames/Create'
+import Error from '@components/frames/Error'
+import Loading from '@components/frames/Loading'
 import Token from '@components/frames/Token'
+import Welcome from '@components/frames/Welcome'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { RouterProvider, createHashRouter, redirect } from 'react-router-dom'
 
 export default function Home() {
   const router = useRouter()

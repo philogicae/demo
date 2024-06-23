@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
+import { type Hex, parseSignature, verifyTypedData } from 'viem'
 import { useSignTypedData } from 'wagmi'
-import { Hex, verifyTypedData, parseSignature } from 'viem'
 
 export function useSign() {
   const isValidSignature = useRef<boolean>(true)

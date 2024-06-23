@@ -1,7 +1,7 @@
 'use client'
-import { Image, Divider, Card, CardHeader, CardBody } from '@nextui-org/react'
-import { cn } from '@utils/tw'
+import { Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
+import { cn } from '@utils/tw'
 
 export function Metadata({
   data,

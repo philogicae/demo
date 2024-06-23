@@ -1,10 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useChainId } from 'wagmi'
+import { LinkButton } from '@components/elements/Buttons'
 import load from '@contracts/loader'
 import { useCall } from '@hooks/useCall'
 import { Divider } from '@nextui-org/react'
-import { LinkButton } from '@components/elements/Buttons'
+import { useEffect, useState } from 'react'
+import { useChainId } from 'wagmi'
 
 export default function Welcome() {
   const chainId = useChainId()

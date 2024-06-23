@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Web3ModalProvider from '@context/Wallet'
-import NextUI from '@context/NextUI'
-import AppState from '@context/AppState'
 import Navbar from '@components/layout/Navbar'
+import AppState from '@context/AppState'
+import NextUI from '@context/NextUI'
+import Web3ModalProvider from '@context/Wallet'
 
 const inter = Inter({ subsets: ['latin'], preload: true })
 

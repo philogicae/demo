@@ -1,8 +1,8 @@
 'use client'
-import { Image } from '@nextui-org/react'
 import { useAppState } from '@context/AppState'
-import { useAccount, useEnsName } from 'wagmi'
+import { Image } from '@nextui-org/react'
 import { cn } from '@utils/tw'
+import { useAccount, useEnsName } from 'wagmi'
 
 export default function Navbar({ children }: { children: React.ReactNode }) {
   const { mobile } = useAppState()

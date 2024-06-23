@@ -1,13 +1,13 @@
 // @ts-expect-error expected
-import { encode, decode } from 'base64-compressor'
+import { decode, encode } from 'base64-compressor'
 import { nanoid } from 'nanoid'
 import {
-  Address,
+  type Address,
+  type Hex,
+  type Signature,
   encodePacked,
-  Hex,
   keccak256,
   parseSignature,
-  Signature,
   toHex,
 } from 'viem'
 

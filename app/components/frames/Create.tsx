@@ -1,21 +1,21 @@
 'use client'
-import { useState } from 'react'
-import { restrictRange } from '@utils/convert'
-import metadatas from '@contracts/metadatas.json'
-import { Metadata } from '@components/elements/Metadata'
-import { Select, SelectItem, Input } from '@nextui-org/react'
 import { ActionButton } from '@components/elements/Buttons'
-import { FaArrowRightLong } from 'react-icons/fa6'
 import { Loader } from '@components/elements/Loader'
+import { Metadata } from '@components/elements/Metadata'
 import { defaultChain } from '@context/Wallet'
-import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import load from '@contracts/loader'
+import metadatas from '@contracts/metadatas.json'
+import { Input, Select, SelectItem } from '@nextui-org/react'
+import { restrictRange } from '@utils/convert'
 import {
-  generateHex,
   generateBatchHex,
+  generateHex,
   generateTicketIds,
 } from '@utils/packing'
-import { Hex } from 'viem'
+import { useState } from 'react'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import type { Hex } from 'viem'
+import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 //import { useTransact } from '@hooks/useTransact'
 
 const maxTickets = 100
