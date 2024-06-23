@@ -76,6 +76,7 @@ export default function Create() {
       </span>
       <Select
         isRequired
+        isDisabled={isLoadingTx || isSuccessTx}
         size="sm"
         color="primary"
         variant="faded"
@@ -87,6 +88,7 @@ export default function Create() {
           !isLoadingTx && !isSuccessTx && setMetadataId(e.target.value)
         }
         classNames={{
+          base: isSuccessTx ? 'opacity-80' : '',
           innerWrapper: 'w-full',
           trigger:
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
@@ -102,6 +104,7 @@ export default function Create() {
       </Select>
       <Input
         isRequired
+        isDisabled={isLoadingTx || isSuccessTx}
         size="sm"
         color="primary"
         variant="faded"
@@ -123,6 +126,7 @@ export default function Create() {
         min={1}
         max={maxTickets}
         classNames={{
+          base: isSuccessTx ? 'opacity-80' : '',
           inputWrapper:
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
           label: 'text-white text-md font-bold',
