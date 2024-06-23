@@ -18,7 +18,7 @@ const generatePreMintPermit = ({
     domain: {
       name: 'TwentySix Soulbound',
       version: '1',
-      chainId: chainId,
+      chainId,
       verifyingContract: contactAddr,
     } as const,
     primaryType: 'PreMintPermit',

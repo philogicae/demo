@@ -1,5 +1,5 @@
 'use client'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export function Loader({
   size,
@@ -10,12 +10,16 @@ export function Loader({
   speed?: number
   color?: string
 }) {
-  const loader = useMemo(async () => {
-    const { bouncy } = await import('ldrs')
-    bouncy.register()
+  useEffect(() => {
+    async function getLoader() {
+      const { bouncy } = await import('ldrs')
+      bouncy.register()
+    }
+    getLoader()
+  }, [])
+  return useMemo(() => {
     return <l-bouncy size={size} speed={speed} color={color} />
   }, [size, speed, color])
-  return loader
 }
 
 export default function LoaderPage() {

@@ -43,7 +43,7 @@ export default function Token() {
   const { fetch } = useCall({
     calls: [
       {
-        chainId: chainId,
+        chainId,
         contract: contract!,
         functionName: 'getFullToken',
         args: [Number(id)],

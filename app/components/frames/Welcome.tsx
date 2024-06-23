@@ -18,17 +18,17 @@ export default function Welcome() {
   const { fetch } = useCall({
     calls: [
       {
-        chainId: chainId,
+        chainId,
         contract: contract!,
         functionName: 'totalBatches',
       },
       {
-        chainId: chainId,
+        chainId,
         contract: contract!,
         functionName: 'totalTickets',
       },
       {
-        chainId: chainId,
+        chainId,
         contract: contract!,
         functionName: 'totalSupply',
       },

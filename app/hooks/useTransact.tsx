@@ -1,7 +1,7 @@
 'use client'
 import { txType } from '@context/Wallet'
 import type { ContractData } from '@contracts/loader'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   useChains,
   useSimulateContract,
@@ -26,28 +26,23 @@ export function useTransact({
   method,
   args = [],
   enabled = false,
-  ignoreError = true,
+  ignoreError = false,
   onSuccess,
   onError,
 }: TransactProps) {
   const chains = useChains()
   const blockExplorer = chains.find((chain) => chain.id === chainId)
     ?.blockExplorers?.default.url
-  const executed = useRef<boolean>(false)
-  const {
-    data,
-    isSuccess: isPrepareSuccess,
-    isError: isPrepareError,
-  } = useSimulateContract({
+
+  const { data, isSuccess: isPrepareSuccess } = useSimulateContract({
     chainId,
     ...contract,
     functionName: method,
-    args: args,
+    args,
     type: txType[chainId],
-    query: {
-      enabled: enabled && !executed.current,
-    },
+    query: { enabled },
   })
+
   const {
     writeContractAsync,
     data: txHash,
@@ -70,41 +65,35 @@ export function useTransact({
     query: { enabled: !!txHash },
   })
 
-  useEffect(() => {
-    if (isPrepareError) {
-      if (!ignoreError) console.error('Tx error')
-      onError && onError()
-    }
-  }, [isPrepareError])
+  const txLink = useMemo(() => {
+    return txHash ? blockExplorer + '/tx/' + txHash : undefined
+  }, [blockExplorer, txHash])
 
   useEffect(() => {
     if (isPostSuccess) {
-      if (!executed.current) {
-        executed.current = true
-        console.log('Tx confirmed')
-        onSuccess && onSuccess()
-      }
-    } else if (isPostError) {
-      console.error('Tx failed')
-      onError && onError()
+      console.log('Tx confirmed:', txLink)
+      onSuccess?.()
+    } else if (isPostError && !ignoreError) {
+      console.error('Tx failed:', postError)
+      onError?.()
     }
   }, [isPostSuccess, isPostError])
 
   return {
-    sendTx: () => {
-      if (isPrepareSuccess) {
-        writeContractAsync(data!.request).catch(() => {
-          if (!ignoreError) console.warn('Tx rejected')
-          onError && onError()
-        })
-      }
-    },
-    receipt: txReceipt,
+    sendTx: () =>
+      isPrepareSuccess &&
+      writeContractAsync(data!.request).catch(() => {
+        if (!isPreSuccess && !ignoreError) {
+          console.warn('Tx rejected:', preError)
+          onError?.()
+        }
+      }),
+    txReceipt,
+    txLink,
     isReadyTx: isPrepareSuccess,
     isLoadingTx: isPreLoading || isPostLoading,
     isSuccessTx: isPreSuccess && isPostSuccess,
     isErrorTx: isPreError || isPostError,
     errorTx: preError || postError,
-    txLink: txHash ? blockExplorer + '/tx/' + txHash : undefined,
   }
 }

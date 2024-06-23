@@ -30,7 +30,7 @@ export function LinkButton({
   className,
 }: {
   page: string
-  label: string
+  label: React.ReactNode
   className?: ClassName
 }) {
   const navigate = useNavigate()
@@ -51,12 +51,14 @@ export function LinkButton({
 export function ActionButton({
   label,
   isActive,
+  isIdle,
   isLoading,
   onClick,
   className,
 }: {
-  label: string
-  isActive: any
+  label: React.ReactNode
+  isActive: boolean
+  isIdle?: boolean
   isLoading: boolean
   onClick: () => void
   className?: ClassName
@@ -70,7 +72,9 @@ export function ActionButton({
           'flex flex-row w-28 font-bold bg-white border-1.5 border-black text-black',
           isActive && !isLoading
             ? 'hover:text-white hover:!bg-gray-950 button-halo'
-            : 'pointer-events-none cursor-not-allowed disabled:!bg-gray-400',
+            : isIdle && !isLoading
+              ? 'hover:text-white hover:!bg-gray-950'
+              : 'pointer-events-none cursor-not-allowed disabled:!bg-gray-400',
           className
         )}
         onClick={onClick}

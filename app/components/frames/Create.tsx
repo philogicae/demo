@@ -5,6 +5,7 @@ import { Metadata } from '@components/elements/Metadata'
 import { defaultChain } from '@context/Wallet'
 import load from '@contracts/loader'
 import metadatas from '@contracts/metadatas.json'
+import { useTransact } from '@hooks/useTransact'
 import { Input, Select, SelectItem } from '@nextui-org/react'
 import { restrictRange } from '@utils/convert'
 import {
@@ -12,15 +13,22 @@ import {
   generateHex,
   generateTicketIds,
 } from '@utils/packing'
-import { useState } from 'react'
-import { FaArrowRightLong } from 'react-icons/fa6'
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useEffect, useState } from 'react'
+import {
+  FaArrowLeftLong,
+  FaArrowRightLong,
+  FaArrowUpLong,
+  FaLink,
+  FaRegCircleCheck,
+} from 'react-icons/fa6'
 import type { Hex } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
-//import { useTransact } from '@hooks/useTransact'
 
 const maxTickets = 100
 
 export default function Create() {
+  const { open } = useWeb3Modal()
   const { isConnected } = useAccount()
   const { switchChain } = useSwitchChain()
   const chainId = useChainId()
@@ -28,31 +36,38 @@ export default function Create() {
   if (isConnected && !contract) switchChain({ chainId: defaultChain.id })
   const [metadataId, setMetadataId] = useState('')
   const [units, setUnits] = useState('')
-  const [loading, setLoading] = useState(false)
   const [hashes, setHashes] = useState({
     batchSecret: '',
     ticketSecrets: [] as Hex[],
     ticketIds: [] as Hex[],
   })
 
-  const handleCreateBatch = async () => {
-    setLoading(true)
-    const batchSecret = generateHex()
-    const ticketSecrets = generateBatchHex(Number(units))
-    const ticketIds = generateTicketIds(batchSecret, ticketSecrets)
-    setHashes({ batchSecret, ticketSecrets, ticketIds })
+  const handleCreateBatch = () => {
+    if (!isConnected) open()
+    else {
+      const batchSecret = generateHex()
+      const ticketSecrets = generateBatchHex(Number(units))
+      const ticketIds = generateTicketIds(batchSecret, ticketSecrets)
+      setHashes({ batchSecret, ticketSecrets, ticketIds })
+    }
   }
 
-  const handleSignTickets = async () => {}
+  const { sendTx, txLink, isReadyTx, isLoadingTx, isSuccessTx } = useTransact({
+    chainId,
+    contract,
+    method: 'preMint',
+    args: [metadataId, hashes.ticketIds],
+    enabled: !!hashes.batchSecret,
+  })
+  useEffect(() => {
+    sendTx()
+  }, [isReadyTx])
 
-  /* const { sendTx, isReadyTx, isLoadingTx, isSuccessTx, isErrorTx } =
-    useTransact({
-      chainId: chainId!,
-      contract,
-      method: 'createOrder',
-      args: steps.tx3,
-      enabled: steps.txArgs3,
-    }) */
+  const handleSignTickets = () => {
+    if (!isConnected) open()
+    else {
+    }
+  }
 
   return (
     <div className="flex flex-col items-center justify-start w-full mt-10 mb-4 px-4 gap-2">
@@ -61,7 +76,6 @@ export default function Create() {
       </span>
       <Select
         isRequired
-        isDisabled={!!hashes.batchSecret}
         size="sm"
         color="primary"
         variant="faded"
@@ -70,7 +84,7 @@ export default function Create() {
         selectorIcon={<></>}
         selectedKeys={[metadataId]}
         onChange={(e: any) =>
-          !hashes.batchSecret && setMetadataId(e.target.value)
+          !isLoadingTx && !isSuccessTx && setMetadataId(e.target.value)
         }
         classNames={{
           innerWrapper: 'w-full',
@@ -88,7 +102,6 @@ export default function Create() {
       </Select>
       <Input
         isRequired
-        isDisabled={!!hashes.batchSecret}
         size="sm"
         color="primary"
         variant="faded"
@@ -97,7 +110,8 @@ export default function Create() {
         type="number"
         value={units}
         onChange={(e: any) =>
-          !hashes.batchSecret &&
+          !isLoadingTx &&
+          !isSuccessTx &&
           setUnits(
             restrictRange(
               Math.round(Number(e.target.value)),
@@ -119,21 +133,42 @@ export default function Create() {
       />
       <div className="flex flex-row py-1 items-center justify-between w-full max-w-xs">
         <ActionButton
-          label="Create Batch"
-          isActive={metadataId && units}
-          isLoading={loading}
-          onClick={handleCreateBatch}
+          label={
+            !isSuccessTx ? (
+              'Create Batch'
+            ) : (
+              <a
+                className="flex flex-row hover:underline"
+                href={txLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaLink className="mr-1 w-4 h-4" />
+                <span className="text-xs">Confirmed</span>
+              </a>
+            )
+          }
+          isActive={!!metadataId && !!units && !isLoadingTx && !isSuccessTx}
+          isIdle={isSuccessTx}
+          isLoading={isLoadingTx}
+          onClick={!isSuccessTx ? handleCreateBatch : () => {}}
         />
-        {false ? (
+        {isLoadingTx ? (
           <Loader size={30} color="white" />
-        ) : metadataId && units ? (
-          <span className="px-1 font-bold text-sm text-lime-300">ready</span>
-        ) : (
+        ) : false ? (
+          <div className="px-1 text-green-400">
+            <FaRegCircleCheck />
+          </div>
+        ) : isSuccessTx ? (
           <FaArrowRightLong />
+        ) : metadataId && units ? (
+          <FaArrowLeftLong />
+        ) : (
+          <FaArrowUpLong />
         )}
         <ActionButton
           label="Sign Tickets"
-          isActive={false}
+          isActive={isSuccessTx}
           isLoading={false}
           onClick={handleSignTickets}
         />

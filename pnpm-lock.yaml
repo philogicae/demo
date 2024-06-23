@@ -12,7 +12,7 @@ dependencies:
     specifier: ^5.45.1
     version: 5.45.1(react@19.0.0-rc-fb9a90fa48-20240614)
   '@web3modal/wagmi':
-    specifier: ^5.0.2
+    specifier: ^5.0.3
     version: 5.0.3(@types/react@18.3.3)(@wagmi/connectors@5.0.16)(@wagmi/core@2.11.4)(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react@19.0.0-rc-fb9a90fa48-20240614)(viem@2.16.1)
   base64-compressor:
     specifier: ^1.0.3
@@ -27,13 +27,13 @@ dependencies:
     specifier: ^5.0.7
     version: 5.0.7
   next:
-    specifier: ^15.0.0-rc.0
+    specifier: 15.0.0-rc.0
     version: 15.0.0-rc.0(@babel/core@7.24.7)(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react@19.0.0-rc-fb9a90fa48-20240614)
   react:
-    specifier: ^19.0.0-rc-3563387fe3-20240621
+    specifier: 19.0.0-rc-fb9a90fa48-20240614
     version: 19.0.0-rc-fb9a90fa48-20240614
   react-dom:
-    specifier: ^19.0.0-rc-3563387fe3-20240621
+    specifier: 19.0.0-rc-fb9a90fa48-20240614
     version: 19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614)
   react-icons:
     specifier: ^5.2.1
@@ -42,10 +42,10 @@ dependencies:
     specifier: ^6.23.1
     version: 6.23.1(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react@19.0.0-rc-fb9a90fa48-20240614)
   viem:
-    specifier: ^2.15.1
+    specifier: ^2.16.1
     version: 2.16.1(typescript@5.5.2)
   wagmi:
-    specifier: ^2.10.2
+    specifier: ^2.10.4
     version: 2.10.4(@tanstack/react-query@5.45.1)(@types/react@18.3.3)(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react-i18next@13.5.0)(react-native@0.74.2)(react@19.0.0-rc-fb9a90fa48-20240614)(typescript@5.5.2)(viem@2.16.1)
 
 devDependencies:
@@ -62,13 +62,13 @@ devDependencies:
     specifier: ^5.0.2
     version: 5.0.2
   '@types/node':
-    specifier: ^20
+    specifier: ^20.14.8
     version: 20.14.8
   '@types/react':
-    specifier: ^18
+    specifier: ^18.3.3
     version: 18.3.3
   '@types/react-dom':
-    specifier: ^18
+    specifier: ^18.3.0
     version: 18.3.0
   clsx:
     specifier: ^2.1.1
@@ -83,16 +83,16 @@ devDependencies:
     specifier: ^1.0.3
     version: 1.0.3
   postcss:
-    specifier: ^8
+    specifier: ^8.4.38
     version: 8.4.38
   tailwind-merge:
     specifier: ^2.3.0
     version: 2.3.0
   tailwindcss:
-    specifier: ^3.4.1
+    specifier: ^3.4.4
     version: 3.4.4(ts-node@10.9.2)
   typescript:
-    specifier: ^5
+    specifier: ^5.5.2
     version: 5.5.2
 
 packages:
