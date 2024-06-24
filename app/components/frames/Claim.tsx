@@ -377,7 +377,7 @@ export default function Claim() {
             !isSuccessTx
           }
           isIdle={isSuccessTx}
-          isLoading={isPendingTx}
+          isLoading={isLoadingTx}
           onClick={() => (!isSuccessTx ? handleClaim() : () => {})}
         />
       </div>
