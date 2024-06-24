@@ -2,6 +2,7 @@
 import { txType } from '@context/Wallet'
 import type { ContractData } from '@contracts/loader'
 import { useEffect, useMemo } from 'react'
+import { parseEventLogs } from 'viem'
 import {
   useChains,
   useSimulateContract,
@@ -89,6 +90,9 @@ export function useTransact({
         }
       }),
     txReceipt,
+    txLogs:
+      txReceipt &&
+      parseEventLogs({ abi: contract?.abi!, logs: txReceipt.logs }),
     txLink,
     isReadyTx: isPrepareSuccess,
     isLoadingTx: isPreLoading || isPostLoading,

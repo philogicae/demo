@@ -42,6 +42,7 @@ export default function Create() {
   const [metadataId, setMetadataId] = useState('')
   const [units, setUnits] = useState('')
   const [hashes, setHashes] = useState(defaultHashes)
+  const [batchId, setBatchId] = useState(0)
 
   const handleCreateBatch = () => {
     if (!isConnected) open()
@@ -53,14 +54,16 @@ export default function Create() {
     }
   }
 
-  const { sendTx, txLink, isReadyTx, isLoadingTx, isSuccessTx } = useTransact({
-    chainId,
-    contract,
-    method: 'preMint',
-    args: [metadataId, hashes.ticketIds],
-    enabled: !!hashes.batchSecret,
-    onError: () => setHashes(defaultHashes),
-  })
+  const { sendTx, txLogs, txLink, isReadyTx, isLoadingTx, isSuccessTx } =
+    useTransact({
+      chainId,
+      contract,
+      method: 'preMint',
+      args: [metadataId, hashes.ticketIds],
+      enabled: !!hashes.batchSecret,
+      onSuccess: () => setBatchId(Number((txLogs?.[0].args as any)?.batchId)),
+      onError: () => setHashes(defaultHashes),
+    })
   useEffect(() => {
     sendTx()
   }, [isReadyTx])
@@ -70,6 +73,8 @@ export default function Create() {
     else {
     }
   }
+
+  batchId && console.log(batchId)
 
   return (
     <div className="flex flex-col items-center justify-start w-full mt-10 mb-4 px-4 gap-2">
