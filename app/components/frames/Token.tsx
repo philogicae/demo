@@ -21,8 +21,9 @@ const prepare = (obj: any): any => {
     if (k === 'createdAt') result[k] = formatDate(Number(v))
     else if (k === 'ticketId')
       result[k] =
-        `${(v as string).slice(0, 10)}...${(v as string).slice(-9, -1)}`
-    else if (typeof v === 'bigint') result[k] = Number(v)
+        `${(v as string).slice(0, 20)}...${(v as string).slice(-21, -1)}`
+    else if (k === 'totalTickets') {
+    } else if (typeof v === 'bigint') result[k] = Number(v)
     else result[k] = prepare(v)
   })
   return result
@@ -83,14 +84,14 @@ export default function Token() {
       })
   }, [id])
 
-  return metadata.data?.name ? (
+  if (!metadata.data?.name) return <LoaderPage />
+
+  return (
     <div className="flex flex-col items-center justify-center w-full mt-10 mb-4 gap-2">
       <span className="text-3xl rounded-xl text-gray-950 bg-white bg-opacity-30 px-2 font-semibold font-mono">
         TRY26#{metadata.id}
       </span>
       <Metadata data={metadata.data} id={metadata.id} extra={metadata.extra} />
     </div>
-  ) : (
-    <LoaderPage />
   )
 }

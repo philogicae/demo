@@ -3,6 +3,7 @@ import Claim from '@components/frames/Claim'
 import Create from '@components/frames/Create'
 import Error from '@components/frames/Error'
 import Loading from '@components/frames/Loading'
+import Temp from '@components/frames/Temp'
 import Token from '@components/frames/Token'
 import Welcome from '@components/frames/Welcome'
 import { useRouter } from 'next/navigation'
@@ -23,6 +24,10 @@ export default function Home() {
     {
       path: 'create',
       element: <Create />,
+    },
+    {
+      path: 'claim',
+      element: <Temp />,
     },
     {
       path: 'claim/:ticket',

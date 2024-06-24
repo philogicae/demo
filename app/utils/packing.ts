@@ -2,6 +2,7 @@
 import { decode, encode } from 'base64-compressor'
 import { nanoid } from 'nanoid'
 import {
+  Address,
   Hex,
   Signature,
   encodePacked,
@@ -49,8 +50,8 @@ export const generateBatchTicketHash = async (
   signature: Hex
 ): Promise<string[]> =>
   await Promise.all(
-    ticketSecrets.map(
-      async (ticketSecret) =>
+    ticketSecrets.map(async (ticketSecret) =>
+      (
         await generateTicketHash(
           chainId,
           batchId,
@@ -58,11 +59,13 @@ export const generateBatchTicketHash = async (
           ticketSecret,
           signature
         )
+      ).replace('~', '')
     )
   )
 
 export const extractFromTicketHash = async (
-  ticketCode: string
+  ticketCode: string,
+  address?: Address
 ): Promise<
   | {
       chainId: number
@@ -70,8 +73,10 @@ export const extractFromTicketHash = async (
         batchId: bigint
         batchSecret: Hex
         ticketSecret: Hex
-        signature: Signature
+        signature: Omit<Signature, 'yParity'>
       }
+      reservation: Hex
+      ticketId: Hex
     }
   | undefined
 > => {
@@ -84,14 +89,33 @@ export const extractFromTicketHash = async (
     const batchSecret = ('0x' + data[1].slice(0, 64)) as Hex
     const ticketSecret = ('0x' + data[1].slice(64, 128)) as Hex
     const signature = parseSignature(('0x' + data[1].slice(128)) as Hex)
+    const reservation = keccak256(
+      encodePacked(
+        ['address', 'bytes32', 'bytes32'],
+        [
+          address || '0x0000000000000000000000000000000000000001',
+          batchSecret,
+          ticketSecret,
+        ]
+      )
+    ) as Hex
+    const ticketId = keccak256(
+      encodePacked(['bytes32', 'bytes32'], [batchSecret, ticketSecret])
+    ) as Hex
     return {
       chainId,
       content: {
         batchId,
         batchSecret,
         ticketSecret,
-        signature,
+        signature: {
+          v: signature.v,
+          r: signature.r,
+          s: signature.s,
+        },
       },
+      reservation,
+      ticketId,
     }
   } catch (e) {
     console.error(e)

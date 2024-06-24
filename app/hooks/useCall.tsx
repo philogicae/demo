@@ -12,10 +12,10 @@ type Call = {
 type CallsProps = {
   calls: Call[]
   initData: any[]
-  active?: boolean
+  enabled?: boolean
 }
 
-export function useCall({ calls, initData, active = false }: CallsProps) {
+export function useCall({ calls, initData, enabled = false }: CallsProps) {
   const methods: { [method: string]: number } = {}
   calls
     .map((x) => x.functionName)
@@ -31,7 +31,7 @@ export function useCall({ calls, initData, active = false }: CallsProps) {
       args: x.args,
     })),
     query: {
-      enabled: active,
+      enabled,
       select: (data) => {
         const result: { [method: string]: any } = {}
         ;(data && data.length

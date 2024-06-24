@@ -198,7 +198,7 @@ export default function Create() {
         <ActionButton
           label={
             !isSuccessTx ? (
-              'Create Batch'
+              '1. Create Batch'
             ) : (
               <a
                 className="flex flex-row hover:underline"
@@ -223,12 +223,12 @@ export default function Create() {
           onClick={!isSuccessTx ? handleCreateBatch : () => {}}
         />
         {isLoadingTx || isPendingSign ? (
-          <FaWallet />
+          <FaWallet className="w-5 h-5" />
         ) : isPendingTx ? (
           <Loader size={30} color="white" />
         ) : isSuccessSign ? (
-          <div className="px-1 text-green-400">
-            <FaRegCircleCheck />
+          <div className="px-1 text-white">
+            <FaRegCircleCheck className="w-5 h-5" />
           </div>
         ) : isSuccessTx ? (
           <FaArrowRightLong />
@@ -240,7 +240,7 @@ export default function Create() {
         <ActionButton
           label={
             !tickets.length ? (
-              'Sign Tickets'
+              '2. Sign Tickets'
             ) : (
               <span className="text-xs">Export Tickets</span>
             )
@@ -248,16 +248,16 @@ export default function Create() {
           isActive={isSuccessTx}
           isIdle={!!tickets.length}
           isLoading={isPendingSign}
-          onClick={() => {
+          onClick={() =>
             !tickets.length
               ? handleSignTickets()
               : navigator.share({
-                  title: 'TwentySix Soulbound',
+                  title: `TRY26 Ticket Batch #${batchId}`,
                   text: tickets
                     .map(({ id, url }) => `${id}: ${url}`)
                     .join('\n'),
                 })
-          }}
+          }
         />
       </div>
       {tickets.length > 0 ? (
