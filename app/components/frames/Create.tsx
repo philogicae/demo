@@ -26,6 +26,11 @@ import type { Hex } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 
 const maxTickets = 100
+const defaultHashes = {
+  batchSecret: '',
+  ticketSecrets: [] as Hex[],
+  ticketIds: [] as Hex[],
+}
 
 export default function Create() {
   const { open } = useWeb3Modal()
@@ -36,11 +41,7 @@ export default function Create() {
   if (isConnected && !contract) switchChain({ chainId: defaultChain.id })
   const [metadataId, setMetadataId] = useState('')
   const [units, setUnits] = useState('')
-  const [hashes, setHashes] = useState({
-    batchSecret: '',
-    ticketSecrets: [] as Hex[],
-    ticketIds: [] as Hex[],
-  })
+  const [hashes, setHashes] = useState(defaultHashes)
 
   const handleCreateBatch = () => {
     if (!isConnected) open()
@@ -58,6 +59,7 @@ export default function Create() {
     method: 'preMint',
     args: [metadataId, hashes.ticketIds],
     enabled: !!hashes.batchSecret,
+    onError: () => setHashes(defaultHashes),
   })
   useEffect(() => {
     sendTx()
