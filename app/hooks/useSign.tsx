@@ -3,7 +3,10 @@ import { useRef } from 'react'
 import { type Hex, parseSignature, verifyTypedData } from 'viem'
 import { useSignTypedData } from 'wagmi'
 
-export function useSign() {
+export function useSign({
+  onSuccess,
+  onError,
+}: { onSuccess?: () => void; onError?: () => void } = {}) {
   const isValidSignature = useRef<boolean>(true)
   const {
     signTypedDataAsync,
@@ -13,13 +16,15 @@ export function useSign() {
     isError,
   } = useSignTypedData()
 
-  const signRequest = (args: any) => {
+  const signRequest = ({ args }: { args: any }) => {
     signTypedDataAsync({ ...args })
       .then(() => {
         console.log('Signed successfully')
+        onSuccess?.()
       })
       .catch(() => {
         console.warn('Signature rejected')
+        onError?.()
       })
   }
 
@@ -41,7 +46,7 @@ export function useSign() {
   return {
     signRequest,
     signature,
-    isLoadingSign: isPending,
+    isPendingSign: isPending,
     isSuccessSign: isSuccess && isValidSignature.current,
     isErrorSign: isError || !isValidSignature.current,
     convert: toSignature,

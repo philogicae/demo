@@ -23,16 +23,16 @@ const generatePreMintPermit = ({
     } as const,
     primaryType: 'PreMintPermit',
     types: {
-      TicketPermit: [
+      PreMintPermit: [
         { name: 'creator', type: 'address' },
         { name: 'batchId', type: 'uint256' },
         { name: 'batchSecret', type: 'bytes32' },
       ],
     } as const,
     message: {
-      creator: creator,
-      batchId: batchId,
-      batchSecret: batchSecret,
+      creator,
+      batchId,
+      batchSecret,
     } as const,
   }
 }

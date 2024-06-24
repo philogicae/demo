@@ -14,6 +14,9 @@ dependencies:
   '@web3modal/wagmi':
     specifier: ^5.0.3
     version: 5.0.3(@types/react@18.3.3)(@wagmi/connectors@5.0.17)(@wagmi/core@2.11.5)(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react@19.0.0-rc-fb9a90fa48-20240614)(viem@2.16.1)
+  '@wojtekmaj/react-qr-svg':
+    specifier: ^2.0.0
+    version: 2.0.0(@types/react@18.3.3)(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react@19.0.0-rc-fb9a90fa48-20240614)
   base64-compressor:
     specifier: ^1.0.3
     version: 1.0.3
@@ -7408,6 +7411,22 @@ packages:
       '@walletconnect/logger': 2.1.2
       '@web3modal/polyfills': 5.0.3
       zod: 3.22.4
+    dev: false
+
+  /@wojtekmaj/react-qr-svg@2.0.0(@types/react@18.3.3)(react-dom@19.0.0-rc-fb9a90fa48-20240614)(react@19.0.0-rc-fb9a90fa48-20240614):
+    resolution: {integrity: sha512-hApWXOay7ST1xh56HxK99HGNm02agmcbGXTF9x10EDQ9N9c5ippVyzxJ0uMwAbLINYm3eV81s4eWl0XXYB2GMw==}
+    peerDependencies:
+      '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@types/react': 18.3.3
+      qrcode-generator: 1.4.4
+      react: 19.0.0-rc-fb9a90fa48-20240614
+      react-dom: 19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614)
     dev: false
 
   /abbrev@1.0.9:

@@ -2,9 +2,8 @@
 import { decode, encode } from 'base64-compressor'
 import { nanoid } from 'nanoid'
 import {
-  type Address,
-  type Hex,
-  type Signature,
+  Hex,
+  Signature,
   encodePacked,
   keccak256,
   parseSignature,
@@ -26,7 +25,7 @@ export const generateTicketIds = (
 
 export const generateTicketHash = async (
   chainId: number,
-  batchId: Hex,
+  batchId: bigint,
   batchSecret: Hex,
   ticketSecret: Hex,
   signature: Hex
@@ -34,7 +33,8 @@ export const generateTicketHash = async (
   const object =
     chainId.toString() +
     ':' +
-    batchId.slice(2) +
+    Number(batchId) +
+    '.' +
     batchSecret.slice(2) +
     ticketSecret.slice(2) +
     signature.slice(2)
@@ -43,7 +43,7 @@ export const generateTicketHash = async (
 
 export const generateBatchTicketHash = async (
   chainId: number,
-  batchId: Hex,
+  batchId: bigint,
   batchSecret: Hex,
   ticketSecrets: Hex[],
   signature: Hex
@@ -67,7 +67,7 @@ export const extractFromTicketHash = async (
   | {
       chainId: number
       content: {
-        batchId: Hex
+        batchId: bigint
         batchSecret: Hex
         ticketSecret: Hex
         signature: Signature
@@ -77,12 +77,13 @@ export const extractFromTicketHash = async (
 > => {
   try {
     const decoded = await decode(ticketCode)
-    const chainId = Number(decoded.split(':')[0])
-    const data = decoded.split(':')[1]
-    const batchId = ('0x' + data.slice(0, 64)) as Address
-    const batchSecret = ('0x' + data.slice(64, 128)) as Address
-    const ticketSecret = ('0x' + data.slice(128, 192)) as Address
-    const signature = parseSignature(('0x' + data.slice(192)) as Address)
+    const unwrapped = decoded.split(':')
+    const chainId = Number(unwrapped[0])
+    const data = unwrapped[1].split('.')
+    const batchId = BigInt(data[0])
+    const batchSecret = ('0x' + data[1].slice(0, 64)) as Hex
+    const ticketSecret = ('0x' + data[1].slice(64, 128)) as Hex
+    const signature = parseSignature(('0x' + data[1].slice(128)) as Hex)
     return {
       chainId,
       content: {
@@ -92,7 +93,7 @@ export const extractFromTicketHash = async (
         signature,
       },
     }
-  } catch {
-    return
+  } catch (e) {
+    console.error(e)
   }
 }

@@ -2,17 +2,21 @@
 import { ActionButton } from '@components/elements/Buttons'
 import { Loader } from '@components/elements/Loader'
 import { Metadata } from '@components/elements/Metadata'
+import { Tickets } from '@components/elements/Tickets'
 import { defaultChain } from '@context/Wallet'
 import load from '@contracts/loader'
 import metadatas from '@contracts/metadatas.json'
+import { useSign } from '@hooks/useSign'
 import { useTransact } from '@hooks/useTransact'
 import { Input, Select, SelectItem } from '@nextui-org/react'
 import { restrictRange } from '@utils/convert'
 import {
   generateBatchHex,
+  generateBatchTicketHash,
   generateHex,
   generateTicketIds,
 } from '@utils/packing'
+import { generatePreMintPermit } from '@utils/permits'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useEffect, useState } from 'react'
 import {
@@ -21,28 +25,33 @@ import {
   FaArrowUpLong,
   FaLink,
   FaRegCircleCheck,
+  FaWallet,
 } from 'react-icons/fa6'
 import type { Hex } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 
 const maxTickets = 100
 const defaultHashes = {
-  batchSecret: '',
+  batchSecret: '' as Hex,
   ticketSecrets: [] as Hex[],
   ticketIds: [] as Hex[],
 }
 
 export default function Create() {
   const { open } = useWeb3Modal()
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
   const { switchChain } = useSwitchChain()
   const chainId = useChainId()
   const contract = load('TRY26', chainId)
   if (isConnected && !contract) switchChain({ chainId: defaultChain.id })
+
   const [metadataId, setMetadataId] = useState('')
   const [units, setUnits] = useState('')
   const [hashes, setHashes] = useState(defaultHashes)
-  const [batchId, setBatchId] = useState(0)
+  const [batchId, setBatchId] = useState(BigInt(0))
+  const [tickets, setTickets] = useState<
+    { id: string; data: string; url: string }[]
+  >([])
 
   const handleCreateBatch = () => {
     if (!isConnected) open()
@@ -54,27 +63,66 @@ export default function Create() {
     }
   }
 
-  const { sendTx, txLogs, txLink, isReadyTx, isLoadingTx, isSuccessTx } =
-    useTransact({
-      chainId,
-      contract,
-      method: 'preMint',
-      args: [metadataId, hashes.ticketIds],
-      enabled: !!hashes.batchSecret,
-      onSuccess: () => setBatchId(Number((txLogs?.[0].args as any)?.batchId)),
-      onError: () => setHashes(defaultHashes),
-    })
+  const {
+    sendTx,
+    txLogs,
+    txLink,
+    isReadyTx,
+    isLoadingTx,
+    isPendingTx,
+    isSuccessTx,
+  } = useTransact({
+    chainId,
+    contract,
+    method: 'preMint',
+    args: [metadataId, hashes.ticketIds],
+    enabled: !!hashes.batchSecret,
+    onSuccess: () => setBatchId((txLogs?.[0].args as any)?.batchId as bigint),
+    onError: () => setHashes(defaultHashes),
+  })
+
   useEffect(() => {
-    sendTx()
+    if (isReadyTx) sendTx()
   }, [isReadyTx])
+
+  const { signRequest, signature, isPendingSign, isSuccessSign } = useSign()
 
   const handleSignTickets = () => {
     if (!isConnected) open()
     else {
+      signRequest({
+        args: generatePreMintPermit({
+          chainId,
+          contactAddr: contract!.address,
+          creator: address!,
+          batchId: batchId,
+          batchSecret: hashes.batchSecret,
+        }),
+      })
     }
   }
 
-  batchId && console.log(batchId)
+  useEffect(() => {
+    if (isSuccessSign) {
+      generateBatchTicketHash(
+        chainId,
+        batchId,
+        hashes.batchSecret,
+        hashes.ticketSecrets,
+        signature as Hex
+      ).then((tickets) => {
+        setTickets(
+          tickets.map((ticket, index) => {
+            return {
+              id: `#${index + 1 < 10 ? '0' : ''}${index + 1}`,
+              data: ticket,
+              url: window.location.origin + '/#/claim/' + ticket,
+            }
+          })
+        )
+      })
+    }
+  }, [isSuccessSign])
 
   return (
     <div className="flex flex-col items-center justify-start w-full mt-10 mb-4 px-4 gap-2">
@@ -83,7 +131,7 @@ export default function Create() {
       </span>
       <Select
         isRequired
-        isDisabled={isLoadingTx || isSuccessTx}
+        isDisabled={isLoadingTx || isPendingTx || isSuccessTx}
         size="sm"
         color="primary"
         variant="faded"
@@ -92,7 +140,10 @@ export default function Create() {
         selectorIcon={<></>}
         selectedKeys={[metadataId]}
         onChange={(e: any) =>
-          !isLoadingTx && !isSuccessTx && setMetadataId(e.target.value)
+          !isLoadingTx &&
+          !isPendingTx &&
+          !isSuccessTx &&
+          setMetadataId(e.target.value)
         }
         classNames={{
           base: isSuccessTx ? 'opacity-80' : '',
@@ -111,7 +162,7 @@ export default function Create() {
       </Select>
       <Input
         isRequired
-        isDisabled={isLoadingTx || isSuccessTx}
+        isDisabled={isLoadingTx || isPendingTx || isSuccessTx}
         size="sm"
         color="primary"
         variant="faded"
@@ -121,6 +172,7 @@ export default function Create() {
         value={units}
         onChange={(e: any) =>
           !isLoadingTx &&
+          !isPendingTx &&
           !isSuccessTx &&
           setUnits(
             restrictRange(
@@ -159,14 +211,22 @@ export default function Create() {
               </a>
             )
           }
-          isActive={!!metadataId && !!units && !isLoadingTx && !isSuccessTx}
+          isActive={
+            !!metadataId &&
+            !!units &&
+            !isLoadingTx &&
+            !isPendingTx &&
+            !isSuccessTx
+          }
           isIdle={isSuccessTx}
           isLoading={isLoadingTx}
           onClick={!isSuccessTx ? handleCreateBatch : () => {}}
         />
-        {isLoadingTx ? (
+        {isLoadingTx || isPendingSign ? (
+          <FaWallet />
+        ) : isPendingTx ? (
           <Loader size={30} color="white" />
-        ) : false ? (
+        ) : isSuccessSign ? (
           <div className="px-1 text-green-400">
             <FaRegCircleCheck />
           </div>
@@ -178,13 +238,31 @@ export default function Create() {
           <FaArrowUpLong />
         )}
         <ActionButton
-          label="Sign Tickets"
+          label={
+            !tickets.length ? (
+              'Sign Tickets'
+            ) : (
+              <span className="text-xs">Export Tickets</span>
+            )
+          }
           isActive={isSuccessTx}
-          isLoading={false}
-          onClick={handleSignTickets}
+          isIdle={!!tickets.length}
+          isLoading={isPendingSign}
+          onClick={() => {
+            !tickets.length
+              ? handleSignTickets()
+              : navigator.share({
+                  title: 'TwentySix Soulbound',
+                  text: tickets
+                    .map(({ id, url }) => `${id}: ${url}`)
+                    .join('\n'),
+                })
+          }}
         />
       </div>
-      {metadataId.length > 0 ? (
+      {tickets.length > 0 ? (
+        <Tickets batchId={Number(batchId)} tickets={tickets} />
+      ) : metadataId.length > 0 ? (
         <Metadata
           data={(metadatas as Record<string, any>)[metadataId]}
         ></Metadata>
