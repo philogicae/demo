@@ -61,6 +61,7 @@ export function Tickets({
               {`${ticket.id}: ${ticket.data.slice(0, 6)}...${ticket.data.slice(-6)}`}
             </Snippet>
             <button
+              type="button"
               className="flex w-5 h-5 items-center justify-center pr-1"
               onClick={() =>
                 navigator.share({
@@ -72,6 +73,7 @@ export function Tickets({
               <FaShareFromSquare className="h-4 w-4" />
             </button>
             <button
+              type="button"
               onClick={() => {
                 setCurrentTicket(index + 1)
                 onOpen()

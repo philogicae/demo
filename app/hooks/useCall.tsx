@@ -17,11 +17,9 @@ type CallsProps = {
 
 export function useCall({ calls, initData, enabled = false }: CallsProps) {
   const methods: { [method: string]: number } = {}
-  calls
-    .map((x) => x.functionName)
-    .forEach((name) => {
-      methods[name] = (methods[name] || 0) + 1
-    })
+  for (const call of calls) {
+    methods[call.functionName] = (methods[call.functionName] || 0) + 1
+  }
 
   const reads = useReadContracts({
     contracts: calls.map((x) => ({
@@ -34,7 +32,7 @@ export function useCall({ calls, initData, enabled = false }: CallsProps) {
       enabled,
       select: (data) => {
         const result: { [method: string]: any } = {}
-        ;(data && data.length
+        ;(data?.length
           ? data.map((x, i) => {
               const field = initData[i]
               return x.status === 'success'

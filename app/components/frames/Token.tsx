@@ -17,7 +17,7 @@ const prepare = (obj: any): any => {
     return obj.map(prepare)
   }
   const result: any = {}
-  Object.entries(obj).forEach(([k, v]) => {
+  for (const [k, v] of Object.entries(obj)) {
     if (k === 'createdAt') result[k] = formatDate(Number(v))
     else if (k === 'ticketId')
       result[k] =
@@ -25,7 +25,7 @@ const prepare = (obj: any): any => {
     else if (k === 'totalTickets') {
     } else if (typeof v === 'bigint') result[k] = Number(v)
     else result[k] = prepare(v)
-  })
+  }
   return result
 }
 

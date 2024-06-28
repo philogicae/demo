@@ -1,5 +1,5 @@
 'use client'
-import Error from '@components/frames/Error'
+import Error404 from '@components/frames/Error'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -9,5 +9,5 @@ export default function Custom404() {
     if (!(window.location.pathname + window.location.hash).startsWith('/#/'))
       router.replace('/#/404')
   }, [router])
-  return <Error />
+  return <Error404 />
 }

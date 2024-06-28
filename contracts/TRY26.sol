@@ -10,14 +10,21 @@ import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {PaginatedEnumerableSet} from "paginated-enumerableset/contracts/PaginatedEnumerableSet.sol";
+import {Context} from "@openzeppelin/contracts/utils/Context.sol";
+import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
+/**
+ * @dev Custom implementation of Non-Fungible Token Standard, including SoulBound Token features,
+ * dynamic offchain metadata, permissionned management by contract owner, commit-reveal pattern for claimable tickets.
+ */
 contract TRY26 is
     IERC721,
     IERC721Metadata,
     IERC721Enumerable,
     ERC165,
     EIP712,
-    Ownable
+    Ownable,
+    ERC2771Context
 {
     /* ------------ Libraries ------------ */
 
@@ -59,8 +66,6 @@ contract TRY26 is
 
     /* ------------ Constants ------------ */
 
-    address private constant ZERO_ADDRESS =
-        0x0000000000000000000000000000000000000000;
     uint256 private constant SAFETY_DELAY = 1 minutes;
     bytes32 private constant PREMINT_PERMIT_TYPEHASH =
         keccak256(
@@ -83,9 +88,10 @@ contract TRY26 is
     mapping(bytes32 reservation => uint256 timestamp) private _reservations;
 
     uint256 private _totalTokens;
+    uint256 private _totalBurned;
     mapping(bytes32 ticketId => uint256) private _tokenIds;
     mapping(uint256 tokenId => Token) private _tokens;
-    mapping(address => PaginatedEnumerableSet.UintSet) private _claimedTokenIds;
+    mapping(address => PaginatedEnumerableSet.UintSet) private _ownedTokenIds;
 
     /* ------------ Events ------------ */
 
@@ -94,6 +100,12 @@ contract TRY26 is
         uint128 indexed metadataId,
         address indexed creator,
         uint256 nbTickets
+    );
+    event BatchMinted(
+        uint256 indexed batchId,
+        uint128 indexed metadataId,
+        address indexed creator,
+        uint256 amount
     );
     event TicketReserved(
         address indexed owner,
@@ -112,10 +124,21 @@ contract TRY26 is
     error TicketNotFound(uint256 batchId, bytes32 ticketId);
     error TicketAlreadyClaimed(uint256 batchId, bytes32 ticketId);
     error InvalidSigner(address creator, address signer);
+    error TokenNotFound(uint256 tokenId);
+    error ERC721InvalidReceiver(address receiver);
+    error ERC721IncorrectOwner(
+        address from,
+        uint256 tokenId,
+        address previousOwner
+    );
 
     /* ------------ Constructor ------------ */
 
-    constructor() EIP712(__name, __version) Ownable(_msgSender()) {}
+    constructor()
+        EIP712(__name, __version)
+        Ownable(_msgSender())
+        ERC2771Context(0xd8253782c45a12053594b9deB72d8e8aB2Fca54c) // GelatoRelayERC2771
+    {}
 
     /* ------------ IERC165 Methods ------------ */
 
@@ -157,23 +180,24 @@ contract TRY26 is
 
     /* ------------ IERC721Enumerable Methods ------------ */
 
-    function totalSupply() external view override returns (uint256) {
-        return _totalTokens;
+    function totalSupply() public view override returns (uint256) {
+        return _totalTokens - _totalBurned;
     }
 
     function tokenOfOwnerByIndex(
         address target,
         uint256 index
-    ) external view override returns (uint256 tokenId) {
-        PaginatedEnumerableSet.UintSet
-            storage claimedTokenIds = _claimedTokenIds[target];
-        if (index >= claimedTokenIds.length()) revert IndexOutOfBounds();
-        tokenId = claimedTokenIds.at(index);
+    ) public view override returns (uint256 tokenId) {
+        PaginatedEnumerableSet.UintSet storage ownedTokenIds = _ownedTokenIds[
+            target
+        ];
+        if (index >= ownedTokenIds.length()) revert IndexOutOfBounds();
+        tokenId = ownedTokenIds.at(index);
     }
 
     function tokenByIndex(
         uint256 index
-    ) external view override returns (uint256) {
+    ) public view override returns (uint256) {
         if (index > _totalTokens) revert IndexOutOfBounds();
         return index;
     }
@@ -181,7 +205,7 @@ contract TRY26 is
     /* ------------ IERC721 Methods ------------ */
 
     function balanceOf(address target) public view returns (uint256) {
-        return _claimedTokenIds[target].length();
+        return _ownedTokenIds[target].length();
     }
 
     function ownerOf(uint256 tokenId) public view returns (address) {
@@ -218,7 +242,7 @@ contract TRY26 is
 
     function tokenIdByTicketId(
         bytes32 ticketId
-    ) external view returns (uint256 tokenId) {
+    ) public view returns (uint256 tokenId) {
         tokenId = _tokenIds[ticketId];
     }
 
@@ -226,11 +250,12 @@ contract TRY26 is
         address target,
         uint256 start,
         uint256 size
-    ) external view returns (uint256[] memory tokenIds) {
-        PaginatedEnumerableSet.UintSet
-            storage claimedTokenIds = _claimedTokenIds[target];
-        if (start + size > claimedTokenIds.length()) revert IndexOutOfBounds();
-        tokenIds = claimedTokenIds.subset(start, size);
+    ) public view returns (uint256[] memory tokenIds) {
+        PaginatedEnumerableSet.UintSet storage ownedTokenIds = _ownedTokenIds[
+            target
+        ];
+        if (start + size > ownedTokenIds.length()) revert IndexOutOfBounds();
+        tokenIds = ownedTokenIds.subset(start, size);
     }
 
     function getToken(uint256 tokenId) public view returns (Token memory) {
@@ -266,7 +291,7 @@ contract TRY26 is
         emit BatchPreMinted(batchId, metadataId, creator, tickets.length);
     }
 
-    function reserve(bytes32 reservation) external {
+    function reserve(bytes32 reservation) public {
         if (_reservations[reservation] > 0) {
             revert ReservationNotChanged(reservation);
         }
@@ -275,7 +300,7 @@ contract TRY26 is
         emit TicketReserved(_msgSender(), reservation, unlock);
     }
 
-    function claim(Ticket memory ticket) external {
+    function claim(Ticket memory ticket) public {
         address claimer = _msgSender();
         bytes32 reservation = keccak256(
             abi.encodePacked(claimer, ticket.batchSecret, ticket.ticketSecret)
@@ -288,8 +313,8 @@ contract TRY26 is
         uint256 tokenId = ++_totalTokens;
         _tokenIds[ticketId] = tokenId;
         _tokens[tokenId] = Token(claimer, ticket.batchId, ticketId);
-        _claimedTokenIds[claimer].add(tokenId);
-        emit Transfer(ZERO_ADDRESS, claimer, tokenId);
+        _ownedTokenIds[claimer].add(tokenId);
+        emit Transfer(address(0), claimer, tokenId);
     }
 
     function _permitTicket(
@@ -323,24 +348,75 @@ contract TRY26 is
         if (signer != creator) revert InvalidSigner(creator, signer);
     }
 
-    /* ------------ IERC721 Banned Methods ------------ */
+    function mint(uint128 metadataId, uint256 amount) external {
+        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+        uint256 batchId = ++totalBatches;
+        address creator = _msgSender();
+        _batches[batchId] = Batch(
+            metadataId,
+            uint128(block.timestamp),
+            creator,
+            uint96(0)
+        );
+        emit BatchMinted(batchId, metadataId, creator, amount);
+        uint256 tokenId = _totalTokens + 1;
+        uint256 max = tokenId + amount;
+        for (; tokenId < max; tokenId++) {
+            _tokens[tokenId] = Token(creator, batchId, 0);
+            _ownedTokenIds[creator].add(tokenId);
+            emit Transfer(address(0), creator, tokenId);
+        }
+        _totalTokens = max - 1;
+    }
 
-    function safeTransferFrom(address, address, uint256) public pure {
-        revert MethodNotAllowed();
+    function burn(uint256 tokenId) external {
+        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+        address tokenOwner = _tokens[tokenId].owner;
+        if (tokenOwner == address(0)) revert TokenNotFound(tokenId);
+        _ownedTokenIds[tokenOwner].remove(tokenId);
+        delete _tokens[tokenId];
+        _totalBurned++;
+        emit Transfer(tokenOwner, address(0), tokenId);
+    }
+
+    /* ------------ IERC721 Transfer Methods ------------ */
+
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override {
+        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+        if (to == address(0)) revert ERC721InvalidReceiver(address(0));
+        Token storage token = _tokens[tokenId];
+        address previousOwner = token.owner;
+        if (previousOwner == address(0)) revert TokenNotFound(tokenId);
+        if (previousOwner != from)
+            revert ERC721IncorrectOwner(from, tokenId, previousOwner);
+        _ownedTokenIds[from].remove(tokenId);
+        _ownedTokenIds[to].add(tokenId);
+        token.owner = to;
+        emit Transfer(from, to, tokenId);
     }
 
     function safeTransferFrom(
-        address,
-        address,
-        uint256,
-        bytes memory
-    ) public pure {
-        revert MethodNotAllowed();
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override {
+        transferFrom(from, to, tokenId);
     }
 
-    function transferFrom(address, address, uint256) public pure {
-        revert MethodNotAllowed();
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory
+    ) public override {
+        transferFrom(from, to, tokenId);
     }
+
+    /* ------------ IERC721 Banned Methods ------------ */
 
     function approve(address, uint256) public pure {
         revert MethodNotAllowed();
@@ -356,5 +432,35 @@ contract TRY26 is
 
     function isApprovedForAll(address, address) public pure returns (bool) {
         revert MethodNotAllowed();
+    }
+
+    /* ------------ ERC2771Context overrides ------------ */
+
+    function _msgSender()
+        internal
+        view
+        override(Context, ERC2771Context)
+        returns (address sender)
+    {
+        if (isTrustedForwarder(msg.sender)) {
+            assembly {
+                sender := shr(96, calldataload(sub(calldatasize(), 20)))
+            }
+        } else {
+            return msg.sender;
+        }
+    }
+
+    function _msgData()
+        internal
+        view
+        override(Context, ERC2771Context)
+        returns (bytes calldata)
+    {
+        if (isTrustedForwarder(msg.sender)) {
+            return msg.data[:msg.data.length - 20];
+        } else {
+            return msg.data;
+        }
     }
 }

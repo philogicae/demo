@@ -1,7 +1,7 @@
 {
   "name": "twentysix-soulbound",
   "description": "Exclusive Free Allocations on TwentySix",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "repository": "https://github.com/philogicae/demo",
   "private": false,
   "author": "@philogicae",
@@ -21,12 +21,13 @@
     "verify": "hardhat verify --network sepolia"
   },
   "dependencies": {
+    "@gelatonetwork/relay-sdk-viem": "^1.0.1",
     "@nextui-org/react": "^2.4.2",
-    "@tanstack/react-query": "^5.45.1",
+    "@tanstack/react-query": "^5.48.0",
     "@web3modal/wagmi": "^5.0.3",
     "@wojtekmaj/react-qr-svg": "^2.0.0",
     "base64-compressor": "^1.0.3",
-    "framer-motion": "^11.2.11",
+    "framer-motion": "^11.2.12",
     "ldrs": "^1.0.2",
     "nanoid": "^5.0.7",
     "next": "15.0.0-rc.0",
@@ -34,15 +35,16 @@
     "react-dom": "19.0.0-rc-fb9a90fa48-20240614",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.24.0",
-    "viem": "^2.16.2",
-    "wagmi": "^2.10.6"
+    "viem": "^2.16.3",
+    "wagmi": "^2.10.7"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.2",
+    "@gelatonetwork/relay-context": "^3.2.0",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "@nomicfoundation/hardhat-verify": "^2.0.8",
     "@openzeppelin/contracts": "^5.0.2",
-    "@types/node": "^20.14.8",
+    "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "clsx": "^2.1.1",

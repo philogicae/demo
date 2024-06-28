@@ -6,6 +6,7 @@ import Invalid from '@components/frames/Invalid'
 import load from '@contracts/loader'
 import metadatas from '@contracts/metadatas.json'
 import { useCall } from '@hooks/useCall'
+import { useGasless } from '@hooks/useGasless'
 import { useTransact } from '@hooks/useTransact'
 import {
   Modal,
@@ -27,20 +28,11 @@ import {
   FaLink,
   FaQrcode,
   FaRegCircleCheck,
-  FaShareFromSquare,
   FaWallet,
 } from 'react-icons/fa6'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Address, Hex, Signature, encodePacked, keccak256 } from 'viem'
+import type { Address, Hex, Signature } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
-
-const prepare = (obj: any) => {
-  return {
-    metadataId: Number(obj.metadataId),
-    createdAt: formatDate(Number(obj.createdAt)),
-    creator: obj.creator,
-  }
-}
 
 const defaultTicket = {
   chainId: 0,
@@ -82,7 +74,7 @@ export default function Claim() {
   const contract = load('TRY26', loadedTicket.chainId)
   const [metadata, setMetadata] = useState({
     data: { name: '' },
-    extra: { metadataId: 0 },
+    extra: { metadataId: 0 } as Record<string, any>,
   })
   const [reservation, setReservation] = useState('' as Hex | number | boolean)
   const [seconds, setSeconds] = useState(0)
@@ -138,7 +130,11 @@ export default function Claim() {
                   data: (metadatas as Record<string, any>)[
                     Number(batch.metadataId)
                   ],
-                  extra: prepare(batch),
+                  extra: {
+                    metadataId: Number(batch.metadataId),
+                    createdAt: formatDate(Number(batch.createdAt)),
+                    creator: batch.creator,
+                  },
                 }
           )
           const timestamp = Number(result.data?.getReservation)
@@ -163,21 +159,43 @@ export default function Claim() {
   }
 
   const {
-    sendTx: sendTxReserve,
+    /* sendTx: sendTxReserve,
     txLink: txLinkReserve,
-    txLogs: txLogsReserve,
+    txLogs: txLogsReserve, */
     isReadyTx: isReadyTxReserve,
-    isLoadingTx: isLoadingTxReserve,
+    /* isLoadingTx: isLoadingTxReserve,
     isPendingTx: isPendingTxReserve,
-    isSuccessTx: isSuccessTxReserve,
+    isSuccessTx: isSuccessTxReserve, */
   } = useTransact({
     chainId: loadedTicket.chainId,
     contract,
     method: 'reserve',
     args: [reservation as Hex],
     enabled: !!reservation && typeof reservation === 'string',
-    onSuccess: () => {
+    /* onSuccess: () => {
       const timestamp = Number((txLogsReserve?.[0].args as any)?.unlock)
+      const chrono = Math.floor(timestamp - new Date().getTime() / 1000)
+      if (chrono > 0) {
+        setReservation(timestamp)
+        setSeconds(chrono)
+      } else if (timestamp > 0) setReservation(true)
+    },
+    onError: () => setReservation('' as Hex), */
+  })
+
+  const {
+    sendToRelay: sendToRelayReserve,
+    txLink: txLinkReserve,
+    isLoadingTx: isLoadingTxReserve,
+    isPendingTx: isPendingTxReserve,
+    isSuccessTx: isSuccessTxReserve,
+  } = useGasless({
+    chainId: loadedTicket.chainId,
+    contract,
+    method: 'reserve',
+    args: [reservation as Hex],
+    onSuccess: (txlogs) => {
+      const timestamp = Number((txlogs?.[0].args as any)?.unlock)
       const chrono = Math.floor(timestamp - new Date().getTime() / 1000)
       if (chrono > 0) {
         setReservation(timestamp)
@@ -188,7 +206,8 @@ export default function Claim() {
   })
 
   useEffect(() => {
-    if (isReadyTxReserve) sendTxReserve()
+    if (isReadyTxReserve) sendToRelayReserve()
+    //if (isReadyTxReserve) sendTxReserve()
   }, [isReadyTxReserve])
 
   useEffect(() => {
@@ -198,20 +217,19 @@ export default function Claim() {
           setSeconds((prev) => prev - 1)
         }, 1000)
         return () => clearInterval(timer)
-      } else if (seconds <= 1) {
-        setReservation(true)
       }
+      setReservation(true)
     }
   }, [reservation, seconds])
 
   const {
-    sendTx,
+    /* sendTx,
     txLink,
-    txLogs,
+    txLogs, */
     isReadyTx,
-    isLoadingTx,
+    /* isLoadingTx,
     isPendingTx,
-    isSuccessTx,
+    isSuccessTx, */
   } = useTransact({
     chainId: loadedTicket.chainId,
     contract,
@@ -223,11 +241,23 @@ export default function Claim() {
     },
   })
 
+  const { sendToRelay, txLink, txLogs, isLoadingTx, isPendingTx, isSuccessTx } =
+    useGasless({
+      chainId: loadedTicket.chainId,
+      contract,
+      method: 'claim',
+      args: [loadedTicket.content],
+      onSuccess: (txlogs) => {
+        setTokenId(Number((txlogs?.[0].args as any)?.tokenId))
+      },
+    })
+
   const handleClaim = () => {
     if (!isConnected) open()
     else if (loadedTicket.chainId > 0 && chainId !== loadedTicket.chainId)
       switchChain({ chainId: loadedTicket.chainId })
-    else sendTx()
+    else sendToRelay()
+    //else sendTx()
   }
 
   if (
@@ -258,6 +288,7 @@ export default function Claim() {
             </span>
           </Snippet>
           <button
+            type="button"
             onClick={() => {
               onOpen()
             }}
@@ -285,6 +316,7 @@ export default function Claim() {
         </div>
       ) : (
         <button
+          type="button"
           className="flex flex-row text-center text-xl rounded-lg text-gray-950 bg-white bg-opacity-30 px-2 pb-0.5 font-bold hover:underline button-halo"
           onClick={() => navigate(`/token/${tokenId}`)}
         >
@@ -305,7 +337,10 @@ export default function Claim() {
                   <span className="text-xs">Reserved</span>
                 </div>
               ) : (
-                '1. Reserve'
+                <div className="flex flex-col">
+                  <span className="">1. Reserve</span>
+                  <span className="text-xs italic pl-4">-gasless-</span>
+                </div>
               )
             ) : (
               <a
@@ -356,7 +391,10 @@ export default function Claim() {
         <ActionButton
           label={
             !isSuccessTx ? (
-              '2. Claim'
+              <div className="flex flex-col">
+                <span className="">2. Claim</span>
+                <span className="text-xs italic pl-4">-gasless-</span>
+              </div>
             ) : (
               <a
                 className="flex flex-row hover:underline"
@@ -390,7 +428,7 @@ export default function Claim() {
           ticketId: `${loadedTicket.ticketId.slice(0, 20)}...${loadedTicket.ticketId.slice(-21, -1)}`,
           ...metadata.extra,
         }}
-      ></Metadata>
+      />
     </div>
   )
 }

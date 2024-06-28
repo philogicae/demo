@@ -2,9 +2,9 @@
 import { decode, encode } from 'base64-compressor'
 import { nanoid } from 'nanoid'
 import {
-  Address,
-  Hex,
-  Signature,
+  type Address,
+  type Hex,
+  type Signature,
   encodePacked,
   keccak256,
   parseSignature,
@@ -31,14 +31,9 @@ export const generateTicketHash = async (
   ticketSecret: Hex,
   signature: Hex
 ): Promise<string> => {
-  const object =
-    chainId.toString() +
-    ':' +
-    Number(batchId) +
-    '.' +
-    batchSecret.slice(2) +
-    ticketSecret.slice(2) +
-    signature.slice(2)
+  const object = `${chainId.toString()}:${Number(batchId)}.${batchSecret.slice(
+    2
+  )}${ticketSecret.slice(2)}${signature.slice(2)}`
   return await encode(object)
 }
 
@@ -86,9 +81,9 @@ export const extractFromTicketHash = async (
     const chainId = Number(unwrapped[0])
     const data = unwrapped[1].split('.')
     const batchId = BigInt(data[0])
-    const batchSecret = ('0x' + data[1].slice(0, 64)) as Hex
-    const ticketSecret = ('0x' + data[1].slice(64, 128)) as Hex
-    const signature = parseSignature(('0x' + data[1].slice(128)) as Hex)
+    const batchSecret = `0x${data[1].slice(0, 64)}` as Hex
+    const ticketSecret = `0x${data[1].slice(64, 128)}` as Hex
+    const signature = parseSignature(`0x${data[1].slice(128)}` as Hex)
     const reservation = keccak256(
       encodePacked(
         ['address', 'bytes32', 'bytes32'],

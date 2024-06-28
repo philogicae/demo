@@ -67,7 +67,7 @@ export function useTransact({
   })
 
   const txLink = useMemo(() => {
-    return txHash ? blockExplorer + '/tx/' + txHash : undefined
+    return txHash ? `${blockExplorer}/tx/${txHash}` : undefined
   }, [blockExplorer, txHash])
 
   useEffect(() => {

@@ -13,13 +13,13 @@ export function Metadata({
   extra?: Record<string, any>
 }) {
   const title = data.name.split(' - ')
-  const external_url = '/#' + data.external_url.split('#')[1]
+  const external_url = `/#${data.external_url.split('#')[1]}`
   return (
     <Card className="w-full max-w-xs text-white bg-opacity-10">
       <CardHeader className="flex items-center justify-between">
         <div className="w-[90px] h-[90px] items-center justify-center overflow-visible">
           <Image
-            src={'/sbt' + data.image.split('sbt')[1]}
+            src={`/sbt${data.image.split('sbt')[1]}`}
             alt="Cover"
             radius="sm"
             width={90}
@@ -49,9 +49,9 @@ export function Metadata({
           <div>
             <Divider className="bg-opacity-30 bg-white my-2" />
             <div className="gap-2">
-              {data.attributes.map((attribute: any, index: number) => (
+              {data.attributes.map((attribute: any) => (
                 <div
-                  key={`attribute-${index}`}
+                  key={attribute.trait_type}
                   className="flex flex-row justify-between items-center"
                 >
                   <span className="font-bold">{attribute.trait_type}</span>
@@ -69,9 +69,9 @@ export function Metadata({
           <div>
             <Divider className="bg-opacity-30 bg-white my-2" />
             <div className="gap-2">
-              {Object.entries(extra).map((item: any, index: number) => (
+              {Object.entries(extra).map((item: any) => (
                 <div
-                  key={`extra-${index}`}
+                  key={item[0]}
                   className="flex flex-row justify-between items-center"
                 >
                   <span className="font-bold">

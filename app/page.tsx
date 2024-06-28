@@ -1,7 +1,7 @@
 'use client'
 import Claim from '@components/frames/Claim'
 import Create from '@components/frames/Create'
-import Error from '@components/frames/Error'
+import Error404 from '@components/frames/Error'
 import Loading from '@components/frames/Loading'
 import Temp from '@components/frames/Temp'
 import Token from '@components/frames/Token'
@@ -37,7 +37,7 @@ export default function Home() {
       path: 'token/:id',
       element: <Token />,
     },
-    { path: '404', element: <Error /> },
+    { path: '404', element: <Error404 /> },
     { path: '*', loader: async () => redirect('404') },
   ])
   return (

@@ -116,7 +116,7 @@ export default function Create() {
             return {
               id: `#${index + 1 < 10 ? '0' : ''}${index + 1}`,
               data: ticket,
-              url: window.location.origin + '/#/claim/' + ticket,
+              url: `${window.location.origin}/#/claim/${ticket}`,
             }
           })
         )
@@ -137,6 +137,7 @@ export default function Create() {
         variant="faded"
         label="Metadata"
         placeholder="Select a template"
+        // biome-ignore lint/complexity/noUselessFragments: <explanation>
         selectorIcon={<></>}
         selectedKeys={[metadataId]}
         onChange={(e: any) =>
@@ -263,9 +264,7 @@ export default function Create() {
       {tickets.length > 0 ? (
         <Tickets batchId={Number(batchId)} tickets={tickets} />
       ) : metadataId.length > 0 ? (
-        <Metadata
-          data={(metadatas as Record<string, any>)[metadataId]}
-        ></Metadata>
+        <Metadata data={(metadatas as Record<string, any>)[metadataId]} />
       ) : null}
     </div>
   )
