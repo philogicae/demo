@@ -7,9 +7,7 @@ export default function Invalid() {
     <div className="flex flex-col items-center justify-center h-full w-full">
       <div className="flex flex-col items-center justify-center h-full gap-6 w-52 text-black">
         <FaBan className="text-6xl" />
-        <span className="text-2xl font-bold text-center">
-          Ticket invalid or already claimed
-        </span>
+        <span className="text-2xl font-bold text-center">Invalid Ticket</span>
         <LinkButton
           page={'/'}
           label={

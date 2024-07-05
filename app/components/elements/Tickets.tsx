@@ -113,12 +113,12 @@ export function Tickets({
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-row py-2 pr-10 items-center">
+              <ModalHeader className="flex flex-row py-2 items-center justify-center">
                 <span className="text-xl text-black font-bold">
                   {`TRY26 - B${batchId}${tickets.at(currentTicket - 1)?.id!}`}
                 </span>
               </ModalHeader>
-              <ModalBody className="bg-white p-3">
+              <ModalBody className="bg-white px-3 py-0">
                 <Image
                   src={tickets.at(currentTicket - 1)?.qrCode}
                   alt="QRCode"

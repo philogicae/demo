@@ -19,7 +19,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
       >
         <a
           className="flex flex-col items-center"
-          href={window.location.pathname}
+          href={'https://www.twentysix.cloud/'}
         >
           <Image
             src="/26-horizontal.png"

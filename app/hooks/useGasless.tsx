@@ -20,9 +20,13 @@ import {
 } from 'viem'
 import { useAccount, useChains, useWaitForTransactionReceipt } from 'wagmi'
 
-if (!process.env.NEXT_PUBLIC_GELATO_RELAY_API_KEY)
-  throw new Error('NEXT_PUBLIC_GELATO_RELAY_API_KEY is not defined')
-const gelatoApiKey = process.env.NEXT_PUBLIC_GELATO_RELAY_API_KEY
+if (!process.env.NEXT_PUBLIC_SEPOLIA_GELATO_RELAY_API_KEY)
+  throw new Error('NEXT_PUBLIC_SEPOLIA_GELATO_RELAY_API_KEY is not defined')
+const sepoliaGelatoApiKey = process.env.NEXT_PUBLIC_SEPOLIA_GELATO_RELAY_API_KEY
+
+if (!process.env.NEXT_PUBLIC_AVAX_GELATO_RELAY_API_KEY)
+  throw new Error('NEXT_PUBLIC_AVAX_GELATO_RELAY_API_KEY is not defined')
+const avaxGelatoApiKey = process.env.NEXT_PUBLIC_AVAX_GELATO_RELAY_API_KEY
 
 export type GaslessProps = {
   chainId: number
@@ -47,8 +51,10 @@ export function useGasless({
   const { address } = useAccount()
   const client = createWalletClient({
     account: address,
-    transport: http('https://eth-sepolia.public.blastapi.io'),
-    //http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc'),
+    transport:
+      chainId === 43114
+        ? http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc')
+        : http('https://eth-sepolia.public.blastapi.io'),
   })
   const [state, setState] = useState({
     data: undefined as any,
@@ -143,7 +149,7 @@ export function useGasless({
       .sponsoredCallERC2771WithSignature(
         payload.struct,
         signature,
-        gelatoApiKey
+        chainId === 43114 ? avaxGelatoApiKey : sepoliaGelatoApiKey
       )
       .then((response) => {
         console.log(

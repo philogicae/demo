@@ -54,11 +54,11 @@ export function Metrics() {
       .catch((err) => {
         console.error('Error during call:', err)
       })
-  }, [])
+  }, [chainId])
 
   return (
     <div className="flex flex-col items-center w-[270px] justify-center gap-2 p-2 rounded-lg bg-violet-400 bg-opacity-10">
-      <span className="text-lg text-center font-extrabold italic text-black w-full pb-0.5 rounded-lg bg-white bg-opacity-80">
+      <span className="text-md text-center font-extrabold italic text-black w-full pb-0.5 rounded-lg bg-white bg-opacity-80">
         TRY26 Metrics
       </span>
       <div className="flex flex-row gap-3 text-sm">

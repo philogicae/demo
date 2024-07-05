@@ -1,4 +1,5 @@
 'use client'
+import load from '@contracts/loader'
 import {
   Card,
   CardBody,
@@ -8,9 +9,10 @@ import {
   Snippet,
 } from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
-import { cn } from '@utils/tw'
 import font from '@utils/fonts'
+import { cn } from '@utils/tw'
 import { FaShareFromSquare } from 'react-icons/fa6'
+import { useChainId } from 'wagmi'
 
 export function Metadata({
   data,
@@ -21,6 +23,9 @@ export function Metadata({
   id?: string
   extra?: Record<string, any>
 }) {
+  const chainId = useChainId()
+  const contract = load('TRY26', chainId)
+  const opensea_url = `https://${chainId === 43114 ? 'opensea.io/assets/avalanche' : 'testnets.opensea.io/assets/sepolia'}/${contract?.address}/${id}`
   const title = data.name.split(' - ')
   const external_url = `/#${data.external_url.split('#')[1]}`
   return (
@@ -118,7 +123,7 @@ export function Metadata({
                     onClick={() =>
                       navigator.share({
                         title: `TRY26 Ticket B${extra.batchId}-${id} on Opensea`,
-                        text: `https://testnets.opensea.io/assets/sepolia/0x7980d217B93FA90Ca268f089Cb0c344ebe722170/${id}`,
+                        text: opensea_url,
                       })
                     }
                   >

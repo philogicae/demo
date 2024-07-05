@@ -5,7 +5,7 @@ import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { useEffect, useState } from 'react'
 import { http, WagmiProvider, fallback, webSocket } from 'wagmi'
-import { sepolia /* avalanche */ } from 'wagmi/chains'
+import { avalanche, sepolia } from 'wagmi/chains'
 
 const queryClient = new QueryClient()
 
@@ -13,7 +13,7 @@ if (!process.env.NEXT_PUBLIC_WALLETCONNECT_ID)
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_ID is not defined')
 export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID
 
-const SITE_NAME = '26 Claim'
+const SITE_NAME = 'Twentysix Claim'
 const SITE_DESCRIPTION = 'Exclusive Free Allocations on TwentySix'
 const SITE_URL = 'https://claim.twentysix.cloud'
 const metadata = {
@@ -24,27 +24,27 @@ const metadata = {
 }
 
 export const txType: Record<number, 'eip1559' | 'legacy'> = {
+  [avalanche.id]: 'eip1559',
   [sepolia.id]: 'eip1559',
-  //[avalanche.id]: 'eip1559',
 }
 
-const chains = [sepolia] as const
+const chains = [avalanche, sepolia] as const
 export const defaultChain = chains[0]
 const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
   transports: {
+    [avalanche.id]: fallback([
+      webSocket('wss://avalanche-c-chain-rpc.publicnode.com'),
+      http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc'),
+      http(),
+    ]),
     [sepolia.id]: fallback([
       webSocket('wss://ethereum-sepolia-rpc.publicnode.com'),
       http('https://eth-sepolia.public.blastapi.io'),
       http(),
     ]),
-    /* [avalanche.id]: fallback([
-      webSocket('wss://avalanche-c-chain-rpc.publicnode.com'),
-      http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc'),
-      http(),
-    ]), */
   },
 })
 

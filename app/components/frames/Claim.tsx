@@ -20,11 +20,12 @@ import {
 } from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
 import font from '@utils/fonts'
+import { updateTicketRow } from '@utils/nocodb'
 import { extractFromTicketHash } from '@utils/packing'
 import { generateQrCode } from '@utils/qrcodes'
 import { cn } from '@utils/tw'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   FaArrowLeftLong,
   FaArrowRightLong,
@@ -62,6 +63,12 @@ export default function Claim() {
   const navigate = useNavigate()
   const { ticket } = useParams()
   const [email, setEmail] = useState('')
+  const validateEmail = (value: string) =>
+    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)
+  const isValidEmail = useMemo(() => {
+    if (email === '') return false
+    return !!validateEmail(email)
+  }, [email])
 
   useEffect(() => {
     if (ticket)
@@ -261,16 +268,22 @@ export default function Claim() {
     if (!isConnected) open()
     else if (loadedTicket.chainId > 0 && chainId !== loadedTicket.chainId)
       switchChain({ chainId: loadedTicket.chainId })
-    else sendToRelay()
+    else {
+      sendToRelay()
+      updateTicketRow({
+        id: loadedTicket.ticketId,
+        ticket: {
+          'Claim Email': email,
+          'Claim Address': address,
+        },
+      })
+    }
     //else sendTx()
   }
 
-  if (
-    loadedTicket.chainId < 0 ||
-    metadata.data?.name === 'bad' ||
-    !!result?.tokenIdByTicketId
-  )
+  if (loadedTicket.chainId < 0 || metadata.data?.name === 'bad')
     return <Invalid />
+  if (result?.tokenIdByTicketId) navigate(`/token/${result.tokenIdByTicketId}`)
   if (!loadedTicket.chainId || !metadata.data?.name) return <LoaderPage />
 
   return (
@@ -315,8 +328,10 @@ export default function Claim() {
             <ModalContent>
               {() => (
                 <>
-                  <ModalHeader />
-                  <ModalBody className="bg-white p-3 flex w-full h-full">
+                  <ModalHeader className="flex flex-row py-2 items-center justify-center">
+                    <span className="text-xl text-black font-bold">TRY26</span>
+                  </ModalHeader>
+                  <ModalBody className="bg-white p-3 pt-0 flex w-full h-full">
                     <Image
                       src={generateQrCode(window.location.href)!}
                       alt="QRCode"
@@ -342,18 +357,18 @@ export default function Claim() {
           Token Claimed #{tokenId}
         </button>
       )}
-      <p className="py-2 text-sm text-center w-full max-w-xs">
+      <p className="p-2 text-xs font-semibold text-center w-full max-w-xs">
         Congrats, you've managed to get your hands on an exclusive TRY26
-        allocation! Claiming your ticket is free, and takes place in 2 gasless
-        transactions. In case of relay failure, just wait a bit before to try
-        again. Welcome to DePIN!
+        allocation! Claiming your ticket is free and takes 2 gasless
+        transactions. In case of relay failure, just wait a bit before to
+        refresh/retry. Welcome to DePIN!
       </p>
       <div className="flex items-center justify-center w-full max-w-xs">
         <Input
           isRequired
           color="primary"
           type="email"
-          placeholder="Enter your email, let's keep in touch!"
+          placeholder="Enter your email & let's keep in touch!"
           value={email}
           onChange={(e: any) =>
             !isLoadingTx &&
@@ -361,7 +376,7 @@ export default function Claim() {
             !isSuccessTx &&
             setEmail(e.target.value)
           }
-          classNames={{}}
+          classNames={{ input: 'placeholder:text-center' }}
         />
       </div>
       <div className="flex flex-row py-1 items-center justify-between w-full max-w-xs">
@@ -390,6 +405,7 @@ export default function Claim() {
             )
           }
           isActive={
+            isValidEmail &&
             !!metadata?.extra.metadataId &&
             !isLoadingTxReserve &&
             !isPendingTxReserve &&
@@ -417,7 +433,7 @@ export default function Claim() {
         ) : isReadyTx ? (
           <FaArrowRightLong />
         ) : seconds > 0 ? (
-          <span className="text-xl font-bold border-1 rounded-3xl px-1 border-black bg-white text-black w-8 text-center">
+          <span className="text-xl font-bold border-2 rounded-xl px-1 pt-1 border-black bg-white text-black w-10 h-10 text-center">
             {seconds}
           </span>
         ) : (
@@ -440,6 +456,7 @@ export default function Claim() {
             )
           }
           isActive={
+            isValidEmail &&
             typeof reservation === 'boolean' &&
             reservation &&
             !isLoadingTx &&

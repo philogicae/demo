@@ -6,10 +6,12 @@ import { Tickets } from '@components/elements/Tickets'
 import { defaultChain } from '@context/Wallet'
 import load from '@contracts/loader'
 import metadatas from '@contracts/metadatas.json'
+import { useCall } from '@hooks/useCall'
 import { useSign } from '@hooks/useSign'
 import { useTransact } from '@hooks/useTransact'
 import { Input, Select, SelectItem } from '@nextui-org/react'
 import { restrictRange } from '@utils/convert'
+import { addTicketRows } from '@utils/nocodb'
 import {
   generateBatchHex,
   generateBatchTicketHash,
@@ -28,7 +30,7 @@ import {
   FaRegCircleCheck,
   FaWallet,
 } from 'react-icons/fa6'
-import type { Hex } from 'viem'
+import type { Address, Hex } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 
 const maxTickets = 100
@@ -53,6 +55,21 @@ export default function Create() {
   const [tickets, setTickets] = useState<
     { id: string; data: string; url: string; qrCode: string }[]
   >([])
+
+  const { fetch, result } = useCall({
+    calls: [
+      {
+        chainId,
+        contract: contract!,
+        functionName: 'owner',
+      },
+    ],
+    initData: ['0x1' as Address],
+  })
+
+  useEffect(() => {
+    !!contract && fetch()
+  }, [contract])
 
   const handleCreateBatch = () => {
     if (!isConnected) open()
@@ -112,17 +129,30 @@ export default function Create() {
         hashes.ticketSecrets,
         signature as Hex
       ).then((tickets) => {
-        setTickets(
-          tickets.map((ticket, index) => {
-            const url = `${window.location.origin}/#/ticket/${ticket}`
-            return {
-              id: `#${index + 1 < 10 ? '0' : ''}${index + 1}`,
-              data: ticket,
-              url: url,
-              qrCode: generateQrCode(url)!,
-            }
+        const printed = [] as {
+          id: string
+          data: string
+          url: string
+          qrCode: string
+        }[]
+        const rows = [] as any[]
+        tickets.forEach((ticket, index) => {
+          const url = `${window.location.origin}/#/ticket/${ticket}`
+          printed.push({
+            id: `#${index + 1 < 10 ? '0' : ''}${index + 1}`,
+            data: ticket,
+            url: url,
+            qrCode: generateQrCode(url)!,
           })
-        )
+          rows.push({
+            'Ticket Id': hashes.ticketIds[index],
+            'Batch Id': Number(batchId),
+            'Metadata Id': Number(metadataId),
+            URL: url,
+          })
+        })
+        addTicketRows(rows)
+        setTickets(printed)
       })
     }
   }, [isSuccessSign])
@@ -134,7 +164,9 @@ export default function Create() {
       </span>
       <Select
         isRequired
-        isDisabled={isLoadingTx || isPendingTx || isSuccessTx}
+        isDisabled={
+          address !== result?.owner || isLoadingTx || isPendingTx || isSuccessTx
+        }
         size="sm"
         color="primary"
         variant="faded"
@@ -166,7 +198,9 @@ export default function Create() {
       </Select>
       <Input
         isRequired
-        isDisabled={isLoadingTx || isPendingTx || isSuccessTx}
+        isDisabled={
+          address !== result?.owner || isLoadingTx || isPendingTx || isSuccessTx
+        }
         size="sm"
         color="primary"
         variant="faded"
@@ -194,14 +228,16 @@ export default function Create() {
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
           label: 'text-black text-md font-bold',
           input:
-            'text-right text-purple font-bold no-arrow placeholder:text-purple',
+            'text-right text-black font-bold no-arrow placeholder:text-purple',
         }}
         className="max-w-xs"
       />
       <div className="flex flex-row py-1 items-center justify-between w-full max-w-xs">
         <ActionButton
           label={
-            !isSuccessTx ? (
+            address !== result?.owner ? (
+              'Restricted'
+            ) : !isSuccessTx ? (
               'Create Batch'
             ) : (
               <a
@@ -216,6 +252,7 @@ export default function Create() {
             )
           }
           isActive={
+            address === result?.owner &&
             !!metadataId &&
             !!units &&
             !isLoadingTx &&
@@ -225,6 +262,7 @@ export default function Create() {
           isIdle={isSuccessTx}
           isLoading={isLoadingTx}
           onClick={!isSuccessTx ? handleCreateBatch : () => {}}
+          className={address !== result?.owner ? 'disabled:!bg-red-200' : ''}
         />
         {isLoadingTx || isPendingSign ? (
           <FaWallet className="w-5 h-5" />
@@ -243,24 +281,27 @@ export default function Create() {
         )}
         <ActionButton
           label={
-            !tickets.length ? (
+            address !== result?.owner ? (
+              'Restricted'
+            ) : !tickets.length ? (
               'Sign Tickets'
             ) : (
-              <span className="text-xs">Export as .zip</span>
+              <span className="text-xs">Export All</span>
             )
           }
-          isActive={isSuccessTx}
+          isActive={address === result?.owner && isSuccessTx}
           isIdle={!!tickets.length}
           isLoading={isPendingSign}
           onClick={() => {
             if (!tickets.length) handleSignTickets()
             else {
-              const zipName = `batch_#${Number(batchId)}`
+              const zipName = `batch_B${Number(batchId)}`
               downloadQrCodesZip(zipName, tickets)
                 .then(() => console.log(`${zipName}.zip created.`))
                 .catch(console.error)
             }
           }}
+          className={address !== result?.owner ? 'disabled:!bg-red-200' : ''}
         />
       </div>
       {tickets.length > 0 ? (
