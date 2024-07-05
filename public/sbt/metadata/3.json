@@ -1,16 +1,17 @@
 {
-  "name": "TRY26 - Confidential Instance",
+  "name": "TRY26 - Confidential VM Access",
   "description": "Exclusive Free Allocation on TwentySix",
-  "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-  "image": "https://26-soulbound.istest.eth.limo/sbt/cover/4.png",
+  "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+  "image": "https://claim.twentysix.cloud/sbt/cover/confidential-vm.jpg",
   "attributes": [
     { "trait_type": "Type", "value": "Instance" },
     { "trait_type": "Max Unit", "value": 1 },
-    { "trait_type": "Max CPU Cores", "value": 2 },
-    { "trait_type": "Max RAM (GB)", "value": 4 },
-    { "trait_type": "Max Volume (GB)", "value": 50 },
+    { "trait_type": "Max vCPU Cores", "value": 1 },
+    { "trait_type": "Max RAM (GB)", "value": 2 },
+    { "trait_type": "Max Volume (GB)", "value": 20 },
     { "trait_type": "Confidential", "value": "Allowed" },
-    { "display_type": "date", "trait_type": "Start", "value": 1718878416 },
-    { "display_type": "date", "trait_type": "End", "value": 1721459616 }
+    { "trait_type": "$ALEPH Virtual Balance", "value": 4000 },
+    { "display_type": "date", "trait_type": "Start", "value": 1723010400 },
+    { "display_type": "date", "trait_type": "End", "value": 1736233200 }
   ]
 }

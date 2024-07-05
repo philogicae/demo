@@ -2,9 +2,9 @@
 import { useEffect, useMemo } from 'react'
 
 export function Loader({
-  size,
+  size = 30,
   speed,
-  color,
+  color = '#5100cd',
 }: {
   size?: number
   speed?: number
@@ -25,7 +25,7 @@ export function Loader({
 export default function LoaderPage() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
-      <Loader size={70} speed={1.5} color="white" />
+      <Loader size={70} speed={1.5} color="black" />
     </div>
   )
 }

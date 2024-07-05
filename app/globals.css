@@ -2,30 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+.text-purple {
+  color: #5100cd;
+}
+
+* {
+  @apply antialiased;
+}
 html {
   @apply flex w-full h-full;
-  background: #093480;
+  background: #FFFFFF;
 }
 body {
-  @apply w-full h-full overflow-hidden text-white;
+  @apply w-full h-full overflow-hidden text-purple;
   background: linear-gradient(
       180deg,
-      #ffffff 0%,
-      #6db68a 19%,
-      #599c88 28%,
-      #4f8f87 37%,
-      #458286 46%,
-      #3b7585 55%,
-      #316884 64%,
-      #275b83 73%,
-      #1d4e82 82%,
-      #134181 92%,
-      #093480 100%
+      #efe3fc 0%,
+      #ffffff 25%,
+      #ffffff 75%,
+      #efe3fc 100%
     )
     no-repeat;
-}
-* {
-  @apply font-sans antialiased;
 }
 
 .no-arrow::-webkit-outer-spin-button,
@@ -43,16 +40,16 @@ body {
 
 @keyframes button-pulse {
   0% {
-    border: 2px solid #000000;
-    box-shadow: 0 0 10px #000000;
+    border: 2px solid #5100cd;
+    box-shadow: 0 0 10px #5100cd;
   }
   50% {
-    border: 1px solid #000000;
-    box-shadow: 0 0 0px #000000;
+    border: 1px solid #5100cd;
+    box-shadow: 0 0 0px #5100cd;
   }
   100% {
-    border: 2px solid #000000;
-    box-shadow: 0 0 10px #000000;
+    border: 2px solid #5100cd;
+    box-shadow: 0 0 10px #5100cd;
   }
 }
 
@@ -63,7 +60,7 @@ body {
   left: -20px;
   width: 150%;
   height: 70%;
-  background: #ffffff;
+  background: #5100cd;
   z-index: -1;
   transform: rotate(45deg);
   animation: loading 3s linear infinite;
@@ -76,4 +73,37 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes moveBackground { 
+  0%{
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 12rem -12rem;
+  }
+}
+
+.bg-grain {
+  position: relative;
+  background: radial-gradient(50% 50% at 50% 50%, #ffffff 0%, #ebdaff 150%);
+  z-index: 0;
+  backface-visibility: hidden;
+}
+
+.bg-grain::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.3;
+  background-repeat: repeat;
+  background-size: 20rem 20rem;
+  animation: 20s linear 0s infinite moveBackground;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDAwIiB3aWR0aD0iNDAwIj4KCTxmaWx0ZXIgaWQ9ImZpbHRlciI+CgkJPGZlVHVyYnVsZW5jZSAKCQkJYmFzZUZyZXF1ZW5jeT0iLjI1IgoJCQl0eXBlPSdmcmFjdGFsTm9pc2UnCiAgICAgIG51bU9jdGF2ZXM9JzMnIC8+CgkJPGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuMQoJCQkJCQkJCQkJCQkJIDAgMCAwIDAgMAoJCQkJCQkJCQkJCQkJIDAgMCAwIDAgMC44MAoJCQkJCQkJCQkJCQkJIDAgMCAwIDEwIC03LjI1Ii8+Cgk8L2ZpbHRlcj4KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmaWx0ZXIpIi8+Cjwvc3ZnPg==')
 }

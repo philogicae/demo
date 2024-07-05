@@ -3,7 +3,6 @@ import Claim from '@components/frames/Claim'
 import Create from '@components/frames/Create'
 import Error404 from '@components/frames/Error'
 import Loading from '@components/frames/Loading'
-import Temp from '@components/frames/Temp'
 import Token from '@components/frames/Token'
 import Welcome from '@components/frames/Welcome'
 import { useRouter } from 'next/navigation'
@@ -26,11 +25,7 @@ export default function Home() {
       element: <Create />,
     },
     {
-      path: 'claim',
-      element: <Temp />,
-    },
-    {
-      path: 'claim/:ticket',
+      path: 'ticket/:ticket',
       element: <Claim />,
     },
     {

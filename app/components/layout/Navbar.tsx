@@ -13,39 +13,37 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
       <div
         id="topbar"
         className={cn(
-          'flex flex-row w-full items-center justify-between',
-          mobile ? 'h-16 pl-3 pr-1' : 'h-20 px-6'
+          'flex flex-row w-full items-center justify-between bg-white',
+          mobile ? 'h-20 pl-3 pr-1' : 'h-24 px-6'
         )}
       >
         <a
           className="flex flex-col items-center"
-          href={'https://26-soulbound.istest.eth.limo'}
+          href={window.location.pathname}
         >
           <Image
             src="/26-horizontal.png"
-            alt="TwentySix Soulbound"
+            alt="TwentySix Claim"
             width={mobile ? 150 : 200}
             height={50}
             radius="none"
           />
           <span
             className={cn(
-              'text-xl font-extrabold italic absolute text-black z-5',
+              'font-extrabold italic absolute text-black z-5',
               mobile
-                ? 'text-md top-[35px] left-[77px]'
-                : 'text-xl top-[44px] left-[110px]'
+                ? 'text-sm top-[41px] left-[124px]'
+                : 'text-xl top-[50px] left-[172px]'
             )}
           >
-            Soulbound
+            Claim
           </span>
         </a>
-        <div className={cn(mobile ? 'pt-2' : 'pt-2')}>
-          <w3m-button
-            size="sm"
-            balance={mobile ? 'hide' : 'show'}
-            label={isConnected ? ensName || address : undefined}
-          />
-        </div>
+        <w3m-button
+          size="sm"
+          balance={mobile ? 'hide' : 'show'}
+          label={isConnected ? ensName || address : undefined}
+        />
       </div>
       <div className="flex flex-col w-full h-full overflow-y-auto">
         {children}

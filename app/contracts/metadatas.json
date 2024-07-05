@@ -1,9 +1,59 @@
 {
   "1": {
-    "name": "TRY26 - Basic Instance",
+    "name": "TRY26 - General Access",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/1.png",
+    "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+    "image": "https://claim.twentysix.cloud/sbt/cover/general.jpg",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "General"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 5
+      },
+      {
+        "trait_type": "Max vCPU Cores",
+        "value": 3
+      },
+      {
+        "trait_type": "Max RAM (GB)",
+        "value": 6
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 24
+      },
+      {
+        "trait_type": "Confidential",
+        "value": "Disallowed"
+      },
+      {
+        "trait_type": "Persistent",
+        "value": "Disallowed"
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 2500
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1720332000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1736233200
+      }
+    ]
+  },
+  "2": {
+    "name": "TRY26 - Instance Access",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+    "image": "https://claim.twentysix.cloud/sbt/cover/instance.jpg",
     "attributes": [
       {
         "trait_type": "Type",
@@ -14,7 +64,7 @@
         "value": 1
       },
       {
-        "trait_type": "Max CPU Cores",
+        "trait_type": "Max vCPU Cores",
         "value": 1
       },
       {
@@ -30,64 +80,26 @@
         "value": "Disallowed"
       },
       {
-        "display_type": "date",
-        "trait_type": "Start",
-        "value": 1718878416
-      },
-      {
-        "display_type": "date",
-        "trait_type": "End",
-        "value": 1721459616
-      }
-    ]
-  },
-  "2": {
-    "name": "TRY26 - Classic Instance",
-    "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/5.png",
-    "attributes": [
-      {
-        "trait_type": "Type",
-        "value": "Instance"
-      },
-      {
-        "trait_type": "Max Unit",
-        "value": 2
-      },
-      {
-        "trait_type": "Max CPU Cores",
-        "value": 4
-      },
-      {
-        "trait_type": "Max RAM (GB)",
-        "value": 8
-      },
-      {
-        "trait_type": "Max Volume (GB)",
-        "value": 100
-      },
-      {
-        "trait_type": "Confidential",
-        "value": "Disallowed"
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 2000
       },
       {
         "display_type": "date",
         "trait_type": "Start",
-        "value": 1718878416
+        "value": 1720332000
       },
       {
         "display_type": "date",
         "trait_type": "End",
-        "value": 1721459616
+        "value": 1736233200
       }
     ]
   },
   "3": {
-    "name": "TRY26 - Confidential Instance",
+    "name": "TRY26 - Confidential VM Access",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/4.png",
+    "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+    "image": "https://claim.twentysix.cloud/sbt/cover/confidential-vm.jpg",
     "attributes": [
       {
         "trait_type": "Type",
@@ -98,38 +110,42 @@
         "value": 1
       },
       {
-        "trait_type": "Max CPU Cores",
-        "value": 2
+        "trait_type": "Max vCPU Cores",
+        "value": 1
       },
       {
         "trait_type": "Max RAM (GB)",
-        "value": 4
+        "value": 2
       },
       {
         "trait_type": "Max Volume (GB)",
-        "value": 50
+        "value": 20
       },
       {
         "trait_type": "Confidential",
         "value": "Allowed"
       },
       {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 4000
+      },
+      {
         "display_type": "date",
         "trait_type": "Start",
-        "value": 1718878416
+        "value": 1723010400
       },
       {
         "display_type": "date",
         "trait_type": "End",
-        "value": 1721459616
+        "value": 1736233200
       }
     ]
   },
   "4": {
-    "name": "TRY26 - Function",
+    "name": "TRY26 - Functions Access",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/3.png",
+    "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+    "image": "https://claim.twentysix.cloud/sbt/cover/functions.jpg",
     "attributes": [
       {
         "trait_type": "Type",
@@ -140,7 +156,7 @@
         "value": 2
       },
       {
-        "trait_type": "Max CPU Cores",
+        "trait_type": "Max vCPU Cores",
         "value": 2
       },
       {
@@ -149,29 +165,33 @@
       },
       {
         "trait_type": "Max Volume (GB)",
-        "value": 2
+        "value": 4
       },
       {
         "trait_type": "Persistent",
         "value": "Disallowed"
       },
       {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 500
+      },
+      {
         "display_type": "date",
         "trait_type": "Start",
-        "value": 1718878416
+        "value": 1720332000
       },
       {
         "display_type": "date",
         "trait_type": "End",
-        "value": 1721459616
+        "value": 1736233200
       }
     ]
   },
   "5": {
-    "name": "TRY26 - Website",
+    "name": "TRY26 - Web3 Hosting Access",
     "description": "Exclusive Free Allocation on TwentySix",
-    "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-    "image": "https://26-soulbound.istest.eth.limo/sbt/cover/2.png",
+    "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+    "image": "https://claim.twentysix.cloud/sbt/cover/web3-hosting.jpg",
     "attributes": [
       {
         "trait_type": "Type",
@@ -186,14 +206,18 @@
         "value": 1
       },
       {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 250
+      },
+      {
         "display_type": "date",
         "trait_type": "Start",
-        "value": 1718878416
+        "value": 1720332000
       },
       {
         "display_type": "date",
         "trait_type": "End",
-        "value": 1721459616
+        "value": 1736233200
       }
     ]
   }

@@ -1,23 +1,25 @@
 'use client'
+import { LinkButton } from '@components/elements/Buttons'
 import { FaArrowLeft, FaBan } from 'react-icons/fa6'
 
 export default function Error404() {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
-      <div className="flex flex-col items-center justify-center w-full h-full gap-6">
+      <div className="flex flex-col items-center justify-center w-full h-full gap-6 text-black">
         <FaBan className="text-6xl" />
-        <span className="text-2xl font-bold ">404 Not Found</span>
-        <a
-          className={
-            'w-20 h-8 text-lg bg-sky-950 rounded-lg cursor-pointer hover:bg-sky-900 hover:shadow-lg flex items-center justify-center font-mono tracking-tighter font-semibold'
+        <span className="text-2xl font-bold w-32 text-center">
+          ---- 404 ---- Not Found
+        </span>
+        <LinkButton
+          page={'/'}
+          label={
+            <div className="text-sm flex flex-row items-center justify-center">
+              <FaArrowLeft />
+              <span className="pl-2">MENU</span>
+            </div>
           }
-          href={`${window.location.origin}/#/`}
-        >
-          <div className="text-sm flex flex-row items-center justify-center">
-            <FaArrowLeft />
-            <span className="pl-2">MENU</span>
-          </div>
-        </a>
+          className="w-24 h-10"
+        />
       </div>
     </div>
   )

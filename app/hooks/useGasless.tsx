@@ -50,9 +50,6 @@ export function useGasless({
     transport: http('https://eth-sepolia.public.blastapi.io'),
     //http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc'),
   })
-  const relay = useMemo(() => {
-    return new GelatoRelay()
-  }, [chainId, contract, method])
   const [state, setState] = useState({
     data: undefined as any,
     isPending: false,
@@ -62,6 +59,30 @@ export function useGasless({
   })
   const [payload, setPayload] = useState(undefined as PayloadToSign | undefined)
   const [txHash, setTxHash] = useState(undefined as Hex | undefined)
+
+  const relay = useMemo(() => {
+    const newRelay = new GelatoRelay()
+    newRelay.onTaskStatusUpdate((taskStatus: TransactionStatusResponse) => {
+      if (state.isSuccess) return
+      if (
+        taskStatus.taskState === TaskState.Cancelled ||
+        taskStatus.taskState === TaskState.ExecReverted
+      ) {
+        setState({
+          ...state,
+          isPending: false,
+          isError: true,
+        })
+        newRelay.unsubscribeTaskStatusUpdate(taskStatus.taskId)
+        console.error('Gelato Exec failed.')
+      } else if (taskStatus.taskState === TaskState.ExecSuccess) {
+        setTxHash(taskStatus.transactionHash as Hex)
+        newRelay.unsubscribeTaskStatusUpdate(taskStatus.taskId)
+        console.log('Gelato Exec success.')
+      }
+    })
+    return newRelay
+  }, [chainId, contract, method])
 
   const { signRequest, signature, isPendingSign } = useSign({
     onError: () => {
@@ -84,23 +105,6 @@ export function useGasless({
     hash: txHash,
     confirmations: 1,
     query: { enabled: !!txHash },
-  })
-
-  relay.onTaskStatusUpdate((taskStatus: TransactionStatusResponse) => {
-    if (state.isSuccess) return
-    if (
-      taskStatus.taskState === TaskState.Cancelled ||
-      taskStatus.taskState === TaskState.ExecReverted
-    ) {
-      setState({
-        ...state,
-        isPending: false,
-        isError: true,
-      })
-      console.error('Tx failed.')
-    } else if (taskStatus.taskState === TaskState.ExecSuccess) {
-      setTxHash(taskStatus.transactionHash as Hex)
-    }
   })
 
   const sendToRelay = () => {

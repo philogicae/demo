@@ -4,6 +4,7 @@ import {
   CardBody,
   CardHeader,
   Divider,
+  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,7 +14,8 @@ import {
   Snippet,
   useDisclosure,
 } from '@nextui-org/react'
-import QrSvg from '@wojtekmaj/react-qr-svg'
+import font from '@utils/fonts'
+import { cn } from '@utils/tw'
 import { useState } from 'react'
 import { FaQrcode, FaShareFromSquare } from 'react-icons/fa6'
 
@@ -22,26 +24,43 @@ export function Tickets({
   tickets,
 }: {
   batchId: number
-  tickets: { id: string; data: string; url: string }[]
+  tickets: { id: string; data: string; url: string; qrCode: string }[]
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [currentTicket, setCurrentTicket] = useState(1)
+  const copy_all_tickets = tickets
+    .map(({ id, url }) => `${id}: ${url}`)
+    .join('\n')
   return (
-    <Card className="w-full max-w-xs text-white bg-opacity-10 items-center justify-center">
-      <CardHeader className="flex items-center justify-center">
+    <Card className="w-full max-w-xs text-purple bg-opacity-10 items-center justify-center">
+      <CardHeader className="flex flex-row items-center justify-center gap-2">
         <Snippet
           symbol=""
-          codeString={tickets.map(({ id, url }) => `${id}: ${url}`).join('\n')}
+          codeString={copy_all_tickets}
           tooltipProps={{
             color: 'foreground',
             content: 'Copy all tickets',
           }}
           classNames={{
-            base: 'p-0 bg-transparent text-white',
+            base: 'p-0 bg-transparent text-purple',
           }}
         >
-          <span className="text-lg font-bold">{`Ticket Batch #${batchId}`}</span>
+          <span
+            className={cn('text-lg font-extrabold', font.className)}
+          >{`Ticket Batch #${batchId}`}</span>
         </Snippet>
+        <button
+          type="button"
+          className="flex w-5 h-5 items-center justify-center"
+          onClick={() =>
+            navigator.share({
+              title: `TRY26 Ticket Batch #${batchId}`,
+              text: copy_all_tickets,
+            })
+          }
+        >
+          <FaShareFromSquare className="h-4 w-4" />
+        </button>
       </CardHeader>
       <Divider className="bg-opacity-30 bg-white" />
       <CardBody className="flex text-sm overflow-hidden items-center justify-center">
@@ -55,7 +74,7 @@ export function Tickets({
               codeString={ticket.url}
               disableTooltip={true}
               classNames={{
-                base: 'p-0 bg-transparent text-white',
+                base: 'p-0 bg-transparent text-purple',
               }}
             >
               {`${ticket.id}: ${ticket.data.slice(0, 6)}...${ticket.data.slice(-6)}`}
@@ -65,7 +84,7 @@ export function Tickets({
               className="flex w-5 h-5 items-center justify-center pr-1"
               onClick={() =>
                 navigator.share({
-                  title: `TRY26 - B${batchId}${batchId}-${ticket.id}`,
+                  title: `TRY26 Ticket B${batchId}-${ticket.id}`,
                   text: ticket.url,
                 })
               }
@@ -100,10 +119,12 @@ export function Tickets({
                 </span>
               </ModalHeader>
               <ModalBody className="bg-white p-3">
-                <QrSvg
-                  value={tickets.at(currentTicket - 1)?.url!}
-                  level="L"
-                  margin={1}
+                <Image
+                  src={tickets.at(currentTicket - 1)?.qrCode}
+                  alt="QRCode"
+                  radius="none"
+                  width={1000}
+                  height={1000}
                 />
               </ModalBody>
               <ModalFooter className="flex flex-row p-2 items-center justify-center">

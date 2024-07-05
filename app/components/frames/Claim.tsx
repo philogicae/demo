@@ -9,6 +9,8 @@ import { useCall } from '@hooks/useCall'
 import { useGasless } from '@hooks/useGasless'
 import { useTransact } from '@hooks/useTransact'
 import {
+  Image,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -17,9 +19,11 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
+import font from '@utils/fonts'
 import { extractFromTicketHash } from '@utils/packing'
+import { generateQrCode } from '@utils/qrcodes'
+import { cn } from '@utils/tw'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
-import QrSvg from '@wojtekmaj/react-qr-svg'
 import { useEffect, useState } from 'react'
 import {
   FaArrowLeftLong,
@@ -57,6 +61,7 @@ export default function Claim() {
   const chainId = useChainId()
   const navigate = useNavigate()
   const { ticket } = useParams()
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
     if (ticket)
@@ -269,7 +274,7 @@ export default function Claim() {
   if (!loadedTicket.chainId || !metadata.data?.name) return <LoaderPage />
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full px-4 gap-2">
+    <div className="flex flex-col items-center justify-center w-full p-4 gap-2">
       {!tokenId ? (
         <div className="flex flex-row bg-white bg-opacity-30 px-3 gap-2 pb-0.5 rounded-lg items-center justify-center">
           <div className="pr-1.5 pt-0.5 text-black">
@@ -280,10 +285,15 @@ export default function Claim() {
             codeString={window.location.href}
             disableTooltip={true}
             classNames={{
-              base: 'p-0 bg-transparent text-white',
+              base: 'p-0 bg-transparent text-purple',
             }}
           >
-            <span className="text-center text-xl text-gray-950 font-bold">
+            <span
+              className={cn(
+                'text-center text-2xl text-black font-extrabold italic',
+                font.className
+              )}
+            >
               Valid Ticket
             </span>
           </Snippet>
@@ -306,8 +316,14 @@ export default function Claim() {
               {() => (
                 <>
                   <ModalHeader />
-                  <ModalBody className="bg-white p-3">
-                    <QrSvg value={window.location.href} level="L" margin={1} />
+                  <ModalBody className="bg-white p-3 flex w-full h-full">
+                    <Image
+                      src={generateQrCode(window.location.href)!}
+                      alt="QRCode"
+                      radius="none"
+                      width={1000}
+                      height={1000}
+                    />
                   </ModalBody>
                 </>
               )}
@@ -317,7 +333,7 @@ export default function Claim() {
       ) : (
         <button
           type="button"
-          className="flex flex-row text-center text-xl rounded-lg text-gray-950 bg-white bg-opacity-30 px-2 pb-0.5 font-bold hover:underline button-halo"
+          className="flex flex-row text-center text-xl rounded-lg text-black bg-white bg-opacity-30 px-2 pb-0.5 font-extrabold italic hover:underline button-halo"
           onClick={() => navigate(`/token/${tokenId}`)}
         >
           <div className="pt-1 pr-2 text-black">
@@ -326,6 +342,28 @@ export default function Claim() {
           Token Claimed #{tokenId}
         </button>
       )}
+      <p className="py-2 text-sm text-center w-full max-w-xs">
+        Congrats, you've managed to get your hands on an exclusive TRY26
+        allocation! Claiming your ticket is free, and takes place in 2 gasless
+        transactions. In case of relay failure, just wait a bit before to try
+        again. Welcome to DePIN!
+      </p>
+      <div className="flex items-center justify-center w-full max-w-xs">
+        <Input
+          isRequired
+          color="primary"
+          type="email"
+          placeholder="Enter your email, let's keep in touch!"
+          value={email}
+          onChange={(e: any) =>
+            !isLoadingTx &&
+            !isPendingTx &&
+            !isSuccessTx &&
+            setEmail(e.target.value)
+          }
+          classNames={{}}
+        />
+      </div>
       <div className="flex flex-row py-1 items-center justify-between w-full max-w-xs">
         <ActionButton
           label={
@@ -337,10 +375,7 @@ export default function Claim() {
                   <span className="text-xs">Reserved</span>
                 </div>
               ) : (
-                <div className="flex flex-col">
-                  <span className="">1. Reserve</span>
-                  <span className="text-xs italic pl-4">-gasless-</span>
-                </div>
+                <span>Reserve</span>
               )
             ) : (
               <a
@@ -374,9 +409,9 @@ export default function Claim() {
         (typeof reservation === 'boolean' && reservation && !isReadyTx) ? (
           <FaWallet className="w-5 h-5" />
         ) : isPendingTxReserve || isPendingTx ? (
-          <Loader size={30} color="white" />
+          <Loader />
         ) : isSuccessTx ? (
-          <div className="px-1 text-white">
+          <div className="px-1 text-purple">
             <FaRegCircleCheck className="w-5 h-5" />
           </div>
         ) : isReadyTx ? (
@@ -391,10 +426,7 @@ export default function Claim() {
         <ActionButton
           label={
             !isSuccessTx ? (
-              <div className="flex flex-col">
-                <span className="">2. Claim</span>
-                <span className="text-xs italic pl-4">-gasless-</span>
-              </div>
+              <span className="">Claim</span>
             ) : (
               <a
                 className="flex flex-row hover:underline"

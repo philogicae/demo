@@ -16,7 +16,7 @@ const generatePreMintPermit = ({
   return {
     account: creator,
     domain: {
-      name: 'TwentySix Soulbound',
+      name: 'TwentySix Claim',
       version: '1',
       chainId,
       verifyingContract: contactAddr,

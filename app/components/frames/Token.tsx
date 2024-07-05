@@ -88,7 +88,7 @@ export default function Token() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full mt-10 mb-4 gap-2">
-      <span className="text-3xl rounded-xl text-gray-950 bg-white bg-opacity-30 px-2 font-semibold font-mono">
+      <span className="text-2xl rounded-xl text-black px-2 font-extrabold italic">
         TRY26#{metadata.id}
       </span>
       <Metadata data={metadata.data} id={metadata.id} extra={metadata.extra} />

@@ -38,7 +38,7 @@ export function LinkButton({
     <Button
       variant="ghost"
       className={cn(
-        'font-bold text-black hover:text-white bg-white hover:!bg-gray-950 border-1.5 border-black w-44',
+        'font-bold text-black hover:text-white bg-white hover:!bg-[#5100cd] border-1.5 border-black w-44',
         className
       )}
       onClick={() => navigate(page)}
@@ -71,10 +71,10 @@ export function ActionButton({
         className={cn(
           'flex flex-row w-28 font-bold bg-white border-1.5 border-black text-black',
           isActive && !isLoading
-            ? 'hover:text-white hover:!bg-gray-950 button-halo'
+            ? 'text-purple hover:text-white hover:!bg-[#5100cd] button-halo'
             : isIdle && !isLoading
-              ? 'hover:text-white hover:!bg-gray-950'
-              : 'pointer-events-none cursor-not-allowed disabled:!bg-gray-400',
+              ? 'hover:text-white hover:!bg-[#5100cd]'
+              : 'pointer-events-none cursor-not-allowed disabled:!bg-gray-200',
           className
         )}
         onClick={onClick}

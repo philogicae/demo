@@ -1,16 +1,36 @@
 {
   "short_name": "TRY26",
-  "name": "TwentySix Soulbound",
+  "name": "TwentySix Claim",
   "description": "Exclusive Free Allocations on TwentySix",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#093480",
+  "theme_color": "#5100cd",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "48x48",
       "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ]
 }

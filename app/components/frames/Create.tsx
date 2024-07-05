@@ -17,6 +17,7 @@ import {
   generateTicketIds,
 } from '@utils/packing'
 import { generatePreMintPermit } from '@utils/permits'
+import { downloadQrCodesZip, generateQrCode } from '@utils/qrcodes'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useEffect, useState } from 'react'
 import {
@@ -50,7 +51,7 @@ export default function Create() {
   const [hashes, setHashes] = useState(defaultHashes)
   const [batchId, setBatchId] = useState(BigInt(0))
   const [tickets, setTickets] = useState<
-    { id: string; data: string; url: string }[]
+    { id: string; data: string; url: string; qrCode: string }[]
   >([])
 
   const handleCreateBatch = () => {
@@ -113,10 +114,12 @@ export default function Create() {
       ).then((tickets) => {
         setTickets(
           tickets.map((ticket, index) => {
+            const url = `${window.location.origin}/#/ticket/${ticket}`
             return {
               id: `#${index + 1 < 10 ? '0' : ''}${index + 1}`,
               data: ticket,
-              url: `${window.location.origin}/#/claim/${ticket}`,
+              url: url,
+              qrCode: generateQrCode(url)!,
             }
           })
         )
@@ -126,8 +129,8 @@ export default function Create() {
 
   return (
     <div className="flex flex-col items-center justify-start w-full mt-10 mb-4 px-4 gap-2">
-      <span className="text-center text-xl rounded-lg text-gray-950 bg-white bg-opacity-30 px-2 pb-0.5 font-bold">
-        Create a new batch of TRY26&rsquo;s
+      <span className="text-center text-xl rounded-lg text-black italic px-2 pb-0.5 font-extrabold">
+        Create a new batch of tickets
       </span>
       <Select
         isRequired
@@ -151,9 +154,9 @@ export default function Create() {
           innerWrapper: 'w-full',
           trigger:
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
-          label: 'text-white font-bold text-md',
-          value: 'text-right font-bold !text-white text-sm',
-          popoverContent: 'text-white bg-gray-800',
+          label: 'text-black font-bold text-md',
+          value: 'text-right font-bold !text-purple text-sm',
+          popoverContent: 'text-white bg-gray-950',
         }}
         className="max-w-xs"
       >
@@ -189,9 +192,9 @@ export default function Create() {
           base: isSuccessTx ? 'opacity-80' : '',
           inputWrapper:
             'bg-opacity-10 border-1 hover:!border-white group-data-[focus=true]:!border-white group-data-[focus-visible=true]:!border-white',
-          label: 'text-white text-md font-bold',
+          label: 'text-black text-md font-bold',
           input:
-            'text-right text-white font-bold no-arrow placeholder:text-white',
+            'text-right text-purple font-bold no-arrow placeholder:text-purple',
         }}
         className="max-w-xs"
       />
@@ -199,7 +202,7 @@ export default function Create() {
         <ActionButton
           label={
             !isSuccessTx ? (
-              '1. Create Batch'
+              'Create Batch'
             ) : (
               <a
                 className="flex flex-row hover:underline"
@@ -226,9 +229,9 @@ export default function Create() {
         {isLoadingTx || isPendingSign ? (
           <FaWallet className="w-5 h-5" />
         ) : isPendingTx ? (
-          <Loader size={30} color="white" />
+          <Loader />
         ) : isSuccessSign ? (
-          <div className="px-1 text-white">
+          <div className="px-1 text-purple">
             <FaRegCircleCheck className="w-5 h-5" />
           </div>
         ) : isSuccessTx ? (
@@ -241,24 +244,23 @@ export default function Create() {
         <ActionButton
           label={
             !tickets.length ? (
-              '2. Sign Tickets'
+              'Sign Tickets'
             ) : (
-              <span className="text-xs">Export Tickets</span>
+              <span className="text-xs">Export as .zip</span>
             )
           }
           isActive={isSuccessTx}
           isIdle={!!tickets.length}
           isLoading={isPendingSign}
-          onClick={() =>
-            !tickets.length
-              ? handleSignTickets()
-              : navigator.share({
-                  title: `TRY26 Ticket Batch #${batchId}`,
-                  text: tickets
-                    .map(({ id, url }) => `${id}: ${url}`)
-                    .join('\n'),
-                })
-          }
+          onClick={() => {
+            if (!tickets.length) handleSignTickets()
+            else {
+              const zipName = `batch_#${Number(batchId)}`
+              downloadQrCodesZip(zipName, tickets)
+                .then(() => console.log(`${zipName}.zip created.`))
+                .catch(console.error)
+            }
+          }}
         />
       </div>
       {tickets.length > 0 ? (

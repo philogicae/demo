@@ -1,7 +1,16 @@
 'use client'
-import { Card, CardBody, CardHeader, Divider, Image } from '@nextui-org/react'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Image,
+  Snippet,
+} from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
 import { cn } from '@utils/tw'
+import font from '@utils/fonts'
+import { FaShareFromSquare } from 'react-icons/fa6'
 
 export function Metadata({
   data,
@@ -15,7 +24,7 @@ export function Metadata({
   const title = data.name.split(' - ')
   const external_url = `/#${data.external_url.split('#')[1]}`
   return (
-    <Card className="w-full max-w-xs text-white bg-opacity-10">
+    <Card className="w-full max-w-xs text-purple bg-grain">
       <CardHeader className="flex items-center justify-between">
         <div className="w-[90px] h-[90px] items-center justify-center overflow-visible">
           <Image
@@ -33,12 +42,12 @@ export function Metadata({
           </span>
         </div>
       </CardHeader>
-      <Divider className="bg-opacity-30 bg-white" />
-      <CardBody className="flex text-sm overflow-hidden">
+      <Divider className="bg-white" />
+      <CardBody className="flex text-sm overflow-hidden font-semibold">
         <p className="italic font-semibold text-center">{data.description}</p>
         <Divider className="bg-opacity-30 bg-white my-2" />
         <div className="flex flex-row justify-between items-center">
-          <span className="font-bold">Image ID</span>
+          <span className="font-bold">Image Ref</span>
           <span>{data.image.split('cover/')[1].split('.')[0]}</span>
         </div>
         <div className="flex flex-row justify-between items-center">
@@ -47,7 +56,7 @@ export function Metadata({
         </div>
         {data.attributes.length > 0 ? (
           <div>
-            <Divider className="bg-opacity-30 bg-white my-2" />
+            <Divider className="bg-white my-2" />
             <div className="gap-2">
               {data.attributes.map((attribute: any) => (
                 <div
@@ -67,7 +76,7 @@ export function Metadata({
         ) : null}
         {extra && Object.keys(extra).length > 0 ? (
           <div>
-            <Divider className="bg-opacity-30 bg-white my-2" />
+            <Divider className="bg-white my-2" />
             <div className="gap-2">
               {Object.entries(extra).map((item: any) => (
                 <div
@@ -77,18 +86,49 @@ export function Metadata({
                   <span className="font-bold">
                     {item[0].at(0).toUpperCase() + item[0].slice(1)}
                   </span>
-                  <span
-                    className={cn(
-                      typeof item[1] !== 'number' && item[1].length > 30
-                        ? 'text-[10px]'
-                        : ''
-                    )}
-                  >
-                    {item[1]}
-                  </span>
+                  {item[1].toString().length > 24 ? (
+                    <Snippet
+                      symbol=""
+                      codeString={item[1]}
+                      disableTooltip={true}
+                      classNames={{
+                        base: 'p-0 bg-transparent text-purple h-5 gap-0',
+                        copyButton: 'justify-end !min-w-6 w-6',
+                      }}
+                    >
+                      <span className={cn('font-semibold', font.className)}>
+                        {`${item[1].toString().slice(0, 8)}...${item[1].toString().slice(-6)}`}
+                      </span>
+                    </Snippet>
+                  ) : (
+                    item[1]
+                  )}
                 </div>
               ))}
             </div>
+
+            {Number(id) > 0 ? (
+              <>
+                <Divider className="bg-white my-2" />
+                <div className="flex flex-row justify-between items-center">
+                  <span className="font-bold">Opensea URL</span>
+                  <button
+                    type="button"
+                    className="flex w-5 h-5 items-center justify-end"
+                    onClick={() =>
+                      navigator.share({
+                        title: `TRY26 Ticket B${extra.batchId}-${id} on Opensea`,
+                        text: `https://testnets.opensea.io/assets/sepolia/0x7980d217B93FA90Ca268f089Cb0c344ebe722170/${id}`,
+                      })
+                    }
+                  >
+                    <FaShareFromSquare className="h-4 w-4" />
+                  </button>
+                </div>
+              </>
+            ) : (
+              ''
+            )}
           </div>
         ) : null}
       </CardBody>

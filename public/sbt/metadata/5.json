@@ -1,13 +1,14 @@
 {
-  "name": "TRY26 - Website",
+  "name": "TRY26 - Web3 Hosting Access",
   "description": "Exclusive Free Allocation on TwentySix",
-  "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-  "image": "https://26-soulbound.istest.eth.limo/sbt/cover/2.png",
+  "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+  "image": "https://claim.twentysix.cloud/sbt/cover/web3-hosting.jpg",
   "attributes": [
     { "trait_type": "Type", "value": "Website" },
     { "trait_type": "Max Unit", "value": 3 },
     { "trait_type": "Max Volume (GB)", "value": 1 },
-    { "display_type": "date", "trait_type": "Start", "value": 1718878416 },
-    { "display_type": "date", "trait_type": "End", "value": 1721459616 }
+    { "trait_type": "$ALEPH Virtual Balance", "value": 250 },
+    { "display_type": "date", "trait_type": "Start", "value": 1720332000 },
+    { "display_type": "date", "trait_type": "End", "value": 1736233200 }
   ]
 }

@@ -1,25 +1,25 @@
 'use client'
+import { LinkButton } from '@components/elements/Buttons'
 import { FaArrowLeft, FaBan } from 'react-icons/fa6'
 
 export default function Invalid() {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
-      <div className="flex flex-col items-center justify-center h-full gap-6 w-52">
+      <div className="flex flex-col items-center justify-center h-full gap-6 w-52 text-black">
         <FaBan className="text-6xl" />
         <span className="text-2xl font-bold text-center">
-          Invalid or Claimed
+          Ticket invalid or already claimed
         </span>
-        <a
-          className={
-            'w-20 h-8 text-lg bg-sky-950 rounded-lg cursor-pointer hover:bg-sky-900 hover:shadow-lg flex items-center justify-center font-mono tracking-tighter font-semibold'
+        <LinkButton
+          page={'/'}
+          label={
+            <div className="text-sm flex flex-row items-center justify-center">
+              <FaArrowLeft />
+              <span className="pl-2">MENU</span>
+            </div>
           }
-          href={`${window.location.origin}/#/`}
-        >
-          <div className="text-sm flex flex-row items-center justify-center">
-            <FaArrowLeft />
-            <span className="pl-2">MENU</span>
-          </div>
-        </a>
+          className="w-24 h-10"
+        />
       </div>
     </div>
   )

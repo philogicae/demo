@@ -1,16 +1,17 @@
 {
-  "name": "TRY26 - Function",
+  "name": "TRY26 - Functions Access",
   "description": "Exclusive Free Allocation on TwentySix",
-  "external_url": "https://26-soulbound.istest.eth.limo/#/token/{id}",
-  "image": "https://26-soulbound.istest.eth.limo/sbt/cover/3.png",
+  "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+  "image": "https://claim.twentysix.cloud/sbt/cover/functions.jpg",
   "attributes": [
     { "trait_type": "Type", "value": "Function" },
     { "trait_type": "Max Unit", "value": 2 },
-    { "trait_type": "Max CPU Cores", "value": 2 },
+    { "trait_type": "Max vCPU Cores", "value": 2 },
     { "trait_type": "Max RAM (GB)", "value": 4 },
-    { "trait_type": "Max Volume (GB)", "value": 2 },
+    { "trait_type": "Max Volume (GB)", "value": 4 },
     { "trait_type": "Persistent", "value": "Disallowed" },
-    { "display_type": "date", "trait_type": "Start", "value": 1718878416 },
-    { "display_type": "date", "trait_type": "End", "value": 1721459616 }
+    { "trait_type": "$ALEPH Virtual Balance", "value": 500 },
+    { "display_type": "date", "trait_type": "Start", "value": 1720332000 },
+    { "display_type": "date", "trait_type": "End", "value": 1736233200 }
   ]
 }

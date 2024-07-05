@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { ethers } = require('hardhat')
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 const fs = require('fs')
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 const path = require('path')
 require('dotenv').config()
 
@@ -11,7 +13,7 @@ if (!fs.existsSync(abis)) {
 }
 const registry = path.join(dest, 'registry.json')
 if (!fs.existsSync(registry)) {
-  fs.writeFileSync(registry, `{}`, 'utf-8')
+  fs.writeFileSync(registry, '{}', 'utf-8')
 }
 
 function saveABI(contractName) {

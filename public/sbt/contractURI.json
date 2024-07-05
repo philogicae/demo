@@ -1,7 +1,8 @@
 {
-  "name": "TwentySix Soulbound",
+  "name": "TwentySix Claim",
   "description": "Exclusive Free Allocations on TwentySix",
-  "image": "https://26-soulbound.istest.eth.limo/26-vertical.png",
-  "featured_image": "https://26-soulbound.istest.eth.limo/26-vertical.png",
-  "external_link": "https://26-soulbound.istest.eth.limo"
+  "image": "https://claim.twentysix.cloud/opensea/image.jpg",
+  "banner_image": "https://claim.twentysix.cloud/opensea/banner-image.jpg",
+  "featured_image": "https://claim.twentysix.cloud/opensea/featured-image.jpg",
+  "external_link": "https://claim.twentysix.cloud"
 }

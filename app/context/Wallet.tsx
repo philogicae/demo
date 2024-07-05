@@ -13,11 +13,14 @@ if (!process.env.NEXT_PUBLIC_WALLETCONNECT_ID)
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_ID is not defined')
 export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID
 
+const SITE_NAME = '26 Claim'
+const SITE_DESCRIPTION = 'Exclusive Free Allocations on TwentySix'
+const SITE_URL = 'https://claim.twentysix.cloud'
 const metadata = {
-  name: 'TwentySix Soulbound',
-  description: 'Exclusive Free Allocations on TwentySix',
-  url: 'https://26-soulbound.istest.eth.limo',
-  icons: ['https://26-soulbound.istest.eth.limo/favicon-32x32.png'],
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  url: SITE_URL,
+  icons: [`${SITE_URL}/512x512.png`],
 }
 
 export const txType: Record<number, 'eip1559' | 'legacy'> = {
@@ -55,8 +58,8 @@ createWeb3Modal({
   themeMode: 'light',
   themeVariables: {
     '--w3m-accent': '#050011',
-    '--w3m-color-mix-strength': 10,
     '--w3m-border-radius-master': '2px',
+    '--w3m-font-family': 'var(--font-rigid-square)',
   },
 })
 

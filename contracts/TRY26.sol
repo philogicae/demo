@@ -7,6 +7,7 @@ import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import {ERC165} from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import {IERC4906} from "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {PaginatedEnumerableSet} from "paginated-enumerableset/contracts/PaginatedEnumerableSet.sol";
@@ -23,6 +24,7 @@ contract TRY26 is
     IERC721Enumerable,
     ERC165,
     EIP712,
+    IERC4906,
     Ownable,
     ERC2771Context
 {
@@ -72,10 +74,10 @@ contract TRY26 is
             "PreMintPermit(address creator,uint256 batchId,bytes32 batchSecret)"
         );
 
-    string private constant __name = "TwentySix Soulbound";
+    string private constant __name = "TwentySix Claim";
     string private constant __symbol = "TRY26";
     string private constant __version = "1";
-    string private constant _baseURI = "https://26-soulbound.istest.eth.limo";
+    string private constant _baseURI = "https://claim.twentysix.cloud";
 
     /* ------------ Storage ------------ */
 
@@ -95,13 +97,13 @@ contract TRY26 is
 
     /* ------------ Events ------------ */
 
-    event BatchPreMinted(
+    event BatchPreMint(
         uint256 indexed batchId,
         uint128 indexed metadataId,
         address indexed creator,
         uint256 nbTickets
     );
-    event BatchMinted(
+    event BatchMint(
         uint256 indexed batchId,
         uint128 indexed metadataId,
         address indexed creator,
@@ -112,7 +114,13 @@ contract TRY26 is
         bytes32 reservation,
         uint256 unlock
     );
-    /* Any transfer is de facto a mint, so no extra event needed */
+    /* Transfer event is emitted at mint. Used by marketplaces to index new tokens */
+    // Custom event for Aleph indexer
+    event Mint(
+        address indexed claimer,
+        uint256 indexed tokenId,
+        uint128 indexed metadataId
+    );
 
     /* ------------ Errors ------------ */
 
@@ -136,8 +144,8 @@ contract TRY26 is
 
     constructor()
         EIP712(__name, __version)
-        Ownable(_msgSender())
-        ERC2771Context(0xd8253782c45a12053594b9deB72d8e8aB2Fca54c) // GelatoRelayERC2771
+        Ownable(msg.sender)
+        ERC2771Context(0xd8253782c45a12053594b9deB72d8e8aB2Fca54c) // TODO: GelatoRelayERC2771
     {}
 
     /* ------------ IERC165 Methods ------------ */
@@ -149,6 +157,7 @@ contract TRY26 is
             interfaceId == type(IERC721).interfaceId ||
             interfaceId == type(IERC721Metadata).interfaceId ||
             interfaceId == type(IERC721Enumerable).interfaceId ||
+            interfaceId == type(IERC4906).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
@@ -170,6 +179,12 @@ contract TRY26 is
                 Strings.toString(_batches[_tokens[tokenId].batchId].metadataId),
                 ".json"
             );
+    }
+
+    /* ------------ ERC4906 Methods ------------ */
+
+    function notifyMetadataUpdate() external onlyOwner {
+        emit BatchMetadataUpdate(1, type(uint256).max);
     }
 
     /* ------------ ERC7572 Methods ------------ */
@@ -272,8 +287,10 @@ contract TRY26 is
 
     /* ------------ Core Methods ------------ */
 
-    function preMint(uint128 metadataId, bytes32[] calldata tickets) external {
-        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+    function preMint(
+        uint128 metadataId,
+        bytes32[] calldata tickets
+    ) external onlyOwner {
         if (tickets.length == 0) revert InvalidBatch();
         uint256 batchId = ++totalBatches;
         address creator = _msgSender();
@@ -288,7 +305,7 @@ contract TRY26 is
             ticketIds.add(tickets[i]);
         }
         totalTickets += tickets.length;
-        emit BatchPreMinted(batchId, metadataId, creator, tickets.length);
+        emit BatchPreMint(batchId, metadataId, creator, tickets.length);
     }
 
     function reserve(bytes32 reservation) public {
@@ -315,6 +332,7 @@ contract TRY26 is
         _tokens[tokenId] = Token(claimer, ticket.batchId, ticketId);
         _ownedTokenIds[claimer].add(tokenId);
         emit Transfer(address(0), claimer, tokenId);
+        emit Mint(claimer, tokenId, _batches[ticket.batchId].metadataId);
     }
 
     function _permitTicket(
@@ -348,8 +366,7 @@ contract TRY26 is
         if (signer != creator) revert InvalidSigner(creator, signer);
     }
 
-    function mint(uint128 metadataId, uint256 amount) external {
-        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+    function mint(uint128 metadataId, uint256 amount) external onlyOwner {
         uint256 batchId = ++totalBatches;
         address creator = _msgSender();
         _batches[batchId] = Batch(
@@ -358,19 +375,19 @@ contract TRY26 is
             creator,
             uint96(0)
         );
-        emit BatchMinted(batchId, metadataId, creator, amount);
+        emit BatchMint(batchId, metadataId, creator, amount);
         uint256 tokenId = _totalTokens + 1;
         uint256 max = tokenId + amount;
         for (; tokenId < max; tokenId++) {
             _tokens[tokenId] = Token(creator, batchId, 0);
             _ownedTokenIds[creator].add(tokenId);
             emit Transfer(address(0), creator, tokenId);
+            emit Mint(creator, tokenId, metadataId);
         }
         _totalTokens = max - 1;
     }
 
-    function burn(uint256 tokenId) external {
-        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+    function burn(uint256 tokenId) external onlyOwner {
         address tokenOwner = _tokens[tokenId].owner;
         if (tokenOwner == address(0)) revert TokenNotFound(tokenId);
         _ownedTokenIds[tokenOwner].remove(tokenId);
@@ -385,8 +402,7 @@ contract TRY26 is
         address from,
         address to,
         uint256 tokenId
-    ) public override {
-        /* TODO: ADD AFTER TESTS: modifier onlyOwner */
+    ) public override onlyOwner {
         if (to == address(0)) revert ERC721InvalidReceiver(address(0));
         Token storage token = _tokens[tokenId];
         address previousOwner = token.owner;
@@ -434,7 +450,7 @@ contract TRY26 is
         revert MethodNotAllowed();
     }
 
-    /* ------------ ERC2771Context overrides ------------ */
+    /* ------------ ERC2771Context Methods ------------ */
 
     function _msgSender()
         internal
