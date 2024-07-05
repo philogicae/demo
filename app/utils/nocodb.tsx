@@ -11,12 +11,14 @@ const api = new Api({
   },
 })
 const orgs = 'noco'
-const baseName = 'pu6rxfhji7e5vqo'
-const tableName = 'mr15cv28fr4oo01'
+const base = 'pu6rxfhji7e5vqo'
+const table_prod = 'mr15cv28fr4oo01'
+const table_test = 'mcz2v39pid4bkuv'
 
-export const addTicketRows = (tickets: any) => {
+export const addTicketRows = (tickets: any, isTest = false) => {
+  const table = !isTest ? table_prod : table_test
   api.dbTableRow
-    .bulkCreate(orgs, baseName, tableName, tickets)
+    .bulkCreate(orgs, base, table, tickets)
     .then(console.log)
     .catch(console.error)
 }
@@ -24,15 +26,17 @@ export const addTicketRows = (tickets: any) => {
 export const updateTicketRow = async ({
   id,
   ticket,
-}: { id: string; ticket: any }) => {
+  isTest = false,
+}: { id: string; ticket: any; isTest?: boolean }) => {
+  const table = !isTest ? table_prod : table_test
   api.dbTableRow
-    .findOne(orgs, baseName, tableName, {
+    .findOne(orgs, base, table, {
       fields: ['Id', 'Ticket Id', 'Batch Id', 'Metadata Id', 'URL'],
       where: `(Ticket Id,eq,${id})`,
     })
     .then((row: any) => {
       api.dbTableRow
-        .update(orgs, baseName, tableName, row.Id, ticket, {
+        .update(orgs, base, table, row.Id, ticket, {
           getHiddenColumn: false,
         })
         .then(console.log)

@@ -151,7 +151,7 @@ export default function Create() {
             URL: url,
           })
         })
-        addTicketRows(rows)
+        addTicketRows(rows, chainId === 11155111)
         setTickets(printed)
       })
     }

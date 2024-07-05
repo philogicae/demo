@@ -276,6 +276,7 @@ export default function Claim() {
           'Claim Email': email,
           'Claim Address': address,
         },
+        isTest: chainId === 11155111,
       })
     }
     //else sendTx()
