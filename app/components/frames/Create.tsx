@@ -164,9 +164,7 @@ export default function Create() {
       </span>
       <Select
         isRequired
-        isDisabled={
-          address !== result?.owner || isLoadingTx || isPendingTx || isSuccessTx
-        }
+        isDisabled={isLoadingTx || isPendingTx || isSuccessTx}
         size="sm"
         color="primary"
         variant="faded"

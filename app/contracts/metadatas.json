@@ -127,7 +127,7 @@
       },
       {
         "trait_type": "$ALEPH Virtual Balance",
-        "value": 4000
+        "value": 1800
       },
       {
         "display_type": "date",
@@ -203,11 +203,11 @@
       },
       {
         "trait_type": "Max Volume (GB)",
-        "value": 1
+        "value": 0.5
       },
       {
         "trait_type": "$ALEPH Virtual Balance",
-        "value": 250
+        "value": 100
       },
       {
         "display_type": "date",
