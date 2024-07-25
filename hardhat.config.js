@@ -6,9 +6,9 @@ require('dotenv').config()
 module.exports = {
   defaultNetwork: 'hardhat',
   solidity: {
-    version: '0.8.26',
+    version: '0.8.24',
     settings: {
-      evmVersion: 'cancun',
+      evmVersion: 'shanghai',
       optimizer: {
         enabled: true,
         runs: 1000,

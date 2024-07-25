@@ -21,7 +21,7 @@ import {
 import { formatDate } from '@utils/convert'
 import font from '@utils/fonts'
 import { updateTicketRow } from '@utils/nocodb'
-import { extractFromTicketHash } from '@utils/packing'
+import { checkAndDecrypt, extractFromTicketHash } from '@utils/packing'
 import { generateQrCode } from '@utils/qrcodes'
 import { cn } from '@utils/tw'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
@@ -70,16 +70,23 @@ export default function Claim() {
     return !!validateEmail(email)
   }, [email])
 
+  const extractor = (ticketCode: string) => {
+    extractFromTicketHash(ticketCode, address).then((decoded) => {
+      if (decoded) {
+        const newTicket = checkAndDecrypt(ticketCode, decoded)
+        newTicket && ticket === ticketCode
+          ? extractor(newTicket)
+          : setLoadedTicket(decoded)
+      } else
+        setLoadedTicket({
+          ...defaultTicket,
+          chainId: -1,
+        })
+    })
+  }
+
   useEffect(() => {
-    if (ticket)
-      extractFromTicketHash(ticket, address).then((decoded) => {
-        if (decoded) setLoadedTicket(decoded)
-        else
-          setLoadedTicket({
-            ...defaultTicket,
-            chainId: -1,
-          })
-      })
+    if (ticket) extractor(ticket)
   }, [ticket, address])
 
   const [loadedTicket, setLoadedTicket] = useState(defaultTicket)
@@ -362,7 +369,15 @@ export default function Claim() {
         Congrats, you've managed to get your hands on an exclusive TRY26
         allocation! Claiming your ticket is free and takes 2 gasless
         transactions. In case of relay failure, just wait a bit before to
-        refresh/retry. Welcome to DePIN!
+        refresh/retry. Welcome to DePIN and enjoy{' '}
+        <a
+          className="flex items-center justify-center hover:underline"
+          href="https://www.twentysix.cloud/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="font-bold">TwentySix Cloud!</span>
+        </a>
       </p>
       <div className="flex items-center justify-center w-full max-w-xs">
         <Input

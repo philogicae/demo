@@ -1,5 +1,5 @@
 'use client'
-//import load from '@contracts/loader'
+import load from '@contracts/loader'
 import {
   Card,
   CardBody,
@@ -11,7 +11,7 @@ import {
 import { formatDate } from '@utils/convert'
 import font from '@utils/fonts'
 import { cn } from '@utils/tw'
-//import { FaShareFromSquare } from 'react-icons/fa6'
+import { FaShareFromSquare } from 'react-icons/fa6'
 import { useChainId } from 'wagmi'
 
 export function Metadata({
@@ -23,9 +23,9 @@ export function Metadata({
   id?: string
   extra?: Record<string, any>
 }) {
-  //const chainId = useChainId()
-  //const contract = load('TRY26', chainId)
-  //const opensea_url = `https://${chainId === 43114 ? 'opensea.io/assets/avalanche' : 'testnets.opensea.io/assets/sepolia'}/${contract?.address}/${id}`
+  const chainId = useChainId()
+  const contract = load('TRY26', chainId)
+  const opensea_url = `https://${chainId === 43114 ? 'opensea.io/assets/avalanche' : 'testnets.opensea.io/assets/sepolia'}/${contract?.address}/${id}`
   const title = data.name.split(' - ')
   const external_url = `/#${data.external_url.split('#')[1]}`
   return (
@@ -111,7 +111,6 @@ export function Metadata({
                 </div>
               ))}
             </div>
-            {/* TODO: Fix Opensea
             {Number(id) > 0 ? (
               <>
                 <Divider className="bg-white my-2" />
@@ -126,10 +125,21 @@ export function Metadata({
                     <FaShareFromSquare className="h-4 w-4" />
                   </a>
                 </div>
+                <div className="flex flex-row justify-between items-center">
+                  <span className="font-bold">Usable on</span>
+                  <a
+                    className="flex items-center justify-end hover:underline"
+                    href="https://www.twentysix.cloud/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="font-bold">TwentySix Cloud</span>
+                  </a>
+                </div>
               </>
             ) : (
               ''
-            )} */}
+            )}
           </div>
         ) : null}
       </CardBody>

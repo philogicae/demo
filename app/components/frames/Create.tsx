@@ -32,6 +32,7 @@ import {
 } from 'react-icons/fa6'
 import type { Address, Hex } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
+//import legacyTickets from '../../utils/migrator/legacyTickets.json'
 
 const maxTickets = 100
 const defaultHashes = {
@@ -76,6 +77,9 @@ export default function Create() {
     else {
       const batchSecret = generateHex()
       const ticketSecrets = generateBatchHex(Number(units))
+      /* Use for migration
+      const batchSecret = (legacyTickets as any)['3'].batchSecret as Hex
+      const ticketSecrets = (legacyTickets as any)['3'].ticketSecrets as Hex[] */
       const ticketIds = generateTicketIds(batchSecret, ticketSecrets)
       setHashes({ batchSecret, ticketSecrets, ticketIds })
     }

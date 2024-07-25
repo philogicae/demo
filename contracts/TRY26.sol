@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity ^0.8.24;
 
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {IERC721Metadata} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
@@ -397,6 +397,25 @@ contract TRY26 is
         delete _tokens[tokenId];
         _totalBurned++;
         emit Transfer(tokenOwner, address(0), tokenId);
+    }
+
+    function claimFor(
+        address claimer,
+        uint256 batchId,
+        bytes32 ticketId
+    ) external onlyOwner {
+        if (!_tickets[batchId].contains(ticketId)) {
+            revert TicketNotFound(batchId, ticketId);
+        }
+        if (_tokenIds[ticketId] > 0) {
+            revert TicketAlreadyClaimed(batchId, ticketId);
+        }
+        uint256 tokenId = ++_totalTokens;
+        _tokenIds[ticketId] = tokenId;
+        _tokens[tokenId] = Token(claimer, batchId, ticketId);
+        _ownedTokenIds[claimer].add(tokenId);
+        emit Transfer(address(0), claimer, tokenId);
+        emit Mint(claimer, tokenId, _batches[batchId].metadataId);
     }
 
     /* ------------ IERC721 Transfer Methods ------------ */

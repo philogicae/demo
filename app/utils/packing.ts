@@ -1,5 +1,6 @@
 // @ts-expect-error expected
 import { decode, encode } from 'base64-compressor'
+import { AES, enc } from 'crypto-js'
 import { nanoid } from 'nanoid'
 import {
   type Address,
@@ -10,6 +11,7 @@ import {
   parseSignature,
   toHex,
 } from 'viem'
+import legacyTickets from './migrator/legacyTickets.json'
 
 export const generateHex = (): Hex => keccak256(toHex(nanoid(32)))
 
@@ -114,5 +116,14 @@ export const extractFromTicketHash = async (
     }
   } catch (e) {
     console.error(e)
+  }
+}
+
+export const checkAndDecrypt = (ticketCode: string, decoded: any) => {
+  const encryptedNewTicket = (legacyTickets as any)[decoded.ticketId]
+  if (encryptedNewTicket) {
+    try {
+      return AES.decrypt(encryptedNewTicket, ticketCode).toString(enc.Utf8)
+    } catch (_) {}
   }
 }

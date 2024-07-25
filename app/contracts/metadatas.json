@@ -27,11 +27,7 @@
       },
       {
         "trait_type": "Confidential",
-        "value": "Disallowed"
-      },
-      {
-        "trait_type": "Persistent",
-        "value": "Disallowed"
+        "value": "Allowed"
       },
       {
         "trait_type": "$ALEPH Virtual Balance",
@@ -166,10 +162,6 @@
       {
         "trait_type": "Max Volume (GB)",
         "value": 4
-      },
-      {
-        "trait_type": "Persistent",
-        "value": "Disallowed"
       },
       {
         "trait_type": "$ALEPH Virtual Balance",

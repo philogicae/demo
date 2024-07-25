@@ -9,7 +9,6 @@
     { "trait_type": "Max vCPU Cores", "value": 2 },
     { "trait_type": "Max RAM (GB)", "value": 4 },
     { "trait_type": "Max Volume (GB)", "value": 4 },
-    { "trait_type": "Persistent", "value": "Disallowed" },
     { "trait_type": "$ALEPH Virtual Balance", "value": 500 },
     { "display_type": "date", "trait_type": "Start", "value": 1720332000 },
     { "display_type": "date", "trait_type": "End", "value": 1736233200 }

@@ -5,7 +5,7 @@ import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { useEffect, useState } from 'react'
 import { http, WagmiProvider, fallback, webSocket } from 'wagmi'
-import { avalanche, sepolia } from 'wagmi/chains'
+import { avalanche /* sepolia */ } from 'wagmi/chains'
 
 const queryClient = new QueryClient()
 
@@ -25,10 +25,10 @@ const metadata = {
 
 export const txType: Record<number, 'eip1559' | 'legacy'> = {
   [avalanche.id]: 'eip1559',
-  [sepolia.id]: 'eip1559',
+  /* [sepolia.id]: 'eip1559', */
 }
 
-const chains = [avalanche, sepolia] as const
+const chains = [avalanche /* sepolia */] as const
 export const defaultChain = chains[0]
 const config = defaultWagmiConfig({
   chains,
@@ -40,11 +40,11 @@ const config = defaultWagmiConfig({
       http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc'),
       http(),
     ]),
-    [sepolia.id]: fallback([
+    /* [sepolia.id]: fallback([
       webSocket('wss://ethereum-sepolia-rpc.publicnode.com'),
       http('https://eth-sepolia.public.blastapi.io'),
       http(),
-    ]),
+    ]), */
   },
 })
 

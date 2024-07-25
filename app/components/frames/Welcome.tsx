@@ -18,9 +18,17 @@ export default function Welcome() {
         </p>
         <p className="text-center text-xs font-semibold">
           Use it to claim an exclusive NFT, giving you access to a special
-          allocation to try out <b>Twentysix Cloud</b>, completely free of
-          charge for a limited period of time. The claim process is fast, secure
-          & gasless, all you need is a wallet.
+          allocation to try out{' '}
+          <a
+            href="https://www.twentysix.cloud/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold hover:underline"
+          >
+            Twentysix Cloud
+          </a>
+          , completely free of charge for a limited period of time. The claim
+          process is fast, secure & gasless, all you need is a wallet.
         </p>
         <p className="text-center text-xs font-semibold">
           You're one scan away from diving into the DePIN multiverse. The dream
