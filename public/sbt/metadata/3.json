@@ -10,7 +10,7 @@
     { "trait_type": "Max RAM (GB)", "value": 2 },
     { "trait_type": "Max Volume (GB)", "value": 20 },
     { "trait_type": "Confidential", "value": "Allowed" },
-    { "trait_type": "$ALEPH Virtual Balance", "value": 1800 },
+    { "trait_type": "$ALEPH Virtual Balance", "value": 4000 },
     { "display_type": "date", "trait_type": "Start", "value": 1723010400 },
     { "display_type": "date", "trait_type": "End", "value": 1736233200 }
   ]
