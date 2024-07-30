@@ -25,7 +25,6 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
             src="/26-horizontal.png"
             alt="TwentySix Claim"
             width={mobile ? 150 : 200}
-            height={50}
             radius="none"
           />
           <span

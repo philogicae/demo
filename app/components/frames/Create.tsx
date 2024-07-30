@@ -54,7 +54,13 @@ export default function Create() {
   const [hashes, setHashes] = useState(defaultHashes)
   const [batchId, setBatchId] = useState(BigInt(0))
   const [tickets, setTickets] = useState<
-    { id: string; data: string; url: string; qrCode: string }[]
+    {
+      id: string
+      ticketId: string
+      data: string
+      url: string
+      qrCode: string
+    }[]
   >([])
 
   const { fetch, result } = useCall({
@@ -135,6 +141,7 @@ export default function Create() {
       ).then((tickets) => {
         const printed = [] as {
           id: string
+          ticketId: string
           data: string
           url: string
           qrCode: string
@@ -144,6 +151,7 @@ export default function Create() {
           const url = `${window.location.origin}/#/ticket/${ticket}`
           printed.push({
             id: `#${index + 1 < 10 ? '0' : ''}${index + 1}`,
+            ticketId: hashes.ticketIds[index],
             data: ticket,
             url: url,
             qrCode: generateQrCode(url)!,

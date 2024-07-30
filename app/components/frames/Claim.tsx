@@ -206,6 +206,7 @@ export default function Claim() {
     sendToRelay: sendToRelayReserve,
     txLink: txLinkReserve,
     isLoadingTx: isLoadingTxReserve,
+    isPendingRelay: isPendingRelayReserve,
     isPendingTx: isPendingTxReserve,
     isSuccessTx: isSuccessTxReserve,
   } = useGasless({
@@ -260,16 +261,23 @@ export default function Claim() {
     },
   })
 
-  const { sendToRelay, txLink, txLogs, isLoadingTx, isPendingTx, isSuccessTx } =
-    useGasless({
-      chainId: loadedTicket.chainId,
-      contract,
-      method: 'claim',
-      args: [loadedTicket.content],
-      onSuccess: (txlogs) => {
-        setTokenId(Number((txlogs?.[0].args as any)?.tokenId))
-      },
-    })
+  const {
+    sendToRelay,
+    txLink,
+    txLogs,
+    isLoadingTx,
+    isPendingRelay,
+    isPendingTx,
+    isSuccessTx,
+  } = useGasless({
+    chainId: loadedTicket.chainId,
+    contract,
+    method: 'claim',
+    args: [loadedTicket.content],
+    onSuccess: (txlogs) => {
+      setTokenId(Number((txlogs?.[0].args as any)?.tokenId))
+    },
+  })
 
   const handleClaim = () => {
     if (!isConnected) open()
@@ -345,7 +353,6 @@ export default function Claim() {
                       alt="QRCode"
                       radius="none"
                       width={1000}
-                      height={1000}
                     />
                   </ModalBody>
                 </>
@@ -388,6 +395,7 @@ export default function Claim() {
           value={email}
           onChange={(e: any) =>
             !isLoadingTx &&
+            !isPendingRelay &&
             !isPendingTx &&
             !isSuccessTx &&
             setEmail(e.target.value)
@@ -405,6 +413,10 @@ export default function Claim() {
                   <FaCheck className="mr-1 w-4 h-4" />
                   <span className="text-xs">Reserved</span>
                 </div>
+              ) : isPendingTxReserve ? (
+                <span>Confirming...</span>
+              ) : isPendingRelayReserve ? (
+                <span>Relaying...</span>
               ) : (
                 <span>Reserve</span>
               )
@@ -424,6 +436,7 @@ export default function Claim() {
             isValidEmail &&
             !!metadata?.extra.metadataId &&
             !isLoadingTxReserve &&
+            !isPendingRelayReserve &&
             !isPendingTxReserve &&
             !isSuccessTxReserve &&
             !reservation
@@ -440,7 +453,10 @@ export default function Claim() {
         isLoadingTx ||
         (typeof reservation === 'boolean' && reservation && !isReadyTx) ? (
           <FaWallet className="w-5 h-5" />
-        ) : isPendingTxReserve || isPendingTx ? (
+        ) : isPendingRelayReserve ||
+          isPendingTxReserve ||
+          isPendingRelay ||
+          isPendingTx ? (
           <Loader />
         ) : isSuccessTx ? (
           <div className="px-1 text-purple">
@@ -458,7 +474,13 @@ export default function Claim() {
         <ActionButton
           label={
             !isSuccessTx ? (
-              <span className="">Claim</span>
+              isPendingTx ? (
+                <span>Confirming...</span>
+              ) : isPendingRelay ? (
+                <span>Relaying...</span>
+              ) : (
+                <span className="">Claim</span>
+              )
             ) : (
               <a
                 className="flex flex-row hover:underline"
@@ -476,6 +498,7 @@ export default function Claim() {
             typeof reservation === 'boolean' &&
             reservation &&
             !isLoadingTx &&
+            !isPendingRelay &&
             !isPendingTx &&
             !isSuccessTx
           }

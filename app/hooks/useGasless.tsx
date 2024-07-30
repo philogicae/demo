@@ -56,9 +56,12 @@ export function useGasless({
         ? http('https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc')
         : http('https://eth-sepolia.public.blastapi.io'),
   })
+  const [relay, setRelay] = useState(undefined as GelatoRelay | undefined)
   const [state, setState] = useState({
+    chainId: 0,
     data: undefined as any,
-    isPending: false,
+    isPendingRelay: false,
+    isPendingTx: false,
     isSuccess: false,
     isError: false,
     error: undefined as any,
@@ -66,28 +69,48 @@ export function useGasless({
   const [payload, setPayload] = useState(undefined as PayloadToSign | undefined)
   const [txHash, setTxHash] = useState(undefined as Hex | undefined)
 
-  const relay = useMemo(() => {
+  const createNewRelay = () => {
     const newRelay = new GelatoRelay()
     newRelay.onTaskStatusUpdate((taskStatus: TransactionStatusResponse) => {
-      if (state.isSuccess) return
       if (
         taskStatus.taskState === TaskState.Cancelled ||
         taskStatus.taskState === TaskState.ExecReverted
       ) {
         setState({
           ...state,
-          isPending: false,
+          error: 'Relay: Task cancelled or reverted.',
+          isPendingRelay: false,
+          isPendingTx: false,
           isError: true,
         })
         newRelay.unsubscribeTaskStatusUpdate(taskStatus.taskId)
+        newRelay.offTaskStatusUpdate(() => {})
         console.error('Gelato Exec failed.')
-      } else if (taskStatus.taskState === TaskState.ExecSuccess) {
+      } else if (
+        !state.isSuccess &&
+        taskStatus.taskState === TaskState.ExecSuccess
+      ) {
         setTxHash(taskStatus.transactionHash as Hex)
+        setState({
+          ...state,
+          isPendingRelay: false,
+          isPendingTx: true,
+        })
         newRelay.unsubscribeTaskStatusUpdate(taskStatus.taskId)
+        newRelay.offTaskStatusUpdate(() => {})
         console.log('Gelato Exec success.')
       }
     })
-    return newRelay
+    setRelay(newRelay)
+  }
+
+  useEffect(() => {
+    if (!contract || (!!relay && state.chainId === chainId)) return
+    setState({
+      ...state,
+      chainId,
+    })
+    createNewRelay()
   }, [chainId, contract, method])
 
   const { signRequest, signature, isPendingSign } = useSign({
@@ -95,7 +118,8 @@ export function useGasless({
       setState({
         ...state,
         error: 'Error during signature for relay',
-        isPending: false,
+        isPendingRelay: false,
+        isPendingTx: false,
         isError: true,
       })
     },
@@ -114,7 +138,14 @@ export function useGasless({
   })
 
   const sendToRelay = () => {
-    if (isPendingSign || state.isPending || state.isSuccess) return
+    if (
+      !relay ||
+      isPendingSign ||
+      state.isPendingRelay ||
+      state.isPendingTx ||
+      state.isSuccess
+    )
+      return
 
     const relayRequest = {
       user: address,
@@ -140,11 +171,14 @@ export function useGasless({
   }
 
   useEffect(() => {
-    if (!payload || !signature) return
+    if (!relay || !payload || !signature) return
+
     setState({
       ...state,
-      isPending: true,
+      isPendingRelay: true,
+      isPendingTx: false,
     })
+
     relay
       .sponsoredCallERC2771WithSignature(
         payload.struct,
@@ -152,6 +186,11 @@ export function useGasless({
         chainId === 43114 ? avaxGelatoApiKey : sepoliaGelatoApiKey
       )
       .then((response) => {
+        setState({
+          ...state,
+          isPendingRelay: false,
+          isPendingTx: true,
+        })
         console.log(
           `Relay task: https://relay.gelato.digital/tasks/status/${response.taskId}`
         )
@@ -160,7 +199,8 @@ export function useGasless({
         setState({
           ...state,
           error: err,
-          isPending: false,
+          isPendingRelay: false,
+          isPendingTx: false,
           isError: true,
         })
         console.error('Error during relay call:', err)
@@ -172,7 +212,8 @@ export function useGasless({
     if (!txReceipt) return
     setState({
       ...state,
-      isPending: false,
+      isPendingRelay: false,
+      isPendingTx: false,
       isSuccess: true,
     })
     const logs = parseEventLogs({ abi: contract?.abi!, logs: txReceipt.logs })
@@ -193,7 +234,8 @@ export function useGasless({
     txLogs,
     txLink,
     isLoadingTx: isPendingSign,
-    isPendingTx: state.isPending,
+    isPendingRelay: state.isPendingRelay,
+    isPendingTx: state.isPendingTx,
     isSuccessTx: state.isSuccess && isPostSuccess,
     isErrorTx: state.isError || isPostError,
     errorTx: state.error || postError,

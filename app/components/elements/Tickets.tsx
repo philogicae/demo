@@ -24,7 +24,13 @@ export function Tickets({
   tickets,
 }: {
   batchId: number
-  tickets: { id: string; data: string; url: string; qrCode: string }[]
+  tickets: {
+    id: string
+    ticketId: string
+    data: string
+    url: string
+    qrCode: string
+  }[]
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [currentTicket, setCurrentTicket] = useState(1)
@@ -77,7 +83,7 @@ export function Tickets({
                 base: 'p-0 bg-transparent text-purple',
               }}
             >
-              {`${ticket.id}: ${ticket.data.slice(0, 6)}...${ticket.data.slice(-6)}`}
+              {`${ticket.id}: ${ticket.ticketId.slice(0, 8)}...${ticket.ticketId.slice(-6)}`}
             </Snippet>
             <button
               type="button"
@@ -124,7 +130,6 @@ export function Tickets({
                   alt="QRCode"
                   radius="none"
                   width={1000}
-                  height={1000}
                 />
               </ModalBody>
               <ModalFooter className="flex flex-row p-2 items-center justify-center">
