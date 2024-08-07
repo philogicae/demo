@@ -19,9 +19,6 @@ const prepare = (obj: any): any => {
   const result: any = {}
   for (const [k, v] of Object.entries(obj)) {
     if (k === 'createdAt') result[k] = formatDate(Number(v))
-    else if (k === 'ticketId')
-      result[k] =
-        `${(v as string).slice(0, 20)}...${(v as string).slice(-21, -1)}`
     else if (k === 'totalTickets') {
     } else if (typeof v === 'bigint') result[k] = Number(v)
     else result[k] = prepare(v)
@@ -83,6 +80,7 @@ export default function Token() {
         navigate('/404')
       })
   }, [id])
+  console.log(metadata)
 
   if (!metadata.data?.name) return <LoaderPage />
 
