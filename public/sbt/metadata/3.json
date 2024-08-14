@@ -3,6 +3,7 @@
   "description": "Exclusive Free Allocation on TwentySix",
   "external_url": "https://claim.twentysix.cloud/#/token/{id}",
   "image": "https://claim.twentysix.cloud/sbt/cover/confidential-vm.jpg",
+  "icon": "https://claim.twentysix.cloud/sbt/icon/confidential-vm.webp",
   "attributes": [
     { "trait_type": "Type", "value": "Instance" },
     { "trait_type": "Max Unit", "value": 1 },
@@ -10,7 +11,7 @@
     { "trait_type": "Max RAM (GB)", "value": 2 },
     { "trait_type": "Max Volume (GB)", "value": 20 },
     { "trait_type": "Confidential", "value": "Allowed" },
-    { "trait_type": "$ALEPH Virtual Balance", "value": 4000 },
+    { "trait_type": "$ALEPH Virtual Balance", "value": 3000 },
     { "display_type": "date", "trait_type": "Start", "value": 1723010400 },
     { "display_type": "date", "trait_type": "End", "value": 1736233200 }
   ]

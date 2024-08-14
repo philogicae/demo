@@ -3,6 +3,7 @@
   "description": "Exclusive Free Allocation on TwentySix",
   "external_url": "https://claim.twentysix.cloud/#/token/{id}",
   "image": "https://claim.twentysix.cloud/sbt/cover/functions.jpg",
+  "icon": "https://claim.twentysix.cloud/sbt/icon/functions.webp",
   "attributes": [
     { "trait_type": "Type", "value": "Function" },
     { "trait_type": "Max Unit", "value": 2 },

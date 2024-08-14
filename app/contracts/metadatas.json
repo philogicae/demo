@@ -4,6 +4,7 @@
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://claim.twentysix.cloud/#/token/{id}",
     "image": "https://claim.twentysix.cloud/sbt/cover/general.jpg",
+    "icon": "https://claim.twentysix.cloud/sbt/icon/general.webp",
     "attributes": [
       {
         "trait_type": "Type",
@@ -50,6 +51,7 @@
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://claim.twentysix.cloud/#/token/{id}",
     "image": "https://claim.twentysix.cloud/sbt/cover/instance.jpg",
+    "icon": "https://claim.twentysix.cloud/sbt/icon/instance.webp",
     "attributes": [
       {
         "trait_type": "Type",
@@ -96,6 +98,7 @@
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://claim.twentysix.cloud/#/token/{id}",
     "image": "https://claim.twentysix.cloud/sbt/cover/confidential-vm.jpg",
+    "icon": "https://claim.twentysix.cloud/sbt/icon/confidential-vm.webp",
     "attributes": [
       {
         "trait_type": "Type",
@@ -123,7 +126,7 @@
       },
       {
         "trait_type": "$ALEPH Virtual Balance",
-        "value": 4000
+        "value": 3000
       },
       {
         "display_type": "date",
@@ -142,6 +145,7 @@
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://claim.twentysix.cloud/#/token/{id}",
     "image": "https://claim.twentysix.cloud/sbt/cover/functions.jpg",
+    "icon": "https://claim.twentysix.cloud/sbt/icon/functions.webp",
     "attributes": [
       {
         "trait_type": "Type",
@@ -184,6 +188,7 @@
     "description": "Exclusive Free Allocation on TwentySix",
     "external_url": "https://claim.twentysix.cloud/#/token/{id}",
     "image": "https://claim.twentysix.cloud/sbt/cover/web3-hosting.jpg",
+    "icon": "https://claim.twentysix.cloud/sbt/icon/web3-hosting.webp",
     "attributes": [
       {
         "trait_type": "Type",

@@ -3,6 +3,7 @@
   "description": "Exclusive Free Allocation on TwentySix",
   "external_url": "https://claim.twentysix.cloud/#/token/{id}",
   "image": "https://claim.twentysix.cloud/sbt/cover/instance.jpg",
+  "icon": "https://claim.twentysix.cloud/sbt/icon/instance.webp",
   "attributes": [
     { "trait_type": "Type", "value": "Instance" },
     { "trait_type": "Max Unit", "value": 1 },
