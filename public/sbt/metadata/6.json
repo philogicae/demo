@@ -1,0 +1,18 @@
+{
+  "name": "TRY26 - General Access 1 Year",
+  "description": "Exclusive Free Allocation on TwentySix",
+  "external_url": "https://claim.twentysix.cloud/#/token/{id}",
+  "image": "https://claim.twentysix.cloud/sbt/cover/general.jpg",
+  "icon": "https://claim.twentysix.cloud/sbt/icon/general.webp",
+  "attributes": [
+    { "trait_type": "Type", "value": "General" },
+    { "trait_type": "Max Unit", "value": 8 },
+    { "trait_type": "Max vCPU Cores", "value": 6 },
+    { "trait_type": "Max RAM (GB)", "value": 12 },
+    { "trait_type": "Max Volume (GB)", "value": 50 },
+    { "trait_type": "Confidential", "value": "Allowed" },
+    { "trait_type": "$ALEPH Virtual Balance", "value": 10000 },
+    { "display_type": "date", "trait_type": "Start", "value": 1729621940 },
+    { "display_type": "date", "trait_type": "End", "value": 1761157888 }
+  ]
+}
