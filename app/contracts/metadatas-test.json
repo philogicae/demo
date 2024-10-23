@@ -1,0 +1,268 @@
+{
+  "1": {
+    "name": "TRY26 - General Access",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "http://localhost:3000/#/token/{id}",
+    "image": "http://localhost:3000/sbt/cover/general.jpg",
+    "icon": "http://localhost:3000/sbt/icon/general.webp",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "General"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 5
+      },
+      {
+        "trait_type": "Max vCPU Cores",
+        "value": 3
+      },
+      {
+        "trait_type": "Max RAM (GB)",
+        "value": 6
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 24
+      },
+      {
+        "trait_type": "Confidential",
+        "value": "Allowed"
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 4000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1720332000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1736233200
+      }
+    ]
+  },
+  "2": {
+    "name": "TRY26 - Instance Access",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "http://localhost:3000/#/token/{id}",
+    "image": "http://localhost:3000/sbt/cover/instance.jpg",
+    "icon": "http://localhost:3000/sbt/icon/instance.webp",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Instance"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 1
+      },
+      {
+        "trait_type": "Max vCPU Cores",
+        "value": 1
+      },
+      {
+        "trait_type": "Max RAM (GB)",
+        "value": 2
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 20
+      },
+      {
+        "trait_type": "Confidential",
+        "value": "Disallowed"
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 2000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1720332000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1736233200
+      }
+    ]
+  },
+  "3": {
+    "name": "TRY26 - Confidential VM Access",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "http://localhost:3000/#/token/{id}",
+    "image": "http://localhost:3000/sbt/cover/confidential-vm.jpg",
+    "icon": "http://localhost:3000/sbt/icon/confidential-vm.webp",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Instance"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 1
+      },
+      {
+        "trait_type": "Max vCPU Cores",
+        "value": 1
+      },
+      {
+        "trait_type": "Max RAM (GB)",
+        "value": 2
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 20
+      },
+      {
+        "trait_type": "Confidential",
+        "value": "Allowed"
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 3000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1723010400
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1736233200
+      }
+    ]
+  },
+  "4": {
+    "name": "TRY26 - Functions Access",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "http://localhost:3000/#/token/{id}",
+    "image": "http://localhost:3000/sbt/cover/functions.jpg",
+    "icon": "http://localhost:3000/sbt/icon/functions.webp",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Function"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 2
+      },
+      {
+        "trait_type": "Max vCPU Cores",
+        "value": 2
+      },
+      {
+        "trait_type": "Max RAM (GB)",
+        "value": 4
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 4
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 500
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1720332000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1736233200
+      }
+    ]
+  },
+  "5": {
+    "name": "TRY26 - Web3 Hosting Access",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "http://localhost:3000/#/token/{id}",
+    "image": "http://localhost:3000/sbt/cover/web3-hosting.jpg",
+    "icon": "http://localhost:3000/sbt/icon/web3-hosting.webp",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Website"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 3
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 0.5
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 100
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1720332000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1736233200
+      }
+    ]
+  },
+  "6": {
+    "name": "TRY26 - General Access 1 Year",
+    "description": "Exclusive Free Allocation on TwentySix",
+    "external_url": "http://localhost:3000/#/token/{id}",
+    "image": "http://localhost:3000/sbt/cover/general.jpg",
+    "icon": "http://localhost:3000/sbt/icon/general.webp",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "General"
+      },
+      {
+        "trait_type": "Max Unit",
+        "value": 8
+      },
+      {
+        "trait_type": "Max vCPU Cores",
+        "value": 6
+      },
+      {
+        "trait_type": "Max RAM (GB)",
+        "value": 12
+      },
+      {
+        "trait_type": "Max Volume (GB)",
+        "value": 50
+      },
+      {
+        "trait_type": "Confidential",
+        "value": "Allowed"
+      },
+      {
+        "trait_type": "$ALEPH Virtual Balance",
+        "value": 10000
+      },
+      {
+        "display_type": "date",
+        "trait_type": "Start",
+        "value": 1729621940
+      },
+      {
+        "display_type": "date",
+        "trait_type": "End",
+        "value": 1761157888
+      }
+    ]
+  }
+}

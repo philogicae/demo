@@ -61,6 +61,12 @@ createWeb3Modal({
     '--w3m-border-radius-master': '2px',
     '--w3m-font-family': 'var(--font-rigid-square)',
   },
+  /* features: {
+    analytics: false,
+    onramp: false,
+    email: false,
+    socials: false,
+  }, */
 })
 
 export default function Web3ModalProvider({

@@ -4,7 +4,8 @@ import LoaderPage, { Loader } from '@components/elements/Loader'
 import { Metadata } from '@components/elements/Metadata'
 import Invalid from '@components/frames/Invalid'
 import load from '@contracts/loader'
-import metadatas from '@contracts/metadatas.json'
+import metadatas_test from '@contracts/metadatas-test.json'
+import metadatas_prod from '@contracts/metadatas.json'
 import { useCall } from '@hooks/useCall'
 import { useGasless } from '@hooks/useGasless'
 import { useTransact } from '@hooks/useTransact'
@@ -38,6 +39,9 @@ import {
 import { useNavigate, useParams } from 'react-router-dom'
 import type { Address, Hex, Signature } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
+
+const metadatas =
+  process.env.NODE_ENV === 'production' ? metadatas_prod : metadatas_test
 
 const defaultTicket = {
   chainId: 0,

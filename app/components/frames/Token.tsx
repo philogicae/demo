@@ -2,12 +2,16 @@
 import LoaderPage from '@components/elements/Loader'
 import { Metadata } from '@components/elements/Metadata'
 import load from '@contracts/loader'
-import metadatas from '@contracts/metadatas.json'
+import metadatas_test from '@contracts/metadatas-test.json'
+import metadatas_prod from '@contracts/metadatas.json'
 import { useCall } from '@hooks/useCall'
 import { formatDate } from '@utils/convert'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useChainId } from 'wagmi'
+
+const metadatas =
+  process.env.NODE_ENV === 'production' ? metadatas_prod : metadatas_test
 
 const prepare = (obj: any): any => {
   if (typeof obj !== 'object' || obj === null) {

@@ -4,6 +4,7 @@ const path = require('path')
 
 const directoryPath = 'public/sbt/metadata/'
 const outputPath = 'app/contracts/metadatas.json'
+const outputTestPath = 'app/contracts/metadatas-test.json'
 
 fs.readdir(directoryPath, (err, files) => {
   if (err) {
@@ -23,6 +24,7 @@ fs.readdir(directoryPath, (err, files) => {
     return Promise.resolve({})
   })
 
+  // Prod
   Promise.all(filePromises)
     .then((results) => {
       const combinedJson = Object.assign({}, ...results)
@@ -36,5 +38,24 @@ fs.readdir(directoryPath, (err, files) => {
     })
     .catch((err) => {
       console.error('Error updating Metadatas JSON:', err)
+    })
+
+  // Test
+  Promise.all(filePromises)
+    .then((results) => {
+      const combinedJson = Object.assign({}, ...results)
+      return fs.promises.writeFile(
+        outputTestPath,
+        JSON.stringify(combinedJson, null, 2).replaceAll(
+          'https://claim.twentysix.cloud',
+          'http://localhost:3000'
+        )
+      )
+    })
+    .then(() => {
+      console.log('Metadatas-test JSON updated successfully')
+    })
+    .catch((err) => {
+      console.error('Error updating Metadatas-test JSON:', err)
     })
 })

@@ -5,7 +5,8 @@ import { Metadata } from '@components/elements/Metadata'
 import { Tickets } from '@components/elements/Tickets'
 import { defaultChain } from '@context/Wallet'
 import load from '@contracts/loader'
-import metadatas from '@contracts/metadatas.json'
+import metadatas_test from '@contracts/metadatas-test.json'
+import metadatas_prod from '@contracts/metadatas.json'
 import { useCall } from '@hooks/useCall'
 import { useSign } from '@hooks/useSign'
 import { useTransact } from '@hooks/useTransact'
@@ -33,6 +34,9 @@ import {
 import type { Address, Hex } from 'viem'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 //import legacyTickets from '../../utils/migrator/legacyTickets.json'
+
+const metadatas =
+  process.env.NODE_ENV === 'production' ? metadatas_prod : metadatas_test
 
 const maxTickets = 100
 const defaultHashes = {
