@@ -2,6 +2,8 @@
   "extends": "solhint:recommended",
   "rules": {
     "func-visibility": ["warn", { "ignoreConstructors": true }],
-    "quotes": ["warn"]
+    "quotes": ["warn"],
+    "const-name-snakecase": ["off"],
+    "no-inline-assembly": ["off"]
   }
 }

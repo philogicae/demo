@@ -11,7 +11,7 @@ sudo apt-get install -y \
 
 # Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-echo '\n. "$HOME/.cargo/env"' >> ~/.bashrc
+echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 rustc --version
 
