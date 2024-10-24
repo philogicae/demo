@@ -5,6 +5,7 @@ import AppState from '@context/AppState'
 import NextUI from '@context/NextUI'
 import Web3ModalProvider from '@context/Wallet'
 import font from '@utils/fonts'
+import { cn } from '@utils/tw'
 
 const SITE_NAME = 'Twentysix Claim'
 const SITE_DESCRIPTION = 'Exclusive Free Allocations on TwentySix'
@@ -103,7 +104,7 @@ frame-src 'self' https://verify.walletconnect.com https://verify.walletconnect.o
       <head>
         <meta httpEquiv="Content-Security-Policy" content={csp} />
       </head>
-      <body className={font.className}>
+      <body className={cn(font.variable, 'font-sans')}>
         <Web3ModalProvider>
           <NextUI>
             <AppState>

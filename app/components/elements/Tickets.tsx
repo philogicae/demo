@@ -14,7 +14,6 @@ import {
   Snippet,
   useDisclosure,
 } from '@nextui-org/react'
-import font from '@utils/fonts'
 import { cn } from '@utils/tw'
 import { useState } from 'react'
 import { FaQrcode, FaShareFromSquare } from 'react-icons/fa6'
@@ -51,9 +50,7 @@ export function Tickets({
             base: 'p-0 bg-transparent text-purple',
           }}
         >
-          <span
-            className={cn('text-lg font-extrabold', font.className)}
-          >{`Ticket Batch #${batchId}`}</span>
+          <span className="text-lg font-extrabold">{`Ticket Batch #${batchId}`}</span>
         </Snippet>
         <button
           type="button"

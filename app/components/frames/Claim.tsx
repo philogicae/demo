@@ -20,7 +20,6 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
-import font from '@utils/fonts'
 import { updateTicketRow } from '@utils/nocodb'
 import { checkAndDecrypt, extractFromTicketHash } from '@utils/packing'
 import { generateQrCode } from '@utils/qrcodes'
@@ -321,12 +320,7 @@ export default function Claim() {
               base: 'p-0 bg-transparent text-purple',
             }}
           >
-            <span
-              className={cn(
-                'text-center text-2xl text-black font-extrabold italic',
-                font.className
-              )}
-            >
+            <span className="text-center text-2xl text-black font-extrabold italic">
               Valid Ticket
             </span>
           </Snippet>

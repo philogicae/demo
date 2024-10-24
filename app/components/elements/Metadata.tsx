@@ -9,7 +9,6 @@ import {
   Snippet,
 } from '@nextui-org/react'
 import { formatDate } from '@utils/convert'
-import font from '@utils/fonts'
 import { cn } from '@utils/tw'
 import { FaShareFromSquare } from 'react-icons/fa6'
 import { useChainId } from 'wagmi'
@@ -101,7 +100,7 @@ export function Metadata({
                         copyButton: 'justify-end !min-w-6 w-6',
                       }}
                     >
-                      <span className={cn('font-semibold', font.className)}>
+                      <span className="font-semibold">
                         {`${item[1].toString().slice(0, 8)}...${item[1].toString().slice(-6)}`}
                       </span>
                     </Snippet>
